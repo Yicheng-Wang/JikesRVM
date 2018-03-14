@@ -253,7 +253,14 @@ public abstract class RVMType extends AnnotatedElement {
     /* install partial type information block (no method dispatch table) for use in type checking. */
     TIB tib = MemoryManager.newTIB(0, AlignmentEncoding.ALIGN_CODE_NONE);
     tib.setType(this);
+    if(isClassType()){
+      VM.sysWriteln("Above is Class!");
+    }else {
+      VM.sysWriteln("Above is Array!");
+    }
+
     Statics.setSlotContents(getTibOffset(), tib);
+
   }
 
   /**
