@@ -90,7 +90,7 @@ public final class MemoryManager {
    */
   private static final boolean CHECK_MEMORY_IS_ZEROED = false;
   private static final boolean traceAllocator = false;
-
+  private static int TIBcount=0;
   /**
    * Has the interface been booted yet?
    */
@@ -878,7 +878,8 @@ public final class MemoryManager {
 
     /* Now we replace the TIB */
     ObjectModel.setTIB(result, realTib);
-
+    TIBcount++;
+    VM.sysWriteln("TIB:"+TIBcount+" Method:"+numVirtualMethods+" Bytes:"+elemBytes+" size:"+size);
     return (TIB)result;
   }
 
