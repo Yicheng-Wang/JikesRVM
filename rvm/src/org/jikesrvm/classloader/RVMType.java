@@ -249,16 +249,15 @@ public abstract class RVMType extends AnnotatedElement {
     this.classForType = classForType;
     this.dimension = dimension;
 
-
-    /* install partial type information block (no method dispatch table) for use in type checking. */
-    TIB tib = MemoryManager.newTIB(0, AlignmentEncoding.ALIGN_CODE_NONE);
-    tib.setType(this);
     if(isClassType()){
       VM.sysWriteln("Above is Class!");
     }else {
       VM.sysWriteln("Above is Array!");
     }
 
+    /* install partial type information block (no method dispatch table) for use in type checking. */
+    TIB tib = MemoryManager.newTIB(0, AlignmentEncoding.ALIGN_CODE_NONE);
+    tib.setType(this);
     Statics.setSlotContents(getTibOffset(), tib);
 
   }
@@ -277,6 +276,11 @@ public abstract class RVMType extends AnnotatedElement {
     this.classForType = createClassForType(this, typeRef);
     this.dimension = dimension;
 
+    if(isClassType()){
+      VM.sysWriteln("Above is Class!");
+    }else {
+      VM.sysWriteln("Above is Array!");
+    }
 
     /* install partial type information block (no method dispatch table) for use in type checking. */
     TIB tib = MemoryManager.newTIB(0, AlignmentEncoding.ALIGN_CODE_NONE);
@@ -944,5 +948,4 @@ public abstract class RVMType extends AnnotatedElement {
     if (VM.VerifyAssertions) VM._assert(isResolved());
     return referenceOffsets;
   }
-
 }
