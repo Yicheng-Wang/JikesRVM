@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/libraryInterface/Harmony/ASF/ASF.iml" filepath="$PROJECT_DIR$/libraryInterface/Harmony/ASF/ASF.iml" />
+      <module fileurl="file://$PROJECT_DIR$/testing/tests/CaffeineMark/CaffeineMark.iml" filepath="$PROJECT_DIR$/testing/tests/CaffeineMark/CaffeineMark.iml" />
+      <module fileurl="file://$PROJECT_DIR$/libraryInterface/Common/Common.iml" filepath="$PROJECT_DIR$/libraryInterface/Common/Common.iml" />
+      <module fileurl="file://$PROJECT_DIR$/libraryInterface/GNUClasspath/EPL/EPL.iml" filepath="$PROJECT_DIR$/libraryInterface/GNUClasspath/EPL/EPL.iml" />
+      <module fileurl="file://$PROJECT_DIR$/libraryInterface/Harmony/EPL/EPL1.iml" filepath="$PROJECT_DIR$/libraryInterface/Harmony/EPL/EPL1.iml" />
+      <module fileurl="file://$PROJECT_DIR$/libraryInterface/GNUClasspath/LGPL/LGPL.iml" filepath="$PROJECT_DIR$/libraryInterface/GNUClasspath/LGPL/LGPL.iml" />
+      <module fileurl="file://$PROJECT_DIR$/MMTk/MMTk.iml" filepath="$PROJECT_DIR$/MMTk/MMTk.iml" />
+      <module fileurl="file://$PROJECT_DIR$/libraryInterface/GNUClasspath/PD/PD.iml" filepath="$PROJECT_DIR$/libraryInterface/GNUClasspath/PD/PD.iml" />
+      <module fileurl="file://$PROJECT_DIR$/tools/ant-tasks/ant-tasks.iml" filepath="$PROJECT_DIR$/tools/ant-tasks/ant-tasks.iml" />
+      <module fileurl="file://$PROJECT_DIR$/tools/asm-tasks/asm-tasks.iml" filepath="$PROJECT_DIR$/tools/asm-tasks/asm-tasks.iml" />
+      <module fileurl="file://$PROJECT_DIR$/testing/tests/basic/basic.iml" filepath="$PROJECT_DIR$/testing/tests/basic/basic.iml" />
+      <module fileurl="file://$PROJECT_DIR$/tools/bootImageWriter/bootImageWriter.iml" filepath="$PROJECT_DIR$/tools/bootImageWriter/bootImageWriter.iml" />
+      <module fileurl="file://$PROJECT_DIR$/tools/checkstyle-plugins/checkstyle-plugins.iml" filepath="$PROJECT_DIR$/tools/checkstyle-plugins/checkstyle-plugins.iml" />
+      <module fileurl="file://$PROJECT_DIR$/testing/tests/gctest/gctest.iml" filepath="$PROJECT_DIR$/testing/tests/gctest/gctest.iml" />
+      <module fileurl="file://$PROJECT_DIR$/testing/tests/gctracingtest/gctracingtest.iml" filepath="$PROJECT_DIR$/testing/tests/gctracingtest/gctracingtest.iml" />
+      <module fileurl="file://$PROJECT_DIR$/MMTk/harness/harness.iml" filepath="$PROJECT_DIR$/MMTk/harness/harness.iml" />
+      <module fileurl="file://$PROJECT_DIR$/testing/tests/jasmin_based/jasmin_based.iml" filepath="$PROJECT_DIR$/testing/tests/jasmin_based/jasmin_based.iml" />
+      <module fileurl="file://$PROJECT_DIR$/testing/tests/jgf/jgf.iml" filepath="$PROJECT_DIR$/testing/tests/jgf/jgf.iml" />
+      <module fileurl="file://$PROJECT_DIR$/testing/tests/jgf-threads/jgf-threads.iml" filepath="$PROJECT_DIR$/testing/tests/jgf-threads/jgf-threads.iml" />
+      <module fileurl="file://$PROJECT_DIR$/testing/tests/jni/jni.iml" filepath="$PROJECT_DIR$/testing/tests/jni/jni.iml" />
+      <module fileurl="file://$PROJECT_DIR$/testing/tests/manual/manual.iml" filepath="$PROJECT_DIR$/testing/tests/manual/manual.iml" />
+      <module fileurl="file://$PROJECT_DIR$/testing/tests/mmtk/mmtk.iml" filepath="$PROJECT_DIR$/testing/tests/mmtk/mmtk.iml" />
+      <module fileurl="file://$PROJECT_DIR$/common/options/options.iml" filepath="$PROJECT_DIR$/common/options/options.iml" />
+      <module fileurl="file://$PROJECT_DIR$/testing/tests/opttests/opttests.iml" filepath="$PROJECT_DIR$/testing/tests/opttests/opttests.iml" />
+      <module fileurl="file://$PROJECT_DIR$/rvm/rvm.iml" filepath="$PROJECT_DIR$/rvm/rvm.iml" />
+      <module fileurl="file://$PROJECT_DIR$/testing/tests/soot/soot.iml" filepath="$PROJECT_DIR$/testing/tests/soot/soot.iml" />
+      <module fileurl="file://$PROJECT_DIR$/rvm/src-generated/src-generated.iml" filepath="$PROJECT_DIR$/rvm/src-generated/src-generated.iml" />
+      <module fileurl="file://$PROJECT_DIR$/external/tuningforklib/tuningforklib.iml" filepath="$PROJECT_DIR$/external/tuningforklib/tuningforklib.iml" />
+      <module fileurl="file://$PROJECT_DIR$/MMTk/ext/vm/vm.iml" filepath="$PROJECT_DIR$/MMTk/ext/vm/vm.iml" />
+      <module fileurl="file://$PROJECT_DIR$/tools/bootImageWriter/vmmagic/vmmagic.iml" filepath="$PROJECT_DIR$/tools/bootImageWriter/vmmagic/vmmagic.iml" />
+      <module fileurl="file://$PROJECT_DIR$/common/vmmagic/vmmagic1.iml" filepath="$PROJECT_DIR$/common/vmmagic/vmmagic1.iml" />
+    </modules>
+  </component>
+</project>
