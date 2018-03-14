@@ -480,6 +480,11 @@ public final class RVMArray extends RVMType {
 
       int alignCode = elementType.isReferenceType() ? HandInlinedScanning.referenceArray() : HandInlinedScanning.primitiveArray();
       TIB allocatedTib = MemoryManager.newTIB(javaLangObjectTIB.numVirtualMethods(), alignCode);
+      if(elementType.isReferenceType()){
+        VM.sysWriteln("Above is referenceArray!");
+      }else {
+        VM.sysWriteln("Above is primitiveArray!");
+      }
       superclassIds = DynamicTypeCheck.buildSuperclassIds(this);
       doesImplement = DynamicTypeCheck.buildDoesImplement(this);
       publishResolved(allocatedTib, superclassIds, doesImplement);
