@@ -94,7 +94,7 @@ public final class MemoryManager {
    * Has the interface been booted yet?
    */
   private static boolean booted = false;
-
+  private static int count=0;
   /**
    * Has garbage collection been enabled yet?
    */
@@ -877,9 +877,9 @@ public final class MemoryManager {
 
     /* Now we replace the TIB */
     ObjectModel.setTIB(result, realTib);
+    count++;
+    VM.sysWriteln("TIB: "+count +"Method: "+numVirtualMethods+ "Alignment: "+ alignCode + "Size: "+size);
 
-    VM.sysWriteln("Is There any body?");
-    
     return (TIB)result;
   }
 
