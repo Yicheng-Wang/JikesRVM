@@ -75,7 +75,9 @@ public final class RVMClass extends RVMType {
 
   /** Flag for closed world testing */
   private static boolean classLoadingDisabled = false;
-
+  private static int interfacenum=0;
+  private static int isdeclarednum=0;
+  private static int isscalarnum=0;
   /**
    * The constant pool holds constants used by the class and the Java
    * bytecodes in the methods associated with this class. This
@@ -1334,13 +1336,16 @@ public final class RVMClass extends RVMType {
     TIB allocatedTib;
     if (isInterface()) {
       allocatedTib = MemoryManager.newTIB(0, AlignmentEncoding.ALIGN_CODE_NONE);
-      VM.sysWriteln("Above is interfaceClass!");
+      interfacenum++;
+      VM.sysWriteln(interfacenum+" interfaceClass!");
     } else if (isAnnotationDeclared(TypeReference.ReferenceFieldsVary)) {
       allocatedTib = MemoryManager.newTIB(virtualMethods.length, HandInlinedScanning.fallback());
-      VM.sysWriteln("Above is annotationdeclaredClass!");
+      isdeclarednum++;
+      VM.sysWriteln(isdeclarednum+" annotationdeclaredClass!");
     } else {
       allocatedTib = MemoryManager.newTIB(virtualMethods.length, HandInlinedScanning.scalar(referenceOffsets));
-      VM.sysWriteln("Above is scalarClass!");
+      isscalarnum++;
+      VM.sysWriteln(isscalarnum+" scalarClass!");
     }
 
     superclassIds = DynamicTypeCheck.buildSuperclassIds(this);

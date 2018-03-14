@@ -86,7 +86,8 @@ public final class RVMArray extends RVMType {
     LongArray = (RVMArray) TypeReference.LongArray.resolve();
     JavaLangObjectArray = (RVMArray) TypeReference.JavaLangObjectArray.resolve();
   }
-
+  private static int referenceArray=0;
+  private static int primitiveArray=0;
   /**
    * The RVMType object for elements of this array type.
    */
@@ -481,9 +482,11 @@ public final class RVMArray extends RVMType {
       int alignCode = elementType.isReferenceType() ? HandInlinedScanning.referenceArray() : HandInlinedScanning.primitiveArray();
       TIB allocatedTib = MemoryManager.newTIB(javaLangObjectTIB.numVirtualMethods(), alignCode);
       if(elementType.isReferenceType()){
-        VM.sysWriteln("Above is referenceArray!");
+        referenceArray++;
+        VM.sysWriteln("Above is referenceArray number: "+referenceArray);
       }else {
-        VM.sysWriteln("Above is primitiveArray!");
+        primitiveArray++;
+        VM.sysWriteln("Above is primitiveArray number: "+primitiveArray);
       }
       superclassIds = DynamicTypeCheck.buildSuperclassIds(this);
       doesImplement = DynamicTypeCheck.buildDoesImplement(this);
