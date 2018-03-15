@@ -62,6 +62,11 @@ import org.vmmagic.unboxed.Offset;
  */
 @NonMoving
 public abstract class RVMType extends AnnotatedElement {
+    /**
+     * to analyze the number of instance of class array
+     */
+    public static int num_instance_class = 0;
+    public static int num_instance_array = 0;
 
   /**
    * A zero-length array, used as GC metadata for primitive
@@ -250,9 +255,11 @@ public abstract class RVMType extends AnnotatedElement {
     this.dimension = dimension;
 
     if(isClassType()){
-      VM.sysWriteln("Above is Class!");
-    }else {
-      VM.sysWriteln("Above is Array!");
+        num_instance_class++;
+        VM.sysWriteln("The " +  num_instance_class + " Class!");
+    }else if (isArrayType()) {
+        num_instance_array++;
+        VM.sysWriteln("The " +  num_instance_array + " Array!");
     }
 
     /* install partial type information block (no method dispatch table) for use in type checking. */
@@ -275,12 +282,6 @@ public abstract class RVMType extends AnnotatedElement {
     this.id = nextId(this);
     this.classForType = createClassForType(this, typeRef);
     this.dimension = dimension;
-
-    if(isClassType()){
-      VM.sysWriteln("Above is Class!");
-    }else {
-      VM.sysWriteln("Above is Array!");
-    }
 
     /* install partial type information block (no method dispatch table) for use in type checking. */
     TIB tib = MemoryManager.newTIB(0, AlignmentEncoding.ALIGN_CODE_NONE);

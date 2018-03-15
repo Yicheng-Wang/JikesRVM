@@ -75,9 +75,14 @@ public final class RVMClass extends RVMType {
 
   /** Flag for closed world testing */
   private static boolean classLoadingDisabled = false;
-  private static int interfacenum=0;
-  private static int isdeclarednum=0;
-  private static int isscalarnum=0;
+
+  /**
+   * to analyze the number of different types of class
+   */
+  private static int interfacenum = 0;
+  private static int isdeclarednum = 0;
+  private static int isscalarnum = 0;
+
   /**
    * The constant pool holds constants used by the class and the Java
    * bytecodes in the methods associated with this class. This
