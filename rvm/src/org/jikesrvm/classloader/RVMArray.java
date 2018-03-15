@@ -86,8 +86,11 @@ public final class RVMArray extends RVMType {
     LongArray = (RVMArray) TypeReference.LongArray.resolve();
     JavaLangObjectArray = (RVMArray) TypeReference.JavaLangObjectArray.resolve();
   }
-  private static int referenceArray=0;
-  private static int primitiveArray=0;
+  /**
+   * to analyze the number of different types of array
+   */
+  private static int referenceArray = 0;
+  private static int primitiveArray = 0;
   /**
    * The RVMType object for elements of this array type.
    */
