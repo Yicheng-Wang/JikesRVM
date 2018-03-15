@@ -275,13 +275,6 @@ public abstract class RVMType extends AnnotatedElement {
     this.classForType = createClassForType(this, typeRef);
     this.dimension = dimension;
 
-      if(isClassType()){
-          num_instance_class++;
-          VM.sysWriteln("The " +  num_instance_class + " Class!");
-      }else if (isArrayType()) {
-          num_instance_array++;
-          VM.sysWriteln("The " +  num_instance_array + " Array!");
-      }
     /* install partial type information block (no method dispatch table) for use in type checking. */
     TIB tib = MemoryManager.newTIB(0, AlignmentEncoding.ALIGN_CODE_NONE);
     tib.setType(this);
