@@ -486,10 +486,10 @@ public final class RVMArray extends RVMType {
       TIB allocatedTib = MemoryManager.newTIB(javaLangObjectTIB.numVirtualMethods(), alignCode);
       if(elementType.isReferenceType()){
         referenceArray++;
-        VM.sysWriteln("Above is referenceArray number: "+referenceArray);
+        VM.sysWriteln("!!!!!!!!!!!!!!!!!!!!!!!Above is referenceArray number: "+referenceArray);
       }else {
         primitiveArray++;
-        VM.sysWriteln("Above is primitiveArray number: "+primitiveArray);
+        VM.sysWriteln("!!!!!!!!!!!!!!!!!!!!!!!!Above is primitiveArray number: "+primitiveArray);
       }
       superclassIds = DynamicTypeCheck.buildSuperclassIds(this);
       doesImplement = DynamicTypeCheck.buildDoesImplement(this);
