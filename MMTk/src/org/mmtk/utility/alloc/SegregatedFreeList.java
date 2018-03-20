@@ -14,6 +14,7 @@ package org.mmtk.utility.alloc;
 
 import org.mmtk.policy.SegregatedFreeListSpace;
 
+import org.mmtk.utility.Log;
 import org.vmmagic.pragma.*;
 import org.vmmagic.unboxed.*;
 /**
@@ -71,11 +72,11 @@ public abstract class SegregatedFreeList<S extends SegregatedFreeListSpace> exte
   @Inline
   public final Address alloc(int bytes, int align, int offset) {
     int alignedBytes = getMaximumAlignedSize(bytes, align);
-    System.out.println("bytes: "+bytes+" and alignedBytes: "+alignedBytes);
+      Log.writeln("bytes: "+bytes+" and alignedBytes: "+alignedBytes);
     int sizeClass = getSizeClass(alignedBytes);
-    System.out.println("sizeClass: "+sizeClass);
+      Log.writeln("sizeClass: "+sizeClass);
     Address cell = freeList.get(sizeClass);
-    System.out.println("cell: "+cell+" Address.zero(): "+Address.zero());
+      Log.writeln("cell: "+cell+" Address.zero(): "+Address.zero());
     if (!cell.isZero()) {
       freeList.set(sizeClass, cell.loadAddress());
       /* Clear the free list link */
