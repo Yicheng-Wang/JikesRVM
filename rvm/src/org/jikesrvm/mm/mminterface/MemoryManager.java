@@ -89,7 +89,7 @@ public final class MemoryManager {
    * zeroed is desired.
    */
   private static final boolean CHECK_MEMORY_IS_ZEROED = false;
-  private static final boolean traceAllocator = true;
+  private static final boolean traceAllocator = false;
   /**
    * Has the interface been booted yet?
    */
