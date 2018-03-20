@@ -875,7 +875,7 @@ public final class MemoryManager {
     int size = elemBytes + headerSize + AlignmentEncoding.padding(alignCode);
     Selected.Mutator mutator = Selected.Mutator.get();
     Address region = allocateSpace(mutator, size, align, offset, type.getMMAllocator(), Plan.DEFAULT_SITE);
-
+    VM.sysWriteln("getMMAllocator is : "+ type.getMMAllocator());
     region = AlignmentEncoding.adjustRegion(alignCode, region);
 
     Object result = ObjectModel.initializeArray(region, fakeTib, elements, size);
