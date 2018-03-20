@@ -84,7 +84,11 @@ public abstract class SegregatedFreeList<S extends SegregatedFreeListSpace> exte
     Address cell = freeList.get(sizeClass);
     Log.write("cell = ");
     Log.write(cell);
+    Log.write(" cell.isZero = ");
+    Log.write(cell.isZero());
     Log.writeln();
+    Log.write("Address.zero()= ");
+    Log.write(Address.zero());
     if (!cell.isZero()) {
       freeList.set(sizeClass, cell.loadAddress());
       /* Clear the free list link */
