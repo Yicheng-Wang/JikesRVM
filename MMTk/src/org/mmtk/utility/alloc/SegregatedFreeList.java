@@ -16,7 +16,6 @@ import org.mmtk.policy.SegregatedFreeListSpace;
 
 import org.vmmagic.pragma.*;
 import org.vmmagic.unboxed.*;
-import org.jikesrvm.VM;
 /**
  * This abstract class implements the fast path for a segregated free list.
  */
@@ -72,11 +71,11 @@ public abstract class SegregatedFreeList<S extends SegregatedFreeListSpace> exte
   @Inline
   public final Address alloc(int bytes, int align, int offset) {
     int alignedBytes = getMaximumAlignedSize(bytes, align);
-    VM.sysWriteln("bytes: "+bytes+" and alignedBytes: "+alignedBytes);
+    System.out.println("bytes: "+bytes+" and alignedBytes: "+alignedBytes);
     int sizeClass = getSizeClass(alignedBytes);
-    VM.sysWriteln("sizeClass: "+sizeClass);
+    System.out.println("sizeClass: "+sizeClass);
     Address cell = freeList.get(sizeClass);
-    VM.sysWriteln("cell: "+cell+" Address.zero(): "+Address.zero());
+    System.out.println("cell: "+cell+" Address.zero(): "+Address.zero());
     if (!cell.isZero()) {
       freeList.set(sizeClass, cell.loadAddress());
       /* Clear the free list link */
