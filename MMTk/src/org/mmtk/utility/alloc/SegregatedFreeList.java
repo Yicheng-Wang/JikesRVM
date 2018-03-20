@@ -83,6 +83,7 @@ public abstract class SegregatedFreeList<S extends SegregatedFreeListSpace> exte
     Log.writeln();
     Address cell = freeList.get(sizeClass);
     Log.write("cell = ");
+    Log.writeln();
     Log.write(cell.toString());
     if (!cell.isZero()) {
       freeList.set(sizeClass, cell.loadAddress());
