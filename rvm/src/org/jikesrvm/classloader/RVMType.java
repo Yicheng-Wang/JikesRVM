@@ -442,7 +442,7 @@ public abstract class RVMType extends AnnotatedElement {
   public final boolean isVoidType() {
     return this == VoidType;
   }
-
+  public final boolean isTIBType () { return  this == TIBType;  }
   /** @return is this type the primitive boolean? */
   @Uninterruptible
   public final boolean isBooleanType() {

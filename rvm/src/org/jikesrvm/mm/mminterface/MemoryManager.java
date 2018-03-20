@@ -89,7 +89,7 @@ public final class MemoryManager {
    * zeroed is desired.
    */
   private static final boolean CHECK_MEMORY_IS_ZEROED = false;
-  private static final boolean traceAllocator = false;
+  private static final boolean traceAllocator = true;
   /**
    * Has the interface been booted yet?
    */
@@ -450,6 +450,9 @@ public final class MemoryManager {
   @Interruptible
   private static int pickAllocatorForType(RVMType type) {
     int allocator = Plan.ALLOC_DEFAULT;
+    /*if(type.isTIBType()){
+      allocator = Plan.ALLOC_TIB;
+    }*/
     if (type.isArrayType()) {
       RVMType elementType = type.asArray().getElementType();
       if (elementType.isPrimitiveType() || elementType.isUnboxedType()) {
@@ -471,6 +474,9 @@ public final class MemoryManager {
         isPrefix("Lorg/jikesrvm/mm/", typeBA) || isPrefix("[Lorg/jikesrvm/mm/", typeBA) ||
         isPrefix("Lorg/jikesrvm/jni/JNIEnvironment;", typeBA)) {
       allocator = Plan.ALLOC_NON_MOVING;
+    }
+    if(type.isTIBType()){
+      VM.sysWriteln("TIB allocator is :"+allocator);
     }
     return allocator;
   }
