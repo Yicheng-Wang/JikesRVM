@@ -82,7 +82,7 @@ import org.vmmagic.unboxed.Word;
   /**
    *
    */
-  private static final int LOG_DEFAULT_STEP_SIZE = 30; // 1G: let the external slow path dominate
+  private static final int LOG_DEFAULT_STEP_SIZE = 32; // 1G: let the external slow path dominate
   private static final int STEP_SIZE = 1 << (SUPPORT_CARD_SCANNING ? LOG_CARD_BYTES : LOG_DEFAULT_STEP_SIZE);
   protected static final int LOG_BLOCK_SIZE = LOG_BYTES_IN_PAGE + 3;
   protected static final Word BLOCK_MASK = Word.one().lsh(LOG_BLOCK_SIZE).minus(Word.one());
