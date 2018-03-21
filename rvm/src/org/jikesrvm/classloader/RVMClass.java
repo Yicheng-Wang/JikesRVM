@@ -1341,16 +1341,16 @@ public final class RVMClass extends RVMType {
     TIB allocatedTib;
     if (isInterface()) {
       allocatedTib = MemoryManager.newTIB(0, AlignmentEncoding.ALIGN_CODE_NONE);
-      interfacenum++;
-      VM.sysWriteln(interfacenum+" interfaceClass!");
+      /*interfacenum++;
+      VM.sysWriteln(interfacenum+" interfaceClass!");*/
     } else if (isAnnotationDeclared(TypeReference.ReferenceFieldsVary)) {
       allocatedTib = MemoryManager.newTIB(virtualMethods.length, HandInlinedScanning.fallback());
-      isdeclarednum++;
-      VM.sysWriteln(isdeclarednum+" annotationdeclaredClass!");
+      /*isdeclarednum++;
+      VM.sysWriteln(isdeclarednum+" annotationdeclaredClass!");*/
     } else {
       allocatedTib = MemoryManager.newTIB(virtualMethods.length, HandInlinedScanning.scalar(referenceOffsets));
-      isscalarnum++;
-      VM.sysWriteln(isscalarnum+" scalarClass!");
+      /*isscalarnum++;
+      VM.sysWriteln(isscalarnum+" scalarClass!");*/
     }
 
     superclassIds = DynamicTypeCheck.buildSuperclassIds(this);

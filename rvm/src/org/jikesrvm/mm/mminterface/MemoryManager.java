@@ -99,7 +99,7 @@ public final class MemoryManager {
    * Has garbage collection been enabled yet?
    */
   private static boolean collectionEnabled = false;
-
+  protected Address last;
   /***********************************************************************
    *
    * Initialization
@@ -853,6 +853,8 @@ public final class MemoryManager {
       return TIB.allocate(elements, alignCode);
     }
     if (alignCode == AlignmentEncoding.ALIGN_CODE_NONE) {
+      VM.sysWriteln("ALIGN_CODE_NONE, count: "+count);
+      count++;
       return (TIB)newRuntimeTable(elements, RVMType.TIBType);
     }
 
@@ -874,7 +876,7 @@ public final class MemoryManager {
     int size = elemBytes + headerSize + AlignmentEncoding.padding(alignCode);
     Selected.Mutator mutator = Selected.Mutator.get();
     notifyClassResolved(type);
-    VM.sysWriteln("size: "+size +" align: "+align+ " offset: "+ offset+ " getMMAllocator is : "+ type.getMMAllocator());
+    VM.sysWriteln("count: "+ count + " size: "+size +" align: "+align+ " offset: "+ offset+ " getMMAllocator is : "+ type.getMMAllocator());
     Address region = allocateSpace(mutator, size, align, offset, type.getMMAllocator(), Plan.DEFAULT_SITE);
     region = AlignmentEncoding.adjustRegion(alignCode, region);
 

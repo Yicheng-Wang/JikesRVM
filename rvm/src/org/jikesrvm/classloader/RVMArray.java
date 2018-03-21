@@ -485,11 +485,11 @@ public final class RVMArray extends RVMType {
       int alignCode = elementType.isReferenceType() ? HandInlinedScanning.referenceArray() : HandInlinedScanning.primitiveArray();
       TIB allocatedTib = MemoryManager.newTIB(javaLangObjectTIB.numVirtualMethods(), alignCode);
       if(elementType.isReferenceType()){
-        referenceArray++;
-        VM.sysWriteln("!!!!!!!!!!!!!!!!!!!!!!!Above is referenceArray number: "+referenceArray);
+        /*referenceArray++;
+        VM.sysWriteln("!!!!!!!!!!!!!!!!!!!!!!!Above is referenceArray number: "+referenceArray);*/
       }else {
-        primitiveArray++;
-        VM.sysWriteln("!!!!!!!!!!!!!!!!!!!!!!!!Above is primitiveArray number: "+primitiveArray);
+        /*primitiveArray++;
+        VM.sysWriteln("!!!!!!!!!!!!!!!!!!!!!!!!Above is primitiveArray number: "+primitiveArray);*/
       }
       superclassIds = DynamicTypeCheck.buildSuperclassIds(this);
       doesImplement = DynamicTypeCheck.buildDoesImplement(this);
