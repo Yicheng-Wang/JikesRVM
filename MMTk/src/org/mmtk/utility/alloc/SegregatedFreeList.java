@@ -76,13 +76,13 @@ public abstract class SegregatedFreeList<S extends SegregatedFreeListSpace> exte
     Log.write(bytes);
     Log.write(" alignedBytes = ");
     Log.write(alignedBytes);
-    Log.writeln();
+    Log.writeln();*/
     int sizeClass = getSizeClass(alignedBytes);
-    Log.write("sizeClass = ");
+    /*Log.write("sizeClass = ");
     Log.write(sizeClass);
-    Log.writeln();
+    Log.writeln();*/
     Address cell = freeList.get(sizeClass);
-    Log.write("cell = ");
+    /*Log.write("cell = ");
     Log.write(cell);
     Log.write(" cell.isZero = ");
     Log.write(cell.isZero());
