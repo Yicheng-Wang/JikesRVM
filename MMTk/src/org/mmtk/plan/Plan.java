@@ -87,6 +87,7 @@ public abstract class Plan {
   public static final int ALLOC_COLD_CODE = USE_CODE_SPACE ? ALLOC_CODE : ALLOC_DEFAULT;
   public static final int ALLOC_STACK = ALLOC_LOS;
   public static final int ALLOCATORS = 9;
+  public static final int ALLOC_TIB=10;
   public static final int DEFAULT_SITE = -1;
 
   /* Miscellaneous Constants */
@@ -109,6 +110,8 @@ public abstract class Plan {
 
   /** Any immortal objects allocated after booting are allocated here. */
   public static final ImmortalSpace immortalSpace = new ImmortalSpace("immortal", VMRequest.discontiguous());
+
+  public static final ImmortalSpace immortalTIBSpace = new ImmortalSpace("immortalTIB", VMRequest.discontiguous());
 
   /** All meta data that is used by MMTk is allocated (and accounted for) in the meta data space. */
   public static final RawPageSpace metaDataSpace = new RawPageSpace("meta", VMRequest.discontiguous());

@@ -450,9 +450,6 @@ public final class MemoryManager {
   @Interruptible
   private static int pickAllocatorForType(RVMType type) {
     int allocator = Plan.ALLOC_DEFAULT;
-    /*if(type.isTIBType()){
-      allocator = Plan.ALLOC_TIB;
-    }*/
     if (type.isArrayType()) {
       RVMType elementType = type.asArray().getElementType();
       if (elementType.isPrimitiveType() || elementType.isUnboxedType()) {
@@ -476,6 +473,7 @@ public final class MemoryManager {
       allocator = Plan.ALLOC_NON_MOVING;
     }
     if(type.isTIBType()){
+      allocator = Plan.ALLOC_TIB;
       VM.sysWriteln("TIB allocator is :"+allocator);
     }
     return allocator;
@@ -874,10 +872,9 @@ public final class MemoryManager {
     }
     int size = elemBytes + headerSize + AlignmentEncoding.padding(alignCode);
     Selected.Mutator mutator = Selected.Mutator.get();
-    VM.sysWriteln("size: "+size +" align: "+align+ " offset: "+ offset);
+    notifyClassResolved(type);
+    VM.sysWriteln("size: "+size +" align: "+align+ " offset: "+ offset+ " getMMAllocator is : "+ type.getMMAllocator());
     Address region = allocateSpace(mutator, size, align, offset, type.getMMAllocator(), Plan.DEFAULT_SITE);
-    VM.sysWriteln("getMMAllocator is : "+ type.getMMAllocator());
-
     region = AlignmentEncoding.adjustRegion(alignCode, region);
 
     Object result = ObjectModel.initializeArray(region, fakeTib, elements, size);

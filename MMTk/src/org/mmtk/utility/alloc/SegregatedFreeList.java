@@ -72,7 +72,7 @@ public abstract class SegregatedFreeList<S extends SegregatedFreeListSpace> exte
   @Inline
   public final Address alloc(int bytes, int align, int offset) {
     int alignedBytes = getMaximumAlignedSize(bytes, align);
-    Log.write("Bytes = ");
+    /*Log.write("Bytes = ");
     Log.write(bytes);
     Log.write(" alignedBytes = ");
     Log.write(alignedBytes);
@@ -89,6 +89,7 @@ public abstract class SegregatedFreeList<S extends SegregatedFreeListSpace> exte
     Log.writeln();
     Log.write("Address.zero()= ");
     Log.write(Address.zero());
+    Log.writeln();*/
     if (!cell.isZero()) {
       freeList.set(sizeClass, cell.loadAddress());
       /* Clear the free list link */

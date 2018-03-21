@@ -113,6 +113,7 @@ public abstract class MutatorContext {
   /** Per-mutator allocator into the immortal space */
   protected final BumpPointer immortal = new ImmortalLocal(Plan.immortalSpace);
 
+  protected final BumpPointer immortalTIB = new ImmortalLocal(Plan.immortalTIBSpace);
   /** Per-mutator allocator into the large object space */
   protected final LargeObjectLocal los = new LargeObjectLocal(Plan.loSpace);
 
@@ -192,6 +193,7 @@ public abstract class MutatorContext {
   @Inline
   public Address alloc(int bytes, int align, int offset, int allocator, int site) {
     switch (allocator) {
+    case      Plan.ALLOC_TIB: return immortalTIB.alloc(bytes,align,offset);
     case      Plan.ALLOC_LOS: return los.alloc(bytes, align, offset);
     case      Plan.ALLOC_IMMORTAL: return immortal.alloc(bytes, align, offset);
     case      Plan.ALLOC_CODE: return smcode.alloc(bytes, align, offset);
