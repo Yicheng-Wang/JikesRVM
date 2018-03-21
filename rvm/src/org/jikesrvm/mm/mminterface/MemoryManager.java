@@ -854,7 +854,7 @@ public final class MemoryManager {
     }
     if (alignCode == AlignmentEncoding.ALIGN_CODE_NONE) {
       VM.sysWriteln("ALIGN_CODE_NONE, count: "+count);
-      count++;
+      //count++;
       return (TIB)newRuntimeTable(elements, RVMType.TIBType);
     }
 
@@ -878,8 +878,8 @@ public final class MemoryManager {
     notifyClassResolved(type);
     VM.sysWriteln("count: "+ count + " size: "+size +" align: "+align+ " offset: "+ offset+ " getMMAllocator is : "+ type.getMMAllocator());
     Address region = allocateSpace(mutator, size, align, offset, type.getMMAllocator(), Plan.DEFAULT_SITE);
+    VM.sysWriteln("region start: " + region + " plus size " +(region.plus(size));
     region = AlignmentEncoding.adjustRegion(alignCode, region);
-
     Object result = ObjectModel.initializeArray(region, fakeTib, elements, size);
     mutator.postAlloc(ObjectReference.fromObject(result), ObjectReference.fromObject(fakeTib), size, type.getMMAllocator());
 
@@ -957,7 +957,7 @@ public final class MemoryManager {
     int align = ObjectModel.getAlignment(fakeType);
     int offset = ObjectModel.getOffsetForAlignment(fakeType, false);
     int width = fakeType.getLogElementSize();
-    notifyClassResolved(type);
+    //notifyClassResolved(type);
     /* Allocate a word array */
     Object array = allocateArray(size,
                                  width,
