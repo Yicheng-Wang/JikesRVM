@@ -878,7 +878,7 @@ public final class MemoryManager {
     notifyClassResolved(type);
     VM.sysWriteln("count: "+ count + " size: "+size +" align: "+align+ " offset: "+ offset+ " getMMAllocator is : "+ type.getMMAllocator());
     Address region = allocateSpace(mutator, size, align, offset, type.getMMAllocator(), Plan.DEFAULT_SITE);
-    VM.sysWriteln("region start: " + region + " plus size " + size);
+    VM.sysWriteln("Allocating TIB: region = ",region," plus size: ",size);
     region = AlignmentEncoding.adjustRegion(alignCode, region);
     Object result = ObjectModel.initializeArray(region, fakeTib, elements, size);
     mutator.postAlloc(ObjectReference.fromObject(result), ObjectReference.fromObject(fakeTib), size, type.getMMAllocator());
