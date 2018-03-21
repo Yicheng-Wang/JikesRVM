@@ -878,7 +878,7 @@ public final class MemoryManager {
     int size = elemBytes + headerSize + AlignmentEncoding.padding(alignCode);
     VM.sysWriteln("old size is: "+ size );
     int aligncodenow = AlignmentEncoding.getTibCodeForRegion(testendpoint);
-    int adjustpadding = (aligncodenow<alignCode)?(alignCode-aligncodenow)*4:(alignCode+8-aligncodenow)*4;
+    int adjustpadding = (aligncodenow<alignCode)?(alignCode-aligncodenow)*4:(alignCode+AlignmentEncoding.MAX_ALIGN_WORDS-aligncodenow)*4;
     size = elemBytes + headerSize + adjustpadding;
     VM.sysWriteln("new size is: "+ size );
     Selected.Mutator mutator = Selected.Mutator.get();
