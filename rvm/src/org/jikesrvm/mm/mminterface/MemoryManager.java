@@ -954,7 +954,7 @@ public final class MemoryManager {
     int align = ObjectModel.getAlignment(fakeType);
     int offset = ObjectModel.getOffsetForAlignment(fakeType, false);
     int width = fakeType.getLogElementSize();
-
+    notifyClassResolved(type);
     /* Allocate a word array */
     Object array = allocateArray(size,
                                  width,
