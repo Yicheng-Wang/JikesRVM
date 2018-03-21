@@ -218,6 +218,7 @@ public abstract class MutatorContext {
   public void postAlloc(ObjectReference ref, ObjectReference typeRef,
       int bytes, int allocator) {
     switch (allocator) {
+    case        Plan.ALLOC_TIB: Plan.immortalTIBSpace.initializeHeader(ref);  return;
     case           Plan.ALLOC_LOS: Plan.loSpace.initializeHeader(ref, true); return;
     case      Plan.ALLOC_IMMORTAL: Plan.immortalSpace.initializeHeader(ref);  return;
     case          Plan.ALLOC_CODE: Plan.smallCodeSpace.initializeHeader(ref, true); return;

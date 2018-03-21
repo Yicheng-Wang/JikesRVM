@@ -133,6 +133,7 @@ public abstract class Plan {
 
   /* Space descriptors */
   public static final int IMMORTAL = immortalSpace.getDescriptor();
+  public static final int TIB = immortalTIBSpace.getDescriptor();
   public static final int VM_SPACE = vmSpace.getDescriptor();
   public static final int META = metaDataSpace.getDescriptor();
   public static final int LOS = loSpace.getDescriptor();
@@ -920,7 +921,7 @@ public abstract class Plan {
    * allocation, excluding space reserved for copying.
    */
   public int getPagesUsed() {
-    return loSpace.reservedPages() + immortalSpace.reservedPages() +
+    return loSpace.reservedPages() + immortalSpace.reservedPages() + immortalTIBSpace.reservedPages() +
       metaDataSpace.reservedPages() + nonMovingSpace.reservedPages();
   }
 
@@ -1052,6 +1053,8 @@ public abstract class Plan {
     if (Space.isInSpace(LOS, object))
       return true;
     if (Space.isInSpace(IMMORTAL, object))
+      return true;
+    if (Space.isInSpace(TIB, object))
       return true;
     if (Space.isInSpace(VM_SPACE, object))
       return true;
