@@ -193,6 +193,11 @@ import org.vmmagic.unboxed.Word;
     fillAlignmentGap(cursor, start);
     cursor = end;
     end.plus(SIZE_OF_TWO_X86_CACHE_LINES_IN_BYTES).prefetch();
+      Log.write("cursor: ");
+      Log.write(cursor);
+      Log.write(" end: ");
+      Log.write(end);
+      Log.writeln();
     return start;
   }
 

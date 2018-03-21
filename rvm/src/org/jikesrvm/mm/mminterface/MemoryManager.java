@@ -25,7 +25,8 @@ import static org.mmtk.utility.heap.layout.HeapParameters.MAX_SPACES;
 import java.lang.ref.PhantomReference;
 import java.lang.ref.SoftReference;
 import java.lang.ref.WeakReference;
-
+import org.mmtk.plan.MutatorContext;
+import org.mmtk.utility.alloc.BumpPointer;
 import org.jikesrvm.VM;
 import org.jikesrvm.architecture.StackFrameLayout;
 import org.jikesrvm.classloader.RVMArray;
@@ -73,7 +74,6 @@ import org.vmmagic.unboxed.ObjectReference;
 import org.vmmagic.unboxed.Offset;
 import org.vmmagic.unboxed.Word;
 import org.vmmagic.unboxed.WordArray;
-
 /**
  * The interface that the MMTk memory manager presents to Jikes RVM
  */
@@ -968,6 +968,7 @@ public final class MemoryManager {
     int align = ObjectModel.getAlignment(fakeType);
     int offset = ObjectModel.getOffsetForAlignment(fakeType, false);
     int width = fakeType.getLogElementSize();
+    VM.sysWrite("runtimetable allocator is",type.getMMAllocator());
     //notifyClassResolved(type);
     /* Allocate a word array */
     Object array = allocateArray(size,
