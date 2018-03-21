@@ -107,6 +107,7 @@ public class AlignmentEncoding {
       VM.sysWriteln(", requested = ",alignCode);
     }
     while (getTibCodeForRegion(region) != alignCode) {
+      //VM.sysWrite("aligning!!!!!!!!!!!");
       Address next = region.plus(ALIGNMENT_INCREMENT);
       // Hack to allow alignment, but no alignment filling during boot
       while (region.LT(next)) {
@@ -127,7 +128,7 @@ public class AlignmentEncoding {
   }
 
 
-  private static int getTibCodeForRegion(Address region) {
+  static int getTibCodeForRegion(Address region) {
     return extractTibCode(region.plus(JavaHeader.OBJECT_REF_OFFSET));
   }
 

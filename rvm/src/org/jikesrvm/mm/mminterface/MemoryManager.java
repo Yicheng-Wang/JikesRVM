@@ -876,13 +876,18 @@ public final class MemoryManager {
       throwLargeArrayOutOfMemoryError();
     }
     int size = elemBytes + headerSize + AlignmentEncoding.padding(alignCode);
-    Selected.Mutator mutator = Selected.Mutator.get();
+    VM.sysWriteln("old size is: "+ size );
+    int aligncodenow = AlignmentEncoding.getTibCodeForRegion(testendpoint);
+    int adjustpadding = (aligncodenow<alignCode)?(alignCode-aligncodenow)*4:(alignCode+8-aligncodenow)*4;
+    size = elemBytes + headerSize + adjustpadding;
+    VM.sysWriteln("new size is: "+ size );
+    Selected.Mutator mutator = Selected.Mutator.get(testendpoint);
     notifyClassResolved(type);
     VM.sysWriteln("count: "+ count + " size: "+size +" align: "+align+ " offset: "+ offset+ " getMMAllocator is : "+ type.getMMAllocator());
     Address region = allocateSpace(mutator, size, align, offset, type.getMMAllocator(), Plan.DEFAULT_SITE);
-      if(region.toInt()!=testendpoint.toInt()){
+      /*if(region.toInt()!=testendpoint.toInt()){
           VM.sysWriteln("ALARM!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-      }
+      }*/
     testendpoint = MutatorContext.immortalTIB.getCursor();
     lastendpoint = region.plus(size);
     VM.sysWrite("Allocating TIB: region = ",region," end region first: ",lastendpoint);
