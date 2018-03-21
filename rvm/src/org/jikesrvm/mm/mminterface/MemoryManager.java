@@ -884,7 +884,7 @@ public final class MemoryManager {
     testendpoint = lastendpoint.plus(48);
     VM.sysWrite("Allocating TIB: region = ",region," end region first: ",lastendpoint);
     VM.sysWriteln(" end region after: ",testendpoint);
-    if(testendpoint.toInt()!=lastendpoint.toInt()){
+    if(region.toInt()!=testendpoint.toInt()){
         VM.sysWriteln("ALARM!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
     }
     region = AlignmentEncoding.adjustRegion(alignCode, region);
