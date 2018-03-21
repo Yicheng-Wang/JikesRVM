@@ -113,7 +113,7 @@ public abstract class MutatorContext {
   /** Per-mutator allocator into the immortal space */
   protected final BumpPointer immortal = new ImmortalLocal(Plan.immortalSpace);
 
-  protected final BumpPointer immortalTIB = new ImmortalLocal(Plan.immortalTIBSpace);
+  public static final BumpPointer immortalTIB = new ImmortalLocal(Plan.immortalTIBSpace);
   /** Per-mutator allocator into the large object space */
   protected final LargeObjectLocal los = new LargeObjectLocal(Plan.loSpace);
 

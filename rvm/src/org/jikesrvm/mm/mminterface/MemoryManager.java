@@ -884,6 +884,7 @@ public final class MemoryManager {
     Word negOff = Word.fromIntSignExtend(-offset);
     Offset delta = negOff.minus(region.toWord()).and(mask).toOffset();
     testendpoint = lastendpoint.plus(delta);
+    testendpoint = MutatorContext.immortalTIB.getCursor();
     if(region.toInt()!=testendpoint.toInt()){
       VM.sysWriteln("ALARM!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
     }
