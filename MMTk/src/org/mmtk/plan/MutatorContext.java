@@ -245,6 +245,7 @@ public abstract class MutatorContext {
    */
   public Allocator getAllocatorFromSpace(Space space) {
     if (space == Plan.immortalSpace)  return immortal;
+    if (space == Plan.immortalTIBSpace)  return immortalTIB;
     if (space == Plan.loSpace)        return los;
     if (space == Plan.nonMovingSpace) return nonmove;
     if (Plan.USE_CODE_SPACE && space == Plan.smallCodeSpace) return smcode;

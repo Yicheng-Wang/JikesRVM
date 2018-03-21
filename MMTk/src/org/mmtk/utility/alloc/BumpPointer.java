@@ -179,7 +179,10 @@ import org.vmmagic.unboxed.Word;
   public final Address alloc(int bytes, int align, int offset) {
     Address start = alignAllocationNoFill(cursor, align, offset);
     Address end = start.plus(bytes);
-      Log.write("Actual BumpPointer");
+      Log.write("Actual BumpPointer start: ");
+      Log.write(start);
+      Log.write(" end: ");
+      Log.write(end);
       Log.writeln();
     if (end.GT(internalLimit)){
         Log.write("!!!!!!!!!!!!!!!!!!!!!!Attention allocSlow!!!!!!!!!!!!!!");
