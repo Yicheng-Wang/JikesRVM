@@ -54,6 +54,7 @@ import org.mmtk.plan.Plan;
 import org.mmtk.policy.Space;
 import org.mmtk.utility.Memory;
 import org.mmtk.utility.alloc.Allocator;
+import org.mmtk.utility.alloc.BumpPointer;
 import org.mmtk.utility.gcspy.GCspy;
 import org.mmtk.utility.heap.HeapGrowthManager;
 import org.mmtk.utility.heap.layout.HeapLayout;
@@ -100,6 +101,7 @@ public final class MemoryManager {
    */
   private static boolean collectionEnabled = false;
   protected static Address lastendpoint;
+    protected static Address testendpoint;
   /***********************************************************************
    *
    * Initialization
@@ -879,7 +881,9 @@ public final class MemoryManager {
     VM.sysWriteln("count: "+ count + " size: "+size +" align: "+align+ " offset: "+ offset+ " getMMAllocator is : "+ type.getMMAllocator());
     Address region = allocateSpace(mutator, size, align, offset, type.getMMAllocator(), Plan.DEFAULT_SITE);
     lastendpoint = region.plus(size);
-    VM.sysWriteln("Allocating TIB: region = ",region," end region: ",lastendpoint);
+    testendpoint = lastendpoint.plus(128);
+    VM.sysWrite("Allocating TIB: region = ",region," end region first: ",lastendpoint);
+    VM.sysWriteln(" end region after: ",testendpoint);
     region = AlignmentEncoding.adjustRegion(alignCode, region);
     Object result = ObjectModel.initializeArray(region, fakeTib, elements, size);
     mutator.postAlloc(ObjectReference.fromObject(result), ObjectReference.fromObject(fakeTib), size, type.getMMAllocator());
