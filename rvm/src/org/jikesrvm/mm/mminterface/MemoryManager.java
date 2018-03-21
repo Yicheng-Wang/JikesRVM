@@ -881,7 +881,7 @@ public final class MemoryManager {
     int adjustpadding = (aligncodenow<alignCode)?(alignCode-aligncodenow)*4:(alignCode+8-aligncodenow)*4;
     size = elemBytes + headerSize + adjustpadding;
     VM.sysWriteln("new size is: "+ size );
-    Selected.Mutator mutator = Selected.Mutator.get(testendpoint);
+    Selected.Mutator mutator = Selected.Mutator.get();
     notifyClassResolved(type);
     VM.sysWriteln("count: "+ count + " size: "+size +" align: "+align+ " offset: "+ offset+ " getMMAllocator is : "+ type.getMMAllocator());
     Address region = allocateSpace(mutator, size, align, offset, type.getMMAllocator(), Plan.DEFAULT_SITE);
