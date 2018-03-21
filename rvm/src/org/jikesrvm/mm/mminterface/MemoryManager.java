@@ -99,7 +99,7 @@ public final class MemoryManager {
    * Has garbage collection been enabled yet?
    */
   private static boolean collectionEnabled = false;
-  protected Address last;
+  protected static Address lastendpoint;
   /***********************************************************************
    *
    * Initialization
@@ -878,7 +878,8 @@ public final class MemoryManager {
     notifyClassResolved(type);
     VM.sysWriteln("count: "+ count + " size: "+size +" align: "+align+ " offset: "+ offset+ " getMMAllocator is : "+ type.getMMAllocator());
     Address region = allocateSpace(mutator, size, align, offset, type.getMMAllocator(), Plan.DEFAULT_SITE);
-    VM.sysWriteln("Allocating TIB: region = ",region," plus size: ",size);
+    lastendpoint = region.plus(size);
+    VM.sysWriteln("Allocating TIB: region = ",region," end region: ",lastendpoint);
     region = AlignmentEncoding.adjustRegion(alignCode, region);
     Object result = ObjectModel.initializeArray(region, fakeTib, elements, size);
     mutator.postAlloc(ObjectReference.fromObject(result), ObjectReference.fromObject(fakeTib), size, type.getMMAllocator());
