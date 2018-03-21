@@ -179,8 +179,14 @@ import org.vmmagic.unboxed.Word;
   public final Address alloc(int bytes, int align, int offset) {
     Address start = alignAllocationNoFill(cursor, align, offset);
     Address end = start.plus(bytes);
-    if (end.GT(internalLimit))
-      return allocSlow(start, end, align, offset);
+      Log.write("Actual BumpPointer");
+      Log.writeln();
+    if (end.GT(internalLimit)){
+        Log.write("!!!!!!!!!!!!!!!!!!!!!!Attention allocSlow!!!!!!!!!!!!!!");
+        Log.writeln();
+        return allocSlow(start, end, align, offset);
+    }
+
     fillAlignmentGap(cursor, start);
     cursor = end;
     end.plus(SIZE_OF_TWO_X86_CACHE_LINES_IN_BYTES).prefetch();
