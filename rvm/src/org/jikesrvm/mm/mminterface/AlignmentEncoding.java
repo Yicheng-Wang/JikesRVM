@@ -51,7 +51,7 @@ public class AlignmentEncoding {
   public static final int ALIGN_CODE_NONE = -1;
 
   /** Bits of metadata that we encode */
-  static final int FIELD_WIDTH = 10;
+  static final int FIELD_WIDTH = 9;
 
   /** Maximum distance (in words) that we shift an object */
   static final int MAX_ALIGN_WORDS = 1 << FIELD_WIDTH;
