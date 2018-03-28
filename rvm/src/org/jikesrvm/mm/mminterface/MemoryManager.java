@@ -96,12 +96,14 @@ public final class MemoryManager {
    */
   private static boolean booted = false;
   private static int count=0;
+  private static int meansize=0;
   /**
    * Has garbage collection been enabled yet?
    */
   private static boolean collectionEnabled = false;
   protected static Address lastendpoint;
     protected static Address testendpoint;
+    protected static Address laststart;
   /***********************************************************************
    *
    * Initialization
@@ -883,13 +885,18 @@ public final class MemoryManager {
     VM.sysWriteln("new size is: "+ size );
     Selected.Mutator mutator = Selected.Mutator.get();
     notifyClassResolved(type);
-    VM.sysWriteln("count: "+ count + " size: "+size +" align: "+align+ " offset: "+ offset+ " getMMAllocator is : "+ type.getMMAllocator());
+    VM.sysWriteln("count: "+ count + " size: "+size +" align: "+align+ " offset: "+ offset+ " getMMAllocator is : "+ type.getMMAllocator()+"Mean size is : "+meansize);
     Address region = allocateSpace(mutator, size, align, offset, type.getMMAllocator(), Plan.DEFAULT_SITE);
+    if(count>0){
+      meansize=(region.toInt()-laststart.toInt())/count;
+    }
       /*if(region.toInt()!=testendpoint.toInt()){
           VM.sysWriteln("ALARM!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
       }*/
     testendpoint = MutatorContext.immortalTIB.getCursor();
     lastendpoint = region.plus(size);
+    if(count==0)
+      laststart=region;
     VM.sysWrite("Allocating TIB: region = ",region," end region first: ",lastendpoint);
     VM.sysWriteln(" end region after: ",testendpoint);
     region = AlignmentEncoding.adjustRegion(alignCode, region);
