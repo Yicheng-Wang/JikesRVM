@@ -27,15 +27,15 @@ import org.vmmagic.pragma.Uninterruptible;
  */
 public class HandInlinedScanning {
 
-  public static final int AE_FALLBACK = 33;//(1 << AlignmentEncoding.FIELD_WIDTH) - 1;
-  public static final int AE_REFARRAY = 32;//AE_FALLBACK - 1;
+  public static final int AE_FALLBACK = 7;//(1 << AlignmentEncoding.FIELD_WIDTH) - 1;
+  public static final int AE_REFARRAY = 6;//AE_FALLBACK - 1;
 
-  public static final int AE_PATTERN_0x0  = 26;
-  public static final int AE_PATTERN_0x1  = 27;
-  public static final int AE_PATTERN_0x7  = 28;
-  public static final int AE_PATTERN_0x3F = 29;
-  public static final int AE_PATTERN_0x3  = 30;
-  public static final int AE_PATTERN_0x3D = 31;
+  public static final int AE_PATTERN_0x0  = 0;
+  public static final int AE_PATTERN_0x1  = 1;
+  public static final int AE_PATTERN_0x7  = 2;
+  public static final int AE_PATTERN_0x3F = 3;
+  public static final int AE_PATTERN_0x3  = 4;
+  public static final int AE_PATTERN_0x3D = 5;
 
   private static final int FIELD0_OFFSET =
     JavaHeader.objectStartOffset(RVMType.JavaLangObjectType) +
