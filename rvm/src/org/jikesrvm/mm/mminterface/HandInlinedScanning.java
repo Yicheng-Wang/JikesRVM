@@ -27,12 +27,12 @@ import org.vmmagic.pragma.Uninterruptible;
  */
 public class HandInlinedScanning {
 
-  public static final int AE_FALLBACK = 80;//(1 << AlignmentEncoding.FIELD_WIDTH) - 1;
+  public static final int AE_FALLBACK = 96;//(1 << AlignmentEncoding.FIELD_WIDTH) - 1;
   public static final int AE_REFARRAY = 6;//AE_FALLBACK - 1;
 
-  public static final int AE_PATTERN_0x0  = 26;
-  public static final int AE_PATTERN_0x1  = 52;
-  public static final int AE_PATTERN_0x7  = 144;
+  public static final int AE_PATTERN_0x0  = 32;
+  public static final int AE_PATTERN_0x1  = 64;
+  public static final int AE_PATTERN_0x7  = 160;
   public static final int AE_PATTERN_0x3F = 3;
   public static final int AE_PATTERN_0x3  = 4;
   public static final int AE_PATTERN_0x3D = 5;
