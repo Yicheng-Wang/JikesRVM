@@ -31,7 +31,7 @@ public class HandInlinedScanning {
   public static final int AE_REFARRAY = 6;//AE_FALLBACK - 1;
 
   public static final int AE_PATTERN_0x0  = 26;
-  public static final int AE_PATTERN_0x1  = 1;
+  public static final int AE_PATTERN_0x1  = 52;
   public static final int AE_PATTERN_0x7  = 2;
   public static final int AE_PATTERN_0x3F = 3;
   public static final int AE_PATTERN_0x3  = 4;
