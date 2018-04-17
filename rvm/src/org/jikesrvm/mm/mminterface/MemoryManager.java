@@ -96,6 +96,7 @@ public final class MemoryManager {
    */
   private static boolean booted = false;
   private static int count=0;
+  private static int buildcount=0;
   private static int meansize=0;
   /**
    * Has garbage collection been enabled yet?
@@ -853,8 +854,11 @@ public final class MemoryManager {
     int elements = TIB.computeSize(numVirtualMethods);
 
     if (!VM.runningVM) {
-      VM.sysWriteln("Not runningVM");
-      return TIB.allocate(elements, alignCode);
+      buildcount++;
+      VM.sysWriteln("Not runningVM "+buildcount);
+      TIB build = TIB.allocate(elements, alignCode);
+      VM.sysWriteln(build.toString());
+      return build;
     }
     if (alignCode == AlignmentEncoding.ALIGN_CODE_NONE) {
       VM.sysWriteln("ALIGN_CODE_NONE, count: "+count);
