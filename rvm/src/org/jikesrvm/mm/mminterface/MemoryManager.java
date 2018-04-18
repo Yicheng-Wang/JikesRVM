@@ -855,10 +855,8 @@ public final class MemoryManager {
 
     if (!VM.runningVM) {
       buildcount++;
-      VM.sysWriteln("Not runningVM "+buildcount);
-      TIB build = TIB.allocate(elements, alignCode);
-      VM.sysWriteln(build.toString());
-      return build;
+      //VM.sysWriteln("Not runningVM "+buildcount);
+      return TIB.allocate(elements, alignCode);
     }
     if (alignCode == AlignmentEncoding.ALIGN_CODE_NONE) {
       VM.sysWriteln("ALIGN_CODE_NONE, count: "+count);

@@ -1006,7 +1006,6 @@ public class ObjectModel {
     int offset = getOffsetForAlignment(array, needsIdentityHash);
     int padding = AlignmentEncoding.padding(alignCode);
     Address ptr = bootImage.allocateDataStorage(size + padding, align, offset);
-    VM.sysWriteln("In the ObjectModel ");
     ptr = AlignmentEncoding.adjustRegion(alignCode, ptr);
     Address ref = JavaHeader.initializeArrayHeader(bootImage, ptr, tib, size, numElements, needsIdentityHash, identityHashValue);
     bootImage.setFullWord(ref.plus(getArrayLengthOffset()), numElements);
