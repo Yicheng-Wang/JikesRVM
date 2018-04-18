@@ -167,7 +167,7 @@ public class BootImageWriter {
   /**
    * How much talking while we work?
    */
-  private static Verbosity verbosity = DETAILED;
+  private static Verbosity verbosity = SUMMARY;
 
   /** how deeply in the recursive copy do we continue to blather */
   private static final int DEPTH_CUTOFF = 3;
