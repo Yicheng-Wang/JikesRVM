@@ -167,7 +167,7 @@ public class BootImageWriter {
   /**
    * How much talking while we work?
    */
-  private static Verbosity verbosity = SUMMARY;
+  private static Verbosity verbosity = NONE;
 
   /** how deeply in the recursive copy do we continue to blather */
   private static final int DEPTH_CUTOFF = 3;
@@ -1832,12 +1832,12 @@ public class BootImageWriter {
    * @throws IllegalAccessException
    */
   private static void copyTIBToBootImage(RVMType rvmType, Object jdkObject, Address imageAddress) throws IllegalAccessException {
-    if (verbosity.isAtLeast(DETAILED)) {
+    if (verbosity.isAtLeast(NONE)) {
       depth--;
       traceContext.push("", jdkObject.getClass().getName(), "tib");
     }
     Address tibImageAddress = copyToBootImage(rvmType.getTypeInformationBlock(), false, Address.max(), jdkObject, false, AlignmentEncoding.ALIGN_CODE_NONE);
-    if (verbosity.isAtLeast(DETAILED)) {
+    if (verbosity.isAtLeast(NONE)) {
       traceContext.pop();
       depth++;
     }
