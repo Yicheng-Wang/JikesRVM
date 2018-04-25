@@ -1011,7 +1011,7 @@ public class ObjectModel {
     if(alignCode==AlignmentEncoding.ALIGN_CODE_NONE){
       newpadding=0;
     }
-    VM.sysWriteln("Old array size is ",size+padding," New size is ",size+newpadding);
+    //VM.sysWriteln("Old array size is ",size+padding," New size is ",size+newpadding);
     Address ptr = bootImage.allocateDataStorage(size + newpadding, align, offset);
     ptr = AlignmentEncoding.adjustRegion(alignCode, ptr);
     Address ref = JavaHeader.initializeArrayHeader(bootImage, ptr, tib, size, numElements, needsIdentityHash, identityHashValue);
