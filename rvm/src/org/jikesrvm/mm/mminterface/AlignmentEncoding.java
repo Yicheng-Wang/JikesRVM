@@ -51,13 +51,13 @@ public class AlignmentEncoding {
   public static final int ALIGN_CODE_NONE = -1;
 
   /** Bits of metadata that we encode */
-  static final int FIELD_WIDTH = 10;
+  public static final int FIELD_WIDTH = 10;
 
   /** Maximum distance (in words) that we shift an object */
   public static final int MAX_ALIGN_WORDS = 1 << FIELD_WIDTH;
 
   /** First bit of the encoded field */
-  private static final int FIELD_SHIFT = LOG_BYTES_IN_ADDRESS;
+  public static final int FIELD_SHIFT = LOG_BYTES_IN_ADDRESS;
 
   /** How far do we need to shift the object to increment the encoded field by 1 */
   private static final int ALIGNMENT_INCREMENT = 1 << FIELD_SHIFT;
