@@ -1005,7 +1005,8 @@ public class ObjectModel {
     }
     int offset = getOffsetForAlignment(array, needsIdentityHash);
     int padding = AlignmentEncoding.padding(alignCode);
-    int aligncodenow = (bootImage.getDataSize())%(1<<(AlignmentEncoding.FIELD_WIDTH + AlignmentEncoding.FIELD_SHIFT));
+    Address Start = Address.fromIntSignExtend(1610612736);
+    int aligncodenow = AlignmentEncoding.getTibCodeForRegion((Address)(Start.plus(bootImage.getDataSize())));
     int newpadding = (aligncodenow<alignCode)?(alignCode-aligncodenow)*4:(alignCode+AlignmentEncoding.MAX_ALIGN_WORDS-aligncodenow)*4;
     VM.sysWriteln("Old array size is ",size+newpadding," New size is ",size+newpadding);
     Address ptr = bootImage.allocateDataStorage(size + padding, align, offset);
