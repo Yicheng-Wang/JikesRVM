@@ -294,6 +294,7 @@ public class BootImage implements BootImageInterface {
 
   @Override
   public Address allocateDataStorage(int size, int align, int offset) {
+    VM.sysWriteln("BOOT_IMAGE_DATA_START is " + BOOT_IMAGE_DATA_START + " and Offset is "+ freeDataOffset );
     size = roundAllocationSize(size);
     Offset unalignedOffset = freeDataOffset;
     freeDataOffset = MemoryManager.alignAllocation(freeDataOffset, align, offset);
