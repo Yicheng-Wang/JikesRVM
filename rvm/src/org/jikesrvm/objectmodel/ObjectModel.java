@@ -1005,9 +1005,9 @@ public class ObjectModel {
     }
     int offset = getOffsetForAlignment(array, needsIdentityHash);
     int padding = AlignmentEncoding.padding(alignCode);
-    /*int aligncodenow = AlignmentEncoding.getTibCodeForRegion(bootImage.getDataSize());
-    int newpadding =*/
-    VM.sysWriteln("Array size is ",size+padding);
+    int aligncodenow = AlignmentEncoding.getTibCodeForRegion((Address)(BOOT_IMAGE_DATA_START.plus(bootImage.getDataSize())));
+    int newpadding = (aligncodenow<alignCode)?(alignCode-aligncodenow)*4:(alignCode+AlignmentEncoding.MAX_ALIGN_WORDS-aligncodenow)*4;
+    VM.sysWriteln("Old array size is ",size+newpadding," New size is ",size+newpadding);
     Address ptr = bootImage.allocateDataStorage(size + padding, align, offset);
     ptr = AlignmentEncoding.adjustRegion(alignCode, ptr);
     Address ref = JavaHeader.initializeArrayHeader(bootImage, ptr, tib, size, numElements, needsIdentityHash, identityHashValue);

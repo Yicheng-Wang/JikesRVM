@@ -54,7 +54,7 @@ public class AlignmentEncoding {
   static final int FIELD_WIDTH = 10;
 
   /** Maximum distance (in words) that we shift an object */
-  static final int MAX_ALIGN_WORDS = 1 << FIELD_WIDTH;
+  public static final int MAX_ALIGN_WORDS = 1 << FIELD_WIDTH;
 
   /** First bit of the encoded field */
   private static final int FIELD_SHIFT = LOG_BYTES_IN_ADDRESS;
@@ -128,7 +128,7 @@ public class AlignmentEncoding {
   }
 
 
-  static int getTibCodeForRegion(Address region) {
+  public static int getTibCodeForRegion(Address region) {
     return extractTibCode(region.plus(JavaHeader.OBJECT_REF_OFFSET));
   }
 

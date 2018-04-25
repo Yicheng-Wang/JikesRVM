@@ -13,13 +13,19 @@
 package org.jikesrvm.objectmodel;
 
 import org.vmmagic.unboxed.Address;
+import org.vmmagic.unboxed.Offset;
 import org.vmmagic.unboxed.Word;
 
 /**
  * Interface of BootImage that is used to define object model classes.
  */
 public interface BootImageInterface {
+  /**
+   * Offset of next free data word, in bytes
+   */
+   Offset freeDataOffset = Offset.zero();
 
+  int getDataSize();
   /**
    * Allocate space in data portion of bootimage. Moral equivalent of
    * memory managers allocating raw storage at runtime.
