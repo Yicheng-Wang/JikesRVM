@@ -1008,8 +1008,8 @@ public class ObjectModel {
     Address Start = Address.fromIntSignExtend(1610612736);
     int aligncodenow = AlignmentEncoding.getTibCodeForRegion((Address)(Start.plus(bootImage.getDataSize())));
     int newpadding = (aligncodenow<alignCode)?(alignCode-aligncodenow)*4:(alignCode+AlignmentEncoding.MAX_ALIGN_WORDS-aligncodenow)*4;
-    VM.sysWriteln("Old array size is ",size+newpadding," New size is ",size+newpadding);
-    Address ptr = bootImage.allocateDataStorage(size + padding, align, offset);
+    VM.sysWriteln("Old array size is ",size+padding," New size is ",size+newpadding);
+    Address ptr = bootImage.allocateDataStorage(size + newpadding, align, offset);
     ptr = AlignmentEncoding.adjustRegion(alignCode, ptr);
     Address ref = JavaHeader.initializeArrayHeader(bootImage, ptr, tib, size, numElements, needsIdentityHash, identityHashValue);
     bootImage.setFullWord(ref.plus(getArrayLengthOffset()), numElements);
