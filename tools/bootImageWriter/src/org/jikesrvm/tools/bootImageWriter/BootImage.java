@@ -74,10 +74,10 @@ public class BootImage implements BootImageInterface {
   private byte[] bootImageRMap;
   private int rMapSize = 0;
 
-  /**
-   * Offset of next free data word, in bytes
-   */
-  private Offset freeDataOffset = Offset.zero();
+    /**
+     * Offset of next free data word, in bytes*/
+
+    private Offset freeDataOffset = Offset.zero();
 
   /**
    * Offset of next free code word, in bytes
@@ -294,7 +294,7 @@ public class BootImage implements BootImageInterface {
 
   @Override
   public Address allocateDataStorage(int size, int align, int offset) {
-    VM.sysWriteln("BOOT_IMAGE_DATA_START is " + BOOT_IMAGE_DATA_START + " and Offset is "+ freeDataOffset );
+    //VM.sysWriteln("BOOT_IMAGE_DATA_START is " + BOOT_IMAGE_DATA_START + " and Offset is "+ freeDataOffset );
     size = roundAllocationSize(size);
     Offset unalignedOffset = freeDataOffset;
     freeDataOffset = MemoryManager.alignAllocation(freeDataOffset, align, offset);
