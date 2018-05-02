@@ -1015,8 +1015,8 @@ public class ObjectModel {
     }
     else{
       ptr = bootImage.allocateTIBStorage(size + newpadding, align, offset);
+      VM.sysWriteln("Next allocating size is ",size+newpadding);
     }
-    //VM.sysWriteln("Old array size is ",size+padding," New size is ",size+newpadding);
     ptr = AlignmentEncoding.adjustRegion(alignCode, ptr);
     Address ref = JavaHeader.initializeArrayHeader(bootImage, ptr, tib, size, numElements, needsIdentityHash, identityHashValue);
     bootImage.setFullWord(ref.plus(getArrayLengthOffset()), numElements);
