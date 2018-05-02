@@ -1765,7 +1765,12 @@ public class BootImageWriter {
           add.setImageAdress(mapEntry.imageAddress);
           add.setFakeAddress(tibImageAddress);
           int index = ((add.getAlignData())/(1<<( FIELD_WIDTH - 3)));
-          if((add.getAlignData()!=AlignmentEncoding.ALIGN_CODE_NONE)&&(numbercount[index]==0||(add.getFakeAddress().toInt()!=TIBAssist[index][numbercount[index]-1].getFakeAddress().toInt()))){
+          boolean same=true;
+          for(int i=0;i<numbercount[index];i++){
+              if(add.getFakeAddress().toInt()==TIBAssist[index][i].getFakeAddress().toInt())
+                  same=false;
+          }
+          if((add.getAlignData()!=AlignmentEncoding.ALIGN_CODE_NONE)&&(same)){
             TIBAssist[index][numbercount[index]] = add;
             numbercount[index]++;
             VM.sysWriteln("The index is: ",index ,"Total : ",numbercount[index]);
@@ -1859,16 +1864,21 @@ public class BootImageWriter {
       fail("can't copy tib for " + jdkObject);
     }
     //VM.sysWriteln(" TIB of " + jdkObject.getClass().getName() + " Address " + Integer.toHexString(tibImageAddress.toInt()) + " Align Data is " + rvmType.getTypeInformationBlock().getAlignData());
-    TIB add = rvmType.getTypeInformationBlock();
-    add.setImageType(rvmType);
-    add.setImageAdress(imageAddress);
-    add.setFakeAddress(tibImageAddress);
-    int index = ((add.getAlignData())/(1<<( FIELD_WIDTH - 3)));
-    if((add.getAlignData()!=AlignmentEncoding.ALIGN_CODE_NONE)&&(numbercount[index]==0||(add.getFakeAddress().toInt()!=TIBAssist[index][numbercount[index]-1].getFakeAddress().toInt()))){
-      TIBAssist[index][numbercount[index]] = add;
-      numbercount[index]++;
-      VM.sysWriteln("index is: ",index ,"Total : ",numbercount[index]);
-    }
+      TIB add = rvmType.getTypeInformationBlock();
+      add.setImageType(rvmType);
+      add.setImageAdress(imageAddress);
+      add.setFakeAddress(tibImageAddress);
+      int index = ((add.getAlignData())/(1<<( FIELD_WIDTH - 3)));
+      boolean same=true;
+      for(int i=0;i<numbercount[index];i++){
+          if(add.getFakeAddress().toInt()==TIBAssist[index][i].getFakeAddress().toInt())
+              same=false;
+      }
+      if((add.getAlignData()!=AlignmentEncoding.ALIGN_CODE_NONE)&&(same)){
+          TIBAssist[index][numbercount[index]] = add;
+          numbercount[index]++;
+          VM.sysWriteln("The index is: ",index ,"Total : ",numbercount[index]);
+      }
     ObjectModel.setTIB(bootImage, imageAddress, tibImageAddress, rvmType);
   }
 
