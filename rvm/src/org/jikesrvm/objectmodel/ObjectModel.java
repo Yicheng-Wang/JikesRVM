@@ -1015,8 +1015,8 @@ public class ObjectModel {
     }
     else{
       ptr = bootImage.allocateTIBStorage(size + newpadding, align, offset);
-      VM.sysWriteln("Next allocating TIB size is ",Integer.toHexString(size)," padding is ", Integer.toHexString(newpadding));
-      VM.sysWriteln("Total size is ",Integer.toHexString(size+newpadding));
+      VM.sysWriteln("Next allocating TIB size is ",Integer.toHexString(size),"  requested = ", Integer.toHexString(alignCode));
+      //VM.sysWriteln("Total size is ",Integer.toHexString(size+newpadding));
     }
     ptr = AlignmentEncoding.adjustRegion(alignCode, ptr);
     Address ref = JavaHeader.initializeArrayHeader(bootImage, ptr, tib, size, numElements, needsIdentityHash, identityHashValue);
