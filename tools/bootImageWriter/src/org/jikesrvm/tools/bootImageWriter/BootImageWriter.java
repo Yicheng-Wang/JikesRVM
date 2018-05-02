@@ -15,6 +15,7 @@ package org.jikesrvm.tools.bootImageWriter;
 import static org.jikesrvm.HeapLayoutConstants.BOOT_IMAGE_CODE_START;
 import static org.jikesrvm.HeapLayoutConstants.BOOT_IMAGE_DATA_START;
 import static org.jikesrvm.HeapLayoutConstants.BOOT_IMAGE_RMAP_START;
+import static org.jikesrvm.mm.mminterface.AlignmentEncoding.FIELD_WIDTH;
 import static org.jikesrvm.runtime.JavaSizeConstants.BYTES_IN_BOOLEAN;
 import static org.jikesrvm.runtime.JavaSizeConstants.BYTES_IN_BYTE;
 import static org.jikesrvm.runtime.JavaSizeConstants.BYTES_IN_CHAR;
@@ -150,6 +151,8 @@ public class BootImageWriter {
    * trying to fill in fields when they cannot be reflected upon. Always lower
    * case.
    */
+  private static TIB[][] TIBAssist = new TIB[8][760];
+  private static int[] numbercount = new int[8];
   private static String classLibrary;
 
   /**
@@ -1757,6 +1760,14 @@ public class BootImageWriter {
           if (tibImageAddress.EQ(OBJECT_NOT_ALLOCATED)) {
             fail("can't copy tib for " + jdkObject);
           }
+          TIB add = rvmType.getTypeInformationBlock();
+          add.setImageType(rvmType);
+          add.setImageAdress(mapEntry.imageAddress);
+          if(add.getAlignData()!=AlignmentEncoding.ALIGN_CODE_NONE){
+            int index = ((add.getAlignData())%(1<<( FIELD_WIDTH - 3)));
+            TIBAssist[index][numbercount[index]] = add;
+            numbercount[index]++;
+          }
           ObjectModel.setTIB(bootImage, mapEntry.imageAddress, tibImageAddress, rvmType);
         }
       } else if (jdkObject instanceof TIB) {
@@ -1837,7 +1848,7 @@ public class BootImageWriter {
       depth--;
       traceContext.push("", jdkObject.getClass().getName(), "tib");
     }
-
+    VM.sysWriteln("try something new!");
     Address tibImageAddress = copyToBootImage(rvmType.getTypeInformationBlock(), false, Address.max(), jdkObject, false, AlignmentEncoding.ALIGN_CODE_NONE);
     if (verbosity.isAtLeast(NONE)) {
       traceContext.pop();
@@ -1847,7 +1858,14 @@ public class BootImageWriter {
       fail("can't copy tib for " + jdkObject);
     }
     //VM.sysWriteln(" TIB of " + jdkObject.getClass().getName() + " Address " + Integer.toHexString(tibImageAddress.toInt()) + " Align Data is " + rvmType.getTypeInformationBlock().getAlignData());
-
+    TIB add = rvmType.getTypeInformationBlock();
+    add.setImageType(rvmType);
+    add.setImageAdress(imageAddress);
+    if(add.getAlignData()!=AlignmentEncoding.ALIGN_CODE_NONE){
+      int index = ((add.getAlignData())%(1<<( FIELD_WIDTH - 3)));
+      TIBAssist[index][numbercount[index]] = add;
+      numbercount[index]++;
+    }
     ObjectModel.setTIB(bootImage, imageAddress, tibImageAddress, rvmType);
   }
 
