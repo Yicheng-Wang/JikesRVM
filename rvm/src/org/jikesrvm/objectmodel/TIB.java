@@ -74,7 +74,7 @@ public final class TIB implements RuntimeTable<Object> {
   public void setImageAdress(Address imageAdress) {
     this.imageAdress = imageAdress;
   }
-}
+
   private int num;
   public void setnum(int num){
     this.num=num;
