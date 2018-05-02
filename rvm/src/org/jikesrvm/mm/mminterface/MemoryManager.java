@@ -854,8 +854,12 @@ public final class MemoryManager {
     int elements = TIB.computeSize(numVirtualMethods);
 
     if (!VM.runningVM) {
-      return TIB.allocate(elements, alignCode);
+      TIB buildTIB = TIB.allocate(elements, alignCode);
+      buildTIB.setnum(buildcount);
+      buildcount++;
+      return buildTIB;
     }
+
     if (alignCode == AlignmentEncoding.ALIGN_CODE_NONE) {
       VM.sysWriteln("ALIGN_CODE_NONE, count: "+count);
       //count++;

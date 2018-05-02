@@ -58,7 +58,13 @@ public final class TIB implements RuntimeTable<Object> {
   /** Alignment encoded data for this TIB - only used at build time */
   private int alignData;
 
-
+  private int num;
+  public void setnum(int num){
+    this.num=num;
+  }
+  public int getnum(){
+    return num;
+  }
   /**
    * Calculates the size of a TIB.
    *
