@@ -1770,7 +1770,7 @@ public class BootImageWriter {
               if(add.getFakeAddress().toInt()==TIBAssist[index][i].getFakeAddress().toInt())
                   same=false;
           }
-          if((add.getAlignData()!=AlignmentEncoding.ALIGN_CODE_NONE)&&(same)){
+          if(same){
             TIBAssist[index][numbercount[index]] = add;
             numbercount[index]++;
             VM.sysWriteln("The index is: ",index ,"Total : ",numbercount[index]);
@@ -1874,7 +1874,7 @@ public class BootImageWriter {
           if(add.getFakeAddress().toInt()==TIBAssist[index][i].getFakeAddress().toInt())
               same=false;
       }
-      if((add.getAlignData()!=AlignmentEncoding.ALIGN_CODE_NONE)&&(same)){
+      if(same){
           TIBAssist[index][numbercount[index]] = add;
           numbercount[index]++;
           VM.sysWriteln("The index is: ",index ,"Total : ",numbercount[index]);
