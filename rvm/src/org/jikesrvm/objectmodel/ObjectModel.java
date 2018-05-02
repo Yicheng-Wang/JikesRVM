@@ -1010,7 +1010,6 @@ public class ObjectModel {
     int newpadding = (aligncodenow<alignCode)?(alignCode-aligncodenow)*4:(alignCode+AlignmentEncoding.MAX_ALIGN_WORDS-aligncodenow)*4;
     Address ptr;
     if(alignCode==AlignmentEncoding.ALIGN_CODE_NONE){
-      newpadding=0;
       ptr = bootImage.allocateDataStorage(size + padding, align, offset);
     }
     else{
