@@ -58,6 +58,23 @@ public final class TIB implements RuntimeTable<Object> {
   /** Alignment encoded data for this TIB - only used at build time */
   private int alignData;
   private Address imageAdress;
+  private RVMType imageType;
+  public RVMType getImageType() {
+    return imageType;
+  }
+
+  public void setImageType(RVMType imageType) {
+    this.imageType = imageType;
+  }
+
+  public Address getImageAdress() {
+    return imageAdress;
+  }
+
+  public void setImageAdress(Address imageAdress) {
+    this.imageAdress = imageAdress;
+  }
+}
   private int num;
   public void setnum(int num){
     this.num=num;
@@ -371,4 +388,4 @@ public final class TIB implements RuntimeTable<Object> {
   public int getAlignData() {
     return alignData;
   }
-}
+
