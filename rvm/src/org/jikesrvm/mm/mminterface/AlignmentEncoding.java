@@ -65,7 +65,7 @@ public class AlignmentEncoding {
   /** Bit-mask to select out the encoded field */
   private static final int TIB_ALIGN_MASK = (MAX_ALIGN_WORDS - 1) << FIELD_SHIFT;
 
-  private static final boolean VERBOSE = false;
+  private static final boolean VERBOSE = true;
 
   /**
    * Assert that a prospective encoded value is sane
