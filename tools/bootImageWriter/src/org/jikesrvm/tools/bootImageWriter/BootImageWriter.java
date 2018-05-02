@@ -1767,6 +1767,8 @@ public class BootImageWriter {
 
         /* Copy the backing array, and then replace its TIB */
         //VM.sysWriteln("Allocating TIB!");
+        VM.sysWriteln("Next allocating TIB number "+ ((TIB)jdkObject).getnum());
+        
         mapEntry.imageAddress = copyToBootImage(backing, allocOnly, overwriteAddress, jdkObject, rvmType.getTypeRef().isRuntimeTable(), alignCodeValue);
 
         if (verbosity.isAtLeast(DETAILED)) say(String.format("TIB address = %x, encoded value = %d, requested = %d%n",
