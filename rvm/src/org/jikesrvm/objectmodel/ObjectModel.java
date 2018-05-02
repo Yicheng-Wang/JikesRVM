@@ -1015,7 +1015,7 @@ public class ObjectModel {
     }
     else{
       ptr = bootImage.allocateTIBStorage(size + newpadding, align, offset);
-      VM.sysWriteln("Next allocating TIB size is ",Integer.toHexString(size),"  requested = ", Integer.toHexString(alignCode));
+      VM.sysWriteln(size," ", alignCode);
       //VM.sysWriteln("Total size is ",Integer.toHexString(size+newpadding));
     }
     ptr = AlignmentEncoding.adjustRegion(alignCode, ptr);
