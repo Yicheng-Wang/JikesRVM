@@ -79,6 +79,7 @@ public class BootImage implements BootImageInterface {
 
     private Offset freeDataOffset = Offset.zero();
 
+    private Offset freeTIBOffset = Offset.zero();
   /**
    * Offset of next free code word, in bytes
    */
@@ -215,6 +216,10 @@ public class BootImage implements BootImageInterface {
     return freeDataOffset.toInt();
   }
 
+
+  public int getTIBSize() {
+    return freeTIBOffset.toInt();
+  }
   /**
    * Get image code size, in bytes.
    * @return image size
@@ -313,6 +318,28 @@ public class BootImage implements BootImageInterface {
                                     lowAddr.minus(unalignedOffset).toWord().toExtent());
     return BOOT_IMAGE_DATA_START.plus(lowAddr);
   }
+
+  public Address allocateTIBStorage(int size, int align, int offset){
+    Address BOOT_IMAGE_TIB_START = Address.fromIntSignExtend(1660944384);
+    size = roundAllocationSize(size);
+    Offset unalignedOffset = freeTIBOffset;
+    freeTIBOffset = MemoryManager.alignAllocation(freeTIBOffset, align, offset);
+    if (VM.ExtremeAssertions) {
+      VM._assert(freeTIBOffset.plus(offset).toWord().and(Word.fromIntSignExtend(align - 1)).isZero());
+      VM._assert(freeTIBOffset.toWord().and(Word.fromIntSignExtend(3)).isZero());
+    }
+    Offset lowAddr = freeTIBOffset;
+    freeTIBOffset = freeTIBOffset.plus(size);
+    if (!VM.AllowOversizedImages && freeTIBOffset.sGT(Offset.fromIntZeroExtend(BOOT_IMAGE_DATA_SIZE_LIMIT)))
+      fail("bootimage full (need at least " + size + " more bytes for data). " +
+              "To ignore this, add config.allowOversizedImage=true to the configuration you are using " +
+              "or increase BOOT_IMAGE_DATA_SIZE_LIMIT in HeapLayoutConstants.template .");
+
+    ObjectModel.fillAlignmentGap(this, BOOT_IMAGE_TIB_START.plus(unalignedOffset),
+            lowAddr.minus(unalignedOffset).toWord().toExtent());
+    return BOOT_IMAGE_TIB_START.plus(lowAddr);
+  }
+
 
   /**
    * Round a size in bytes up to the next value of MIN_ALIGNMENT
