@@ -55,10 +55,13 @@ public final class TIB implements RuntimeTable<Object> {
     return codeWords;
   }
 
-  /** Alignment encoded data for this TIB - only used at build time */
+  /**
+   * Alignment encoded data for this TIB - only used at build time
+   */
   private int alignData;
   private Address imageAdress;
   private RVMType imageType;
+
   public RVMType getImageType() {
     return imageType;
   }
@@ -76,12 +79,15 @@ public final class TIB implements RuntimeTable<Object> {
   }
 
   private int num;
-  public void setnum(int num){
-    this.num=num;
+
+  public void setnum(int num) {
+    this.num = num;
   }
-  public int getnum(){
+
+  public int getnum() {
     return num;
   }
+
   /**
    * Calculates the size of a TIB.
    *
@@ -95,6 +101,7 @@ public final class TIB implements RuntimeTable<Object> {
 
   /**
    * Calculate the virtual method offset for the given index.
+   *
    * @param virtualMethodIndex The index to calculate the offset for
    * @return The offset.
    */
@@ -104,6 +111,7 @@ public final class TIB implements RuntimeTable<Object> {
 
   /**
    * Calculate the virtual method index for the given offset.
+   *
    * @param virtualMethodOffset The offset to calculate the index for
    * @return The index.
    */
@@ -140,9 +148,9 @@ public final class TIB implements RuntimeTable<Object> {
   /**
    * Create a new TIB of the specified size.
    *
-   * @param size The size of the TIB
+   * @param size      The size of the TIB
    * @param alignData Alignment-encoded data for this TIB,
-   *      AlignmentEncoding.ALIGN_CODE_NONE for no alignment encoding.
+   *                  AlignmentEncoding.ALIGN_CODE_NONE for no alignment encoding.
    * @return The created TIB instance.
    */
   @NoInline
@@ -195,7 +203,7 @@ public final class TIB implements RuntimeTable<Object> {
     if (VM.runningVM) {
       return Magic.objectAsType(get(TIB_TYPE_INDEX));
     } else {
-      return (RVMType)get(TIB_TYPE_INDEX);
+      return (RVMType) get(TIB_TYPE_INDEX);
     }
   }
 
@@ -215,7 +223,7 @@ public final class TIB implements RuntimeTable<Object> {
   @Interruptible
   public ITableArray getITableArray() {
     if (VM.VerifyAssertions) VM._assert(getType().isClassType());
-    return (ITableArray)get(TIB_INTERFACE_DISPATCH_TABLE_INDEX);
+    return (ITableArray) get(TIB_INTERFACE_DISPATCH_TABLE_INDEX);
   }
 
   public void setITableArray(ITableArray iTableArray) {
@@ -235,7 +243,7 @@ public final class TIB implements RuntimeTable<Object> {
   @Interruptible
   public IMT getImt() {
     if (VM.VerifyAssertions) VM._assert(getType().isClassType());
-    return (IMT)get(TIB_INTERFACE_DISPATCH_TABLE_INDEX);
+    return (IMT) get(TIB_INTERFACE_DISPATCH_TABLE_INDEX);
   }
 
   public void setImt(IMT imt) {
@@ -251,7 +259,7 @@ public final class TIB implements RuntimeTable<Object> {
 
   /**
    * Gets a virtual method from this TIB.
-   *
+   * <p>
    * When running the VM, we must translate requests to return the internal
    * lazy compilation trampoline marker.
    *
@@ -288,12 +296,12 @@ public final class TIB implements RuntimeTable<Object> {
 
   /**
    * Set a virtual method in this TIB.
-   *
+   * <p>
    * When running the VM, we must translate requests to use the internal
    * lazy compilation trampoline.
    *
    * @param virtualMethodIndex the index of the virtual metho
-   * @param code the code for the virtual method
+   * @param code               the code for the virtual method
    */
   @NoInline
   public void setVirtualMethod(int virtualMethodIndex, CodeArray code) {
@@ -314,6 +322,7 @@ public final class TIB implements RuntimeTable<Object> {
 
   /**
    * Calculate the address that is the call target for the lazy method invoker trampoline.
+   *
    * @return the offset of the instruction that is the call target
    */
   public int lazyMethodInvokerTrampolineIndex() {
@@ -358,6 +367,7 @@ public final class TIB implements RuntimeTable<Object> {
 
   /**
    * Does this slot in the TIB hold a TIB entry?
+   *
    * @param slot the TIB slot
    * @return {@code true} if this the array element TIB
    */
@@ -371,6 +381,7 @@ public final class TIB implements RuntimeTable<Object> {
 
   /**
    * Does this slot in the TIB hold code?
+   *
    * @param slot the TIB slot
    * @return {@code true} if slot is one that holds a code array reference
    */
@@ -388,4 +399,5 @@ public final class TIB implements RuntimeTable<Object> {
   public int getAlignData() {
     return alignData;
   }
+}
 
