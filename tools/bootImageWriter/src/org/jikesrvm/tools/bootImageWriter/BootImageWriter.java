@@ -151,7 +151,7 @@ public class BootImageWriter {
    * trying to fill in fields when they cannot be reflected upon. Always lower
    * case.
    */
-  private static TIB[][] TIBAssist = new TIB[8][760];
+  private static TIB[][] TIBAssist = new TIB[8][2000];
   private static int[] numbercount = new int[8];
   private static String classLibrary;
 
@@ -1848,7 +1848,6 @@ public class BootImageWriter {
       depth--;
       traceContext.push("", jdkObject.getClass().getName(), "tib");
     }
-    VM.sysWriteln("try something new!");
     Address tibImageAddress = copyToBootImage(rvmType.getTypeInformationBlock(), false, Address.max(), jdkObject, false, AlignmentEncoding.ALIGN_CODE_NONE);
     if (verbosity.isAtLeast(NONE)) {
       traceContext.pop();
@@ -1865,6 +1864,7 @@ public class BootImageWriter {
       int index = ((add.getAlignData())%(1<<( FIELD_WIDTH - 3)));
       TIBAssist[index][numbercount[index]] = add;
       numbercount[index]++;
+      VM.sysWriteln("Total : ",numbercount[index]);
     }
     ObjectModel.setTIB(bootImage, imageAddress, tibImageAddress, rvmType);
   }
