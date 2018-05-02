@@ -60,6 +60,7 @@ public final class TIB implements RuntimeTable<Object> {
    */
   private int alignData;
   private Address imageAdress;
+  private Address fakeAddress;
   private RVMType imageType;
 
   public RVMType getImageType() {
@@ -398,6 +399,14 @@ public final class TIB implements RuntimeTable<Object> {
 
   public int getAlignData() {
     return alignData;
+  }
+
+  public Address getFakeAddress() {
+    return fakeAddress;
+  }
+
+  public void setFakeAddress(Address fakeAddress) {
+    this.fakeAddress = fakeAddress;
   }
 }
 
