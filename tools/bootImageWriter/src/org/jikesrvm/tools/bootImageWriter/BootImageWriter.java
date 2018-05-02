@@ -1764,7 +1764,7 @@ public class BootImageWriter {
           add.setImageType(rvmType);
           add.setImageAdress(mapEntry.imageAddress);
           if(add.getAlignData()!=AlignmentEncoding.ALIGN_CODE_NONE){
-            int index = ((add.getAlignData())%(1<<( FIELD_WIDTH - 3)));
+            int index = ((add.getAlignData())/(1<<( FIELD_WIDTH - 3)));
             TIBAssist[index][numbercount[index]] = add;
             numbercount[index]++;
             VM.sysWriteln("index is: ",index ,"Total : ",numbercount[index]);
@@ -1862,7 +1862,7 @@ public class BootImageWriter {
     add.setImageType(rvmType);
     add.setImageAdress(imageAddress);
     if(add.getAlignData()!=AlignmentEncoding.ALIGN_CODE_NONE){
-      int index = ((add.getAlignData())%(1<<( FIELD_WIDTH - 3)));
+      int index = ((add.getAlignData())/(1<<( FIELD_WIDTH - 3)));
       TIBAssist[index][numbercount[index]] = add;
       numbercount[index]++;
       VM.sysWriteln("index is: ",index ,"Total : ",numbercount[index]);
