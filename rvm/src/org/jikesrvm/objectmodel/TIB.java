@@ -57,7 +57,7 @@ public final class TIB implements RuntimeTable<Object> {
 
   /** Alignment encoded data for this TIB - only used at build time */
   private int alignData;
-
+  private Address imageAdress;
   private int num;
   public void setnum(int num){
     this.num=num;
