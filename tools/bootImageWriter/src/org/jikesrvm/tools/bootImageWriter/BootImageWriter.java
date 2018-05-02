@@ -1846,7 +1846,7 @@ public class BootImageWriter {
     if (tibImageAddress.EQ(OBJECT_NOT_ALLOCATED)) {
       fail("can't copy tib for " + jdkObject);
     }
-    VM.sysWriteln(" TIB of " + jdkObject.getClass().getName() + " Address " + tibImageAddress.toInt() + " Align Data is " + rvmType.getTypeInformationBlock().getAlignData());
+    //VM.sysWriteln(" TIB of " + jdkObject.getClass().getName() + " Address " + Integer.toHexString(tibImageAddress.toInt()) + " Align Data is " + rvmType.getTypeInformationBlock().getAlignData());
 
     ObjectModel.setTIB(bootImage, imageAddress, tibImageAddress, rvmType);
   }
