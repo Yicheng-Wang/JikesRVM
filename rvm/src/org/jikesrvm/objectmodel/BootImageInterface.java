@@ -26,7 +26,6 @@ public interface BootImageInterface {
    Offset freeDataOffset = Offset.zero();
 
   int getDataSize();
-  int getTIBSize();
   /**
    * Allocate space in data portion of bootimage. Moral equivalent of
    * memory managers allocating raw storage at runtime.
