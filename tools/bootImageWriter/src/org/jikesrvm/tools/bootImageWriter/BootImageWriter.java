@@ -797,13 +797,13 @@ public class BootImageWriter {
       fail("unable to copy statics: " + e);
     }
     jtocCount = -1;
-    for(int i=0;i<8;i++){
+    /*for(int i=0;i<8;i++){
       int j=0;
       while(TIBAssist[i][j]!=null){
         ObjectModel.setTIB(bootImage, TIBAssist[i][j].getImageAdress(), TIBAssist[i][j].getFakeAddress(), TIBAssist[i][j].getImageType());
         j++;
       }
-    }
+    }*/
     if (profile) {
       stopTime = System.currentTimeMillis();
       System.out.println("PROF: filling bootimage byte[] " + (stopTime - startTime) + " ms");
