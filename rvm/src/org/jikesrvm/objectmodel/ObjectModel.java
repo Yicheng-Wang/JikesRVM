@@ -1014,11 +1014,11 @@ public class ObjectModel {
           ptr = bootImage.allocateDataStorage(size + padding, align, offset);
       }
       else{
-          ptr = bootImage.allocateTIBStorage(size + newpadding, align, offset);
+          ptr = bootImage.allocateTIBStorage(size + padding, align, offset);
           VM.sysWriteln(size," ", alignCode);
           //VM.sysWriteln("Total size is ",Integer.toHexString(size+newpadding));
       }
-    ptr = bootImage.allocateDataStorage(size + padding, align, offset);
+    //ptr = bootImage.allocateDataStorage(size + padding, align, offset);
     ptr = AlignmentEncoding.adjustRegion(alignCode, ptr);
     Address ref = JavaHeader.initializeArrayHeader(bootImage, ptr, tib, size, numElements, needsIdentityHash, identityHashValue);
     bootImage.setFullWord(ref.plus(getArrayLengthOffset()), numElements);
