@@ -68,18 +68,23 @@ public class BootImage implements BootImageInterface {
   /**
    * The reference map for the boot image
    */
+  public int BOOT_IMAGE_TIB_START = 0x65000000;
   private final byte[] referenceMap;
   private int referenceMapReferences = 0;
   private int referenceMapLimit = 0;
   private byte[] bootImageRMap;
   private int rMapSize = 0;
 
-    /**
-     * Offset of next free data word, in bytes*/
+  private Offset freeTIBOffset = Offset.zero();
 
-    private Offset freeDataOffset = Offset.zero();
+  public int getTIBOffset(){
+    return freeTIBOffset.toInt();
+  }
+  /**
+   * Offset of next free data word, in bytes
+   */
+  private Offset freeDataOffset = Offset.zero();
 
-    private Offset freeTIBOffset = Offset.zero();
   /**
    * Offset of next free code word, in bytes
    */
@@ -216,10 +221,6 @@ public class BootImage implements BootImageInterface {
     return freeDataOffset.toInt();
   }
 
-
-  public int getTIBSize() {
-    return freeTIBOffset.toInt();
-  }
   /**
    * Get image code size, in bytes.
    * @return image size
@@ -299,7 +300,6 @@ public class BootImage implements BootImageInterface {
 
   @Override
   public Address allocateDataStorage(int size, int align, int offset) {
-    //VM.sysWriteln("BOOT_IMAGE_DATA_START is " + BOOT_IMAGE_DATA_START + " and Offset is "+ freeDataOffset );
     size = roundAllocationSize(size);
     Offset unalignedOffset = freeDataOffset;
     freeDataOffset = MemoryManager.alignAllocation(freeDataOffset, align, offset);
@@ -320,7 +320,6 @@ public class BootImage implements BootImageInterface {
   }
 
   public Address allocateTIBStorage(int size, int align, int offset){
-    Address BOOT_IMAGE_TIB_START = Address.fromIntSignExtend(1694498816);
     size = roundAllocationSize(size);
     Offset unalignedOffset = freeTIBOffset;
     freeTIBOffset = MemoryManager.alignAllocation(freeTIBOffset, align, offset);
@@ -339,8 +338,6 @@ public class BootImage implements BootImageInterface {
             lowAddr.minus(unalignedOffset).toWord().toExtent());
     return BOOT_IMAGE_TIB_START.plus(lowAddr);
   }
-
-
   /**
    * Round a size in bytes up to the next value of MIN_ALIGNMENT
    */
