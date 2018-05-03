@@ -151,8 +151,8 @@ public class BootImageWriter {
    * trying to fill in fields when they cannot be reflected upon. Always lower
    * case.
    */
-  private static TIB[][] TIBAssist = new TIB[8][2000];
-  private static int[] numbercount = new int[8];
+  //private static TIB[][] TIBAssist = new TIB[8][2000];
+  //private static int[] numbercount = new int[8];
   private static String classLibrary;
 
   /**
@@ -1766,7 +1766,7 @@ public class BootImageWriter {
           if (tibImageAddress.EQ(OBJECT_NOT_ALLOCATED)) {
             fail("can't copy tib for " + jdkObject);
           }
-          TIB add = rvmType.getTypeInformationBlock();
+          /*TIB add = rvmType.getTypeInformationBlock();
           add.setImageType(rvmType);
           add.setImageAdress(mapEntry.imageAddress);
           add.setFakeAddress(tibImageAddress);
@@ -1780,8 +1780,8 @@ public class BootImageWriter {
             TIBAssist[index][numbercount[index]] = add;
             numbercount[index]++;
             VM.sysWriteln("The index is: ",index ,"Total : ",numbercount[index]);
-          }
-          //ObjectModel.setTIB(bootImage, mapEntry.imageAddress, tibImageAddress, rvmType);
+          }*/
+          ObjectModel.setTIB(bootImage, mapEntry.imageAddress, tibImageAddress, rvmType);
         }
       } else if (jdkObject instanceof TIB) {
         Object backing = ((RuntimeTable<?>)jdkObject).getBacking();
@@ -1870,7 +1870,7 @@ public class BootImageWriter {
       fail("can't copy tib for " + jdkObject);
     }
     //VM.sysWriteln(" TIB of " + jdkObject.getClass().getName() + " Address " + Integer.toHexString(tibImageAddress.toInt()) + " Align Data is " + rvmType.getTypeInformationBlock().getAlignData());
-      TIB add = rvmType.getTypeInformationBlock();
+      /*TIB add = rvmType.getTypeInformationBlock();
       add.setImageType(rvmType);
       add.setImageAdress(imageAddress);
       add.setFakeAddress(tibImageAddress);
@@ -1884,8 +1884,8 @@ public class BootImageWriter {
           TIBAssist[index][numbercount[index]] = add;
           numbercount[index]++;
           VM.sysWriteln("The index is: ",index ,"Total : ",numbercount[index]);
-      }
-    //ObjectModel.setTIB(bootImage, imageAddress, tibImageAddress, rvmType);
+      }*/
+    ObjectModel.setTIB(bootImage, imageAddress, tibImageAddress, rvmType);
   }
 
   /**
