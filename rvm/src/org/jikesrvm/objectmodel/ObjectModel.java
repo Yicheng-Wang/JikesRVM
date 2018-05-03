@@ -1022,6 +1022,7 @@ public class ObjectModel {
     bootImage.setFullWord(ref.plus(getArrayLengthOffset()), numElements);
     MemoryManager.initializeHeader(bootImage, ref, tib, size, false);
     MiscHeader.initializeHeader(bootImage, ref, tib, size, false);
+    VM.sysWriteln("The final Address is ",ref);
     return ref;
   }
 
