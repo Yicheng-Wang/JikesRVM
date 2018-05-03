@@ -100,4 +100,6 @@ public interface BootImageInterface {
    * @param value value to write
    */
   void setDoubleWord(Address offset, long value);
+
+  int getTIBOffset();
 }
