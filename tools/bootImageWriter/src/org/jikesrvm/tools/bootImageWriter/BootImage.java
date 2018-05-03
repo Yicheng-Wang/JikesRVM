@@ -320,7 +320,7 @@ public class BootImage implements BootImageInterface {
   }
 
   public Address allocateTIBStorage(int size, int align, int offset){
-    Address BOOT_IMAGE_TIB_START = Address.fromIntSignExtend(1660944384);
+    Address BOOT_IMAGE_TIB_START = Address.fromIntSignExtend(1694498816);
     size = roundAllocationSize(size);
     Offset unalignedOffset = freeTIBOffset;
     freeTIBOffset = MemoryManager.alignAllocation(freeTIBOffset, align, offset);
