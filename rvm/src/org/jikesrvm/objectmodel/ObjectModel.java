@@ -1005,10 +1005,11 @@ public class ObjectModel {
     }
     int offset = getOffsetForAlignment(array, needsIdentityHash);
     int padding = AlignmentEncoding.padding(alignCode);
-      /*Address Start = Address.fromIntSignExtend(1694498816);
+      Address Start = Address.fromIntSignExtend(1694498816);
       int aligncodenow = AlignmentEncoding.getTibCodeForRegion(Start.plus(bootImage.getTIBOffset()));
       int newpadding = (aligncodenow<alignCode)?(alignCode-aligncodenow)*4:(alignCode+AlignmentEncoding.MAX_ALIGN_WORDS-aligncodenow)*4;
       Address ptr;
+      /*
       if(alignCode==AlignmentEncoding.ALIGN_CODE_NONE){
           ptr = bootImage.allocateDataStorage(size + padding, align, offset);
       }
@@ -1017,7 +1018,7 @@ public class ObjectModel {
           VM.sysWriteln(size," ", alignCode);
           //VM.sysWriteln("Total size is ",Integer.toHexString(size+newpadding));
       }*/
-    Address ptr = bootImage.allocateDataStorage(size + padding, align, offset);
+    ptr = bootImage.allocateDataStorage(size + padding, align, offset);
     ptr = AlignmentEncoding.adjustRegion(alignCode, ptr);
     Address ref = JavaHeader.initializeArrayHeader(bootImage, ptr, tib, size, numElements, needsIdentityHash, identityHashValue);
     bootImage.setFullWord(ref.plus(getArrayLengthOffset()), numElements);
