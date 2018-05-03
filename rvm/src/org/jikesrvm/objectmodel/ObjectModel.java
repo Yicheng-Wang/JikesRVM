@@ -1005,16 +1005,15 @@ public class ObjectModel {
     }
     int offset = getOffsetForAlignment(array, needsIdentityHash);
     int padding = AlignmentEncoding.padding(alignCode);
-      Address Start = Address.fromIntSignExtend(1694498816);
+      Address Start = Address.fromIntSignExtend(1644167168);
       int aligncodenow = AlignmentEncoding.getTibCodeForRegion(Start.plus(bootImage.getTIBOffset()));
       int newpadding = (aligncodenow<alignCode)?(alignCode-aligncodenow)*4:(alignCode+AlignmentEncoding.MAX_ALIGN_WORDS-aligncodenow)*4;
       Address ptr;
-
       if(alignCode==AlignmentEncoding.ALIGN_CODE_NONE){
           ptr = bootImage.allocateDataStorage(size + padding, align, offset);
       }
       else{
-          ptr = bootImage.allocateTIBStorage(size + padding, align, offset);
+          ptr = bootImage.allocateTIBStorage(size + newpadding, align, offset);
           VM.sysWriteln(size," ", alignCode);
           //VM.sysWriteln("Total size is ",Integer.toHexString(size+newpadding));
       }
