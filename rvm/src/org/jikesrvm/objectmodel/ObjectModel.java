@@ -1014,7 +1014,7 @@ public class ObjectModel {
       }
       else{
           int newpadding = (aligncodenow<alignCode)?(alignCode-aligncodenow)*4:(alignCode+AlignmentEncoding.MAX_ALIGN_WORDS-aligncodenow)*4;
-          ptr = bootImage.allocateTIBStorage(size + newpadding, align, offset);
+          ptr = bootImage.allocateDataStorage(size + padding, align, offset);
           TIBOffset += (size+newpadding);
           VM.sysWriteln(size," ", alignCode);
           //VM.sysWriteln("Total size is ",Integer.toHexString(size+newpadding));
