@@ -100,5 +100,4 @@ public interface BootImageInterface {
    */
   void setDoubleWord(Address offset, long value);
 
-  int getTIBOffset();
 }
