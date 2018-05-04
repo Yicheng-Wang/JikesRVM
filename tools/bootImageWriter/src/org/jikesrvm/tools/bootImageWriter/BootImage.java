@@ -68,7 +68,7 @@ public class BootImage implements BootImageInterface {
   /**
    * The reference map for the boot image
    */
-  public Address BOOT_IMAGE_TIB_START = Address.fromIntSignExtend(0x62000000);
+  public Address BOOT_IMAGE_TIB_START = BOOT_IMAGE_DATA_START.plus(0x2000000);
   private final byte[] referenceMap;
   private int referenceMapReferences = 0;
   private int referenceMapLimit = 0;
