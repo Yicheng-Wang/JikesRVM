@@ -1009,12 +1009,14 @@ public class ObjectModel {
       Address Start = Address.fromIntSignExtend(1644167168);
       int aligncodenow = AlignmentEncoding.getTibCodeForRegion(Start.plus(TIBOffset));
       Address ptr;
+      Address back;
       if(alignCode==AlignmentEncoding.ALIGN_CODE_NONE){
           ptr = bootImage.allocateDataStorage(size + padding, align, offset);
       }
       else{
           int newpadding = (aligncodenow<alignCode)?(alignCode-aligncodenow)*4:(alignCode+AlignmentEncoding.MAX_ALIGN_WORDS-aligncodenow)*4;
-          ptr = bootImage.allocateDataStorage(size + padding, align, offset);
+          ptr = bootImage.allocateTIBStorage(size + newpadding, align, offset);
+          back = bootImage.allocateDataStorage(8,align,offset);
           TIBOffset += (size+newpadding);
           VM.sysWriteln(size," ", alignCode);
           //VM.sysWriteln("Total size is ",Integer.toHexString(size+newpadding));
