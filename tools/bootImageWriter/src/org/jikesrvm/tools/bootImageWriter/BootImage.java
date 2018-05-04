@@ -68,7 +68,7 @@ public class BootImage implements BootImageInterface {
   /**
    * The reference map for the boot image
    */
-  public Address BOOT_IMAGE_TIB_START = Address.fromIntSignExtend(0x63000000);
+  public Address BOOT_IMAGE_TIB_START = Address.fromIntSignExtend(0x62000000);
   private final byte[] referenceMap;
   private int referenceMapReferences = 0;
   private int referenceMapLimit = 0;
@@ -76,10 +76,6 @@ public class BootImage implements BootImageInterface {
   private int rMapSize = 0;
 
   private Offset freeTIBOffset = Offset.zero();
-
-  public int getTIBOffset(){
-    return freeTIBOffset.toInt();
-  }
   /**
    * Offset of next free data word, in bytes
    */
