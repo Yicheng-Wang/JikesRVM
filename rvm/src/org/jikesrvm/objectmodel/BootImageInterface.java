@@ -23,8 +23,6 @@ public interface BootImageInterface {
   /**
    * Offset of next free data word, in bytes
    */
-   Offset freeDataOffset = Offset.zero();
-
   int getDataSize();
   /**
    * Allocate space in data portion of bootimage. Moral equivalent of
