@@ -32,7 +32,7 @@ public interface BootImageInterface {
    * @param offset the offset at which the alignment is desired.
    * @return start address of the allocated memory
    */
-  Address allocateDataStorage(int size, int align, int offset);
+  Address allocateDataStorage(int size, int align, int offset , boolean isTIB);
 
   Address allocateTIBStorage(int size, int align, int offset);
   /**

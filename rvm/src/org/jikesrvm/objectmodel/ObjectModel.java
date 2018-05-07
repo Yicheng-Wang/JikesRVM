@@ -915,7 +915,7 @@ public class ObjectModel {
     }
     int align = getAlignment(klass);
     int offset = getOffsetForAlignment(klass, needsIdentityHash);
-    Address ptr = bootImage.allocateDataStorage(size, align, offset);
+    Address ptr = bootImage.allocateDataStorage(size, align, offset,false);
     Address ref = JavaHeader.initializeScalarHeader(bootImage, ptr, tib, size, needsIdentityHash, identityHashValue);
     MemoryManager.initializeHeader(bootImage, ref, tib, size, true);
     MiscHeader.initializeHeader(bootImage, ref, tib, size, true);
@@ -1010,12 +1010,12 @@ public class ObjectModel {
       int aligncodenow = AlignmentEncoding.getTibCodeForRegion(Start.plus(TIBOffset));
       Address ptr;
       if(alignCode==AlignmentEncoding.ALIGN_CODE_NONE){
-          ptr = bootImage.allocateDataStorage(size + padding, align, offset);
+          ptr = bootImage.allocateDataStorage(size + padding, align, offset, false);
       }
       else{
           int newpadding = (aligncodenow<alignCode)?(alignCode-aligncodenow)*4:(alignCode+AlignmentEncoding.MAX_ALIGN_WORDS-aligncodenow)*4;
-          ptr = bootImage.allocateTIBStorage(size + padding, align, offset);
-          ptr = bootImage.allocateDataStorage(size + padding, align, offset);
+          ptr = bootImage.allocateDataStorage(size + newpadding, align, offset,true);
+          //ptr = bootImage.allocateDataStorage(size + padding, align, offset);
           TIBOffset += (size+newpadding);
           VM.sysWriteln(size," ", alignCode);
           //VM.sysWriteln("Total size is ",Integer.toHexString(size+newpadding));
