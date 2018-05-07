@@ -309,7 +309,7 @@ public class BootImage implements BootImageInterface {
       if (!VM.AllowOversizedImages && freeTIBOffset.sGT(Offset.fromIntZeroExtend(BOOT_IMAGE_DATA_SIZE_LIMIT)))
         fail("bootimage full (need at least " + size + " more bytes for data). " +
                 "To ignore this, add config.allowOversizedImage=true to the configuration you are using " +
-                "or increase BOOT_IMAGE_DATA_SIZE_LIMIT in HeapLayoutConstants.template .");
+                "or increase BOOT_IMAGE_DATA_SIZE_LIMIT in HeapLayoutConstants.template ."+ BOOT_IMAGE_DATA_SIZE_LIMIT);
 
       ObjectModel.fillAlignmentGap(this, BOOT_IMAGE_DATA_START.plus(unalignedOffset),
               lowAddr.minus(unalignedOffset).toWord().toExtent());
