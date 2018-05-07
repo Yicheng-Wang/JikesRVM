@@ -75,7 +75,7 @@ public class BootImage implements BootImageInterface {
   private byte[] bootImageRMap;
   private int rMapSize = 0;
 
-  private Offset freeTIBOffset = Offset.zero().plus(207618048);
+  private Offset freeTIBOffset = Offset.zero().plus(6291456);
   /**
    * Offset of next free data word, in bytes
    */
