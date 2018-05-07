@@ -1009,8 +1009,10 @@ public class ObjectModel {
       Address Start = Address.fromIntSignExtend(1660944384);
       int aligncodenow = AlignmentEncoding.getTibCodeForRegion(Start.plus(TIBOffset));
       Address ptr;
+      Address waste;
       if(alignCode==AlignmentEncoding.ALIGN_CODE_NONE){
           ptr = bootImage.allocateDataStorage(size + padding, align, offset, false);
+          waste = bootImage.allocateDataStorage(size + padding, align, offset, false);
       }
       else{
           int newpadding = (aligncodenow<alignCode)?(alignCode-aligncodenow)*4:(alignCode+AlignmentEncoding.MAX_ALIGN_WORDS-aligncodenow)*4;
