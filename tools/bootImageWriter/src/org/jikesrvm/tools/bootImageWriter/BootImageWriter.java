@@ -1184,11 +1184,11 @@ public class BootImageWriter {
       // allocate storage for boot record
       bootImage.allocateDataStorage(rvmBRType.getInstanceSize(),
                                     ObjectModel.getAlignment(rvmBRType),
-                                    ObjectModel.getOffsetForAlignment(rvmBRType, false));
+                                    ObjectModel.getOffsetForAlignment(rvmBRType, false),false);
       // allocate storage for JTOC (force 16byte alignment of the JTOC on Intel)
       Address jtocAddress = bootImage.allocateDataStorage(intArrayType.getInstanceSize(0),
                                                           VM.BuildForIA32 ? 16 : ObjectModel.getAlignment(intArrayType),
-                                                          ObjectModel.getOffsetForAlignment(intArrayType, false));
+                                                          ObjectModel.getOffsetForAlignment(intArrayType, false),false);
       bootImage.resetAllocator();
       bootRecord.tocRegister = jtocAddress.plus(intArrayType.getInstanceSize(Statics.middleOfTable));
 
