@@ -214,7 +214,7 @@ public class BootImage implements BootImageInterface {
    * @return image size
    */
   public int getDataSize() {
-    return freeDataOffset.toInt();
+    return freeTIBOffset.toInt();
   }
 
   /**
@@ -391,6 +391,7 @@ public class BootImage implements BootImageInterface {
    */
   public void resetAllocator() {
     freeDataOffset = Offset.zero();
+    freeTIBOffset = Offset.zero().plus(0x2000000);
     freeCodeOffset = Offset.zero();
   }
 
