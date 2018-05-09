@@ -151,8 +151,8 @@ public class BootImageWriter {
    * trying to fill in fields when they cannot be reflected upon. Always lower
    * case.
    */
-  //private static TIB[][] TIBAssist = new TIB[8][2000];
-  //private static int[] numbercount = new int[8];
+  private static TIB[][] TIBAssist = new TIB[8][800];
+  private static int[] numbercount = new int[8];
   private static String classLibrary;
 
   /**
@@ -1761,26 +1761,12 @@ public class BootImageWriter {
         // already
         if (!allocOnly) {
           if (verbosity.isAtLeast(DETAILED)) traceContext.push("", jdkObject.getClass().getName(), "tib");
+          rvmType.getTypeInformationBlock().setFakeAddress(mapEntry.imageAddress);
           Address tibImageAddress = copyToBootImage(rvmType.getTypeInformationBlock(), allocOnly, Address.max(), jdkObject, false, AlignmentEncoding.ALIGN_CODE_NONE);
           if (verbosity.isAtLeast(DETAILED)) traceContext.pop();
           if (tibImageAddress.EQ(OBJECT_NOT_ALLOCATED)) {
             fail("can't copy tib for " + jdkObject);
           }
-          /*TIB add = rvmType.getTypeInformationBlock();
-          add.setImageType(rvmType);
-          add.setImageAdress(mapEntry.imageAddress);
-          add.setFakeAddress(tibImageAddress);
-          int index = ((add.getAlignData())/(1<<( FIELD_WIDTH - 3)));
-          boolean same=true;
-          for(int i=0;i<numbercount[index];i++){
-              if(add.getFakeAddress().toInt()==TIBAssist[index][i].getFakeAddress().toInt())
-                  same=false;
-          }
-          if(same){
-            TIBAssist[index][numbercount[index]] = add;
-            numbercount[index]++;
-            VM.sysWriteln("The index is: ",index ,"Total : ",numbercount[index]);
-          }*/
           ObjectModel.setTIB(bootImage, mapEntry.imageAddress, tibImageAddress, rvmType);
         }
       } else if (jdkObject instanceof TIB) {
@@ -1792,7 +1778,15 @@ public class BootImageWriter {
         /* Copy the backing array, and then replace its TIB */
         //VM.sysWriteln("Allocating TIB!");
         mapEntry.imageAddress = copyToBootImage(backing, allocOnly, overwriteAddress, jdkObject, rvmType.getTypeRef().isRuntimeTable(), alignCodeValue);
-
+        int alignValue = rvmType.getTypeInformationBlock().getAlignData();
+        rvmType.getTypeInformationBlock().setImageAdress(mapEntry.imageAddress);
+        TIB add = rvmType.getTypeInformationBlock();
+        int index = ((add.getAlignData())/(1<<( FIELD_WIDTH - 3)));
+        if(alignValue!=AlignmentEncoding.ALIGN_CODE_NONE){
+          TIBAssist[index][numbercount[index]] = add;
+          numbercount[index]++;
+          VM.sysWriteln("The index is: ",index ,"Total : ",numbercount[index]);
+        }
         if (verbosity.isAtLeast(DETAILED)) say(String.format("TIB address = %x, encoded value = %d, requested = %d%n",
             mapEntry.imageAddress.toInt(),
             AlignmentEncoding.extractTibCode(mapEntry.imageAddress),alignCodeValue));
@@ -1861,6 +1855,7 @@ public class BootImageWriter {
       depth--;
       traceContext.push("", jdkObject.getClass().getName(), "tib");
     }
+    rvmType.getTypeInformationBlock().setFakeAddress(imageAddress);
     Address tibImageAddress = copyToBootImage(rvmType.getTypeInformationBlock(), false, Address.max(), jdkObject, false, AlignmentEncoding.ALIGN_CODE_NONE);
     if (verbosity.isAtLeast(NONE)) {
       traceContext.pop();
