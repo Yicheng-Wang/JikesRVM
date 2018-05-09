@@ -1790,6 +1790,7 @@ public class BootImageWriter {
         boolean needsIdentityHash = mapEntry.requiresIdentityHashCode();
         int identityHashValue = mapEntry.getIdentityHashCode();
         Address arrayImageAddress = (overwriteAddress.isMax()) ? bootImage.allocateArray(rvmArrayType, arrayCount, needsIdentityHash, identityHashValue, alignCode) : overwriteAddress;
+        overwriteAddress = Address.max();
         mapEntry.imageAddress = arrayImageAddress;
         mapEntry.imageAddress = copyArrayToBootImage(arrayCount, arrayImageAddress, jdkObject, jdkType,
             rvmArrayType, allocOnly, overwriteAddress, parentObject, untraced);
