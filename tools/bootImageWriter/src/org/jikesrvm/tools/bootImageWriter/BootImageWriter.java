@@ -1812,7 +1812,7 @@ public class BootImageWriter {
 
         int alignCodeValue = ((TIB)jdkObject).getAlignData();
         if (verbosity.isAtLeast(DETAILED)) say("Encoding value " + alignCodeValue + " into tib");
-        if(alignCode!=AlignmentEncoding.ALIGN_CODE_NONE){
+        if(alignCodeValue!=AlignmentEncoding.ALIGN_CODE_NONE){
           overwriteAddress = ((TIB)jdkObject).getImageAdress();
         }
         /* Copy the backing array, and then replace its TIB */
