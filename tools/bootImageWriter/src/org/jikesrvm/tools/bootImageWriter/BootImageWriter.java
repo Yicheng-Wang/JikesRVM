@@ -1778,16 +1778,14 @@ public class BootImageWriter {
         if (verbosity.isAtLeast(DETAILED)) say("Encoding value " + alignCodeValue + " into tib");
 
         /* Copy the backing array, and then replace its TIB */
-        //VM.sysWriteln("Allocating TIB!");
         mapEntry.imageAddress = copyToBootImage(backing, allocOnly, overwriteAddress, jdkObject, rvmType.getTypeRef().isRuntimeTable(), alignCodeValue);
-        int alignValue = ((TIB)jdkObject).getAlignData();
+
         ((TIB)jdkObject).setImageAdress(mapEntry.imageAddress);
-        TIB add = ((TIB)jdkObject);
-        int index = (add.getAlignData())/(1<<( FIELD_WIDTH - 3));
-        if(alignValue!=AlignmentEncoding.ALIGN_CODE_NONE){
-          TIBAssist[index][numbercount[index]] = add;
+        int index = (alignCodeValue)/(1<<( FIELD_WIDTH - 3));
+        if(alignCodeValue!=AlignmentEncoding.ALIGN_CODE_NONE){
+          TIBAssist[index][numbercount[index]] = ((TIB)jdkObject);
           numbercount[index]++;
-          VM.sysWriteln(" TIB Address is ", add.getImageAdress() );
+          VM.sysWriteln("Fake Address is ",((TIB)jdkObject).getFakeAddress()," TIB Address is ", ((TIB)jdkObject).getImageAdress() );
           VM.sysWriteln("The index is: ",index ,"Total : ",numbercount[index]);
         }
         if (verbosity.isAtLeast(DETAILED)) say(String.format("TIB address = %x, encoded value = %d, requested = %d%n",
