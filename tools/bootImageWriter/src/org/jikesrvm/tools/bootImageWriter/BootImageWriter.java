@@ -721,9 +721,28 @@ public class BootImageWriter {
       Object jdkObject = BootImageMap.getObject(objCookie);
 
       if(jdkObject instanceof TIB){
-        if(((TIB)jdkObject).getAlignData()!=AlignmentEncoding.ALIGN_CODE_NONE)
+        int AlignValue = ((TIB)jdkObject).getAlignData();
+        if(AlignValue!=AlignmentEncoding.ALIGN_CODE_NONE){
           count1++;
-        VM.sysWriteln("Count of TIB in jdkObject is ",count1);
+          VM.sysWriteln("Count of TIB in jdkObject is ",count1);
+          Object backing = ((RuntimeTable<?>)jdkObject).getBacking();
+          BootImageMap.Entry mapEntry = BootImageMap.findOrCreateEntry(backing);
+          Class<?>   jdkType = backing.getClass();
+          RVMType rvmType = getRvmType(jdkType);
+          int arrayCount = Array.getLength(backing);
+          RVMArray rvmArrayType = rvmType.asArray();
+          boolean needsIdentityHash = mapEntry.requiresIdentityHashCode();
+          int identityHashValue = mapEntry.getIdentityHashCode();
+          Address ImageAdress = bootImage.allocateArray(rvmArrayType, arrayCount, needsIdentityHash, identityHashValue, AlignValue);
+          ((TIB)jdkObject).setImageAdress(ImageAdress);
+          /*int index = (alignCodeValue)/(1<<( FIELD_WIDTH - 3));
+          if(alignCodeValue!=AlignmentEncoding.ALIGN_CODE_NONE){
+            TIBAssist[index][numbercount[index]] = ((TIB)jdkObject);
+            numbercount[index]++;
+            VM.sysWriteln("TIB number is ",((TIB)jdkObject).getnum()," TIB Address is ", ((TIB)jdkObject).getImageAdress() );
+            VM.sysWriteln("The index is: ",index ,"Total : ",numbercount[index]);
+          }*/
+        }
       }
     }
     //
@@ -1778,7 +1797,7 @@ public class BootImageWriter {
         // already
         if (!allocOnly) {
           if (verbosity.isAtLeast(DETAILED)) traceContext.push("", jdkObject.getClass().getName(), "tib");
-          rvmType.getTypeInformationBlock().setFakeAddress(mapEntry.imageAddress);
+          //rvmType.getTypeInformationBlock().setFakeAddress(mapEntry.imageAddress);
           Address tibImageAddress = copyToBootImage(rvmType.getTypeInformationBlock(), allocOnly, Address.max(), jdkObject, false, AlignmentEncoding.ALIGN_CODE_NONE);
           if (verbosity.isAtLeast(DETAILED)) traceContext.pop();
           if (tibImageAddress.EQ(OBJECT_NOT_ALLOCATED)) {
@@ -1793,18 +1812,20 @@ public class BootImageWriter {
 
         int alignCodeValue = ((TIB)jdkObject).getAlignData();
         if (verbosity.isAtLeast(DETAILED)) say("Encoding value " + alignCodeValue + " into tib");
-
+        if(alignCode!=AlignmentEncoding.ALIGN_CODE_NONE){
+          overwriteAddress = ((TIB)jdkObject).getImageAdress();
+        }
         /* Copy the backing array, and then replace its TIB */
         mapEntry.imageAddress = copyToBootImage(backing, allocOnly, overwriteAddress, jdkObject, rvmType.getTypeRef().isRuntimeTable(), alignCodeValue);
 
-        ((TIB)jdkObject).setImageAdress(mapEntry.imageAddress);
+        /*((TIB)jdkObject).setImageAdress(mapEntry.imageAddress);
         int index = (alignCodeValue)/(1<<( FIELD_WIDTH - 3));
         if(alignCodeValue!=AlignmentEncoding.ALIGN_CODE_NONE){
           TIBAssist[index][numbercount[index]] = ((TIB)jdkObject);
           numbercount[index]++;
           VM.sysWriteln("TIB number is ",((TIB)jdkObject).getnum()," TIB Address is ", ((TIB)jdkObject).getImageAdress() );
           VM.sysWriteln("The index is: ",index ,"Total : ",numbercount[index]);
-        }
+        }*/
         if (verbosity.isAtLeast(DETAILED)) say(String.format("TIB address = %x, encoded value = %d, requested = %d%n",
             mapEntry.imageAddress.toInt(),
             AlignmentEncoding.extractTibCode(mapEntry.imageAddress),alignCodeValue));
@@ -1875,7 +1896,7 @@ public class BootImageWriter {
     }
     if(imageAddress==null)
         VM.sysWriteln("No imageAddress!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-    rvmType.getTypeInformationBlock().setFakeAddress(imageAddress);
+    //rvmType.getTypeInformationBlock().setFakeAddress(imageAddress);
     Address tibImageAddress = copyToBootImage(rvmType.getTypeInformationBlock(), false, Address.max(), jdkObject, false, AlignmentEncoding.ALIGN_CODE_NONE);
     if (verbosity.isAtLeast(NONE)) {
       traceContext.pop();
