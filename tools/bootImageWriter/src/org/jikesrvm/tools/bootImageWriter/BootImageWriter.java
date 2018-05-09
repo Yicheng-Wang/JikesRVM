@@ -758,6 +758,7 @@ public class BootImageWriter {
     if (verbosity.isAtLeast(SUMMARY)) say("copying statics");
     try {
       int refSlotSize = Statics.getReferenceSlotSize();
+      int count1 = 0;
       for (int i = Statics.middleOfTable + refSlotSize, n = Statics.getHighestInUseSlot();
            i <= n;
            i += refSlotSize) {
@@ -777,7 +778,10 @@ public class BootImageWriter {
         Object jdkObject = BootImageMap.getObject(objCookie);
         if (jdkObject == null)
           continue;
-
+        if(jdkObject instanceof TIB){
+          count1++;
+          VM.sysWriteln("Count of TIB in jdkObject is ",count1);
+        }
         if (verbosity.isAtLeast(DETAILED)) traceContext.push(jdkObject.getClass().getName(),
                                             getRvmStaticField(jtocOff) + "");
         copyReferenceFieldToBootImage(jtocPtr.plus(jtocOff), jdkObject, Statics.getSlotsAsIntArray(), false, false, null, null);
