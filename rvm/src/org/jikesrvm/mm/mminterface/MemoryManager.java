@@ -84,7 +84,8 @@ public final class MemoryManager {
    *
    * Class variables
    */
-
+  public static TIB[][] TIBAssist = new TIB[8][800];
+  public static int[] numbercount = new int[8];
   /**
    * <code>true</code> if checking of allocated memory to ensure it is
    * zeroed is desired.
@@ -858,6 +859,8 @@ public final class MemoryManager {
       if(alignCode!=AlignmentEncoding.ALIGN_CODE_NONE){
         buildTIB.setnum(buildcount);
         buildcount++;
+        int index = ((alignCode)/(1<<(AlignmentEncoding.FIELD_WIDTH - 3)));
+
       }
       return buildTIB;
     }
