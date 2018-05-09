@@ -1010,7 +1010,7 @@ public class ObjectModel {
       int aligncodenow = AlignmentEncoding.getTibCodeForRegion(Start.plus(TIBOffset));
       int newpadding = (aligncodenow<alignCode)?(alignCode-aligncodenow)*4:(alignCode+AlignmentEncoding.MAX_ALIGN_WORDS-aligncodenow)*4;
       boolean isTIB = (alignCode!=AlignmentEncoding.ALIGN_CODE_NONE);
-      Address ptr = bootImage.allocateDataStorage(size + padding, align, offset, false);
+      Address ptr = bootImage.allocateDataStorage(size + padding, align, offset, isTIB);
       /*
       if(alignCode==AlignmentEncoding.ALIGN_CODE_NONE){
           ptr = bootImage.allocateDataStorage(size + padding, align, offset, false);
@@ -1026,7 +1026,7 @@ public class ObjectModel {
     bootImage.setFullWord(ref.plus(getArrayLengthOffset()), numElements);
     MemoryManager.initializeHeader(bootImage, ref, tib, size, false);
     MiscHeader.initializeHeader(bootImage, ref, tib, size, false);
-    VM.sysWriteln("Address is ", ref);
+    //VM.sysWriteln("Address is ", ref);
     return ref;
   }
 
