@@ -706,7 +706,26 @@ public class BootImageWriter {
                           " bytes");
 
     if (profile) startTime = System.currentTimeMillis();
+    int refSlotSize = Statics.getReferenceSlotSize();
+    int count1 = 0;
+    for (int i = Statics.middleOfTable + refSlotSize, n = Statics.getHighestInUseSlot();
+         i <= n;
+         i += refSlotSize) {
+      Offset jtocOff = Statics.slotAsOffset(i);
+      int objCookie;
+      if (VM.BuildFor32Addr)
+        objCookie = Statics.getSlotContentsAsInt(jtocOff);
+      else
+        objCookie = (int) Statics.getSlotContentsAsLong(jtocOff);
 
+      Object jdkObject = BootImageMap.getObject(objCookie);
+
+      if(jdkObject instanceof TIB){
+        if(((TIB)jdkObject).getAlignData()!=AlignmentEncoding.ALIGN_CODE_NONE)
+          count1++;
+        VM.sysWriteln("Count of TIB in jdkObject is ",count1);
+      }
+    }
     //
     // First object in image must be boot record (so boot loader will know
     // where to find it).  We'll write out an uninitialized record and not recurse
@@ -757,8 +776,6 @@ public class BootImageWriter {
     //
     if (verbosity.isAtLeast(SUMMARY)) say("copying statics");
     try {
-      int refSlotSize = Statics.getReferenceSlotSize();
-      int count1 = 0;
       for (int i = Statics.middleOfTable + refSlotSize, n = Statics.getHighestInUseSlot();
            i <= n;
            i += refSlotSize) {
@@ -778,11 +795,6 @@ public class BootImageWriter {
         Object jdkObject = BootImageMap.getObject(objCookie);
         if (jdkObject == null)
           continue;
-        if(jdkObject instanceof TIB){
-          if(((TIB)jdkObject).getAlignData()!=AlignmentEncoding.ALIGN_CODE_NONE)
-          count1++;
-          VM.sysWriteln("Count of TIB in jdkObject is ",count1);
-        }
         if (verbosity.isAtLeast(DETAILED)) traceContext.push(jdkObject.getClass().getName(),
                                             getRvmStaticField(jtocOff) + "");
         copyReferenceFieldToBootImage(jtocPtr.plus(jtocOff), jdkObject, Statics.getSlotsAsIntArray(), false, false, null, null);
