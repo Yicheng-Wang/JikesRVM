@@ -1785,7 +1785,7 @@ public class BootImageWriter {
         if(alignCodeValue!=AlignmentEncoding.ALIGN_CODE_NONE){
           TIBAssist[index][numbercount[index]] = ((TIB)jdkObject);
           numbercount[index]++;
-          VM.sysWriteln("Fake Address is ",((TIB)jdkObject).getFakeAddress()," TIB Address is ", ((TIB)jdkObject).getImageAdress() );
+          VM.sysWriteln("TIB number is ",((TIB)jdkObject).getnum()," TIB Address is ", ((TIB)jdkObject).getImageAdress() );
           VM.sysWriteln("The index is: ",index ,"Total : ",numbercount[index]);
         }
         if (verbosity.isAtLeast(DETAILED)) say(String.format("TIB address = %x, encoded value = %d, requested = %d%n",
