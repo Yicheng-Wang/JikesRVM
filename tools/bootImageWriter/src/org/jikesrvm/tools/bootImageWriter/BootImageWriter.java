@@ -779,6 +779,7 @@ public class BootImageWriter {
         if (jdkObject == null)
           continue;
         if(jdkObject instanceof TIB){
+          if(((TIB)jdkObject).getAlignData()!=AlignmentEncoding.ALIGN_CODE_NONE)
           count1++;
           VM.sysWriteln("Count of TIB in jdkObject is ",count1);
         }
