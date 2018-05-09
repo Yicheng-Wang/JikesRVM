@@ -1775,7 +1775,9 @@ public class BootImageWriter {
 
       // fetch object's type information
       Class<?>   jdkType = jdkObject.getClass();
+      Class<?>   parentjdkType = parentObject.getClass();
       RVMType rvmType = getRvmType(jdkType);
+      RVMType parentrvmType = getRvmType(parentjdkType);
       if (rvmType == null) {
         if (verbosity.isAtLeast(DETAILED)) traverseObject(jdkObject);
         if (verbosity.isAtLeast(DETAILED)) depth--;
@@ -1789,8 +1791,13 @@ public class BootImageWriter {
         RVMArray rvmArrayType = rvmType.asArray();
         boolean needsIdentityHash = mapEntry.requiresIdentityHashCode();
         int identityHashValue = mapEntry.getIdentityHashCode();
-        Address arrayImageAddress = (overwriteAddress.isMax()) ? bootImage.allocateArray(rvmArrayType, arrayCount, needsIdentityHash, identityHashValue, alignCode) : overwriteAddress;
-        overwriteAddress = Address.max();
+        Address arrayImageAddress;
+        if(alignCode!=AlignmentEncoding.ALIGN_CODE_NONE){
+          arrayImageAddress = ((TIB)parentObject).getImageAdress();
+        }
+        else{
+          arrayImageAddress = (overwriteAddress.isMax()) ? bootImage.allocateArray(rvmArrayType, arrayCount, needsIdentityHash, identityHashValue, alignCode) : overwriteAddress;
+        }
         mapEntry.imageAddress = arrayImageAddress;
         mapEntry.imageAddress = copyArrayToBootImage(arrayCount, arrayImageAddress, jdkObject, jdkType,
             rvmArrayType, allocOnly, overwriteAddress, parentObject, untraced);
@@ -1813,9 +1820,6 @@ public class BootImageWriter {
 
         int alignCodeValue = ((TIB)jdkObject).getAlignData();
         if (verbosity.isAtLeast(DETAILED)) say("Encoding value " + alignCodeValue + " into tib");
-        if(alignCodeValue!=AlignmentEncoding.ALIGN_CODE_NONE){
-          overwriteAddress = ((TIB)jdkObject).getImageAdress();
-        }
         /* Copy the backing array, and then replace its TIB */
         mapEntry.imageAddress = copyToBootImage(backing, allocOnly, overwriteAddress, jdkObject, rvmType.getTypeRef().isRuntimeTable(), alignCodeValue);
 
