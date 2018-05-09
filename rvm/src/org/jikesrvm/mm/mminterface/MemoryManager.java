@@ -855,8 +855,10 @@ public final class MemoryManager {
 
     if (!VM.runningVM) {
       TIB buildTIB = TIB.allocate(elements, alignCode);
-      buildTIB.setnum(buildcount);
-      buildcount++;
+      if(alignCode!=AlignmentEncoding.ALIGN_CODE_NONE){
+        buildTIB.setnum(buildcount);
+        buildcount++;
+      }
       return buildTIB;
     }
 
