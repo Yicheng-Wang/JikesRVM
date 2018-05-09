@@ -1775,9 +1775,7 @@ public class BootImageWriter {
 
       // fetch object's type information
       Class<?>   jdkType = jdkObject.getClass();
-      Class<?>   parentjdkType = parentObject.getClass();
       RVMType rvmType = getRvmType(jdkType);
-      RVMType parentrvmType = getRvmType(parentjdkType);
       if (rvmType == null) {
         if (verbosity.isAtLeast(DETAILED)) traverseObject(jdkObject);
         if (verbosity.isAtLeast(DETAILED)) depth--;
