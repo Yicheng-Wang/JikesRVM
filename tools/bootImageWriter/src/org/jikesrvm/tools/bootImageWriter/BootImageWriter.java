@@ -1767,6 +1767,8 @@ public class BootImageWriter {
           if (tibImageAddress.EQ(OBJECT_NOT_ALLOCATED)) {
             fail("can't copy tib for " + jdkObject);
           }
+          if(mapEntry.imageAddress==null)
+            VM.sysWriteln("No imageAddress!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
           ObjectModel.setTIB(bootImage, mapEntry.imageAddress, tibImageAddress, rvmType);
         }
       } else if (jdkObject instanceof TIB) {
@@ -1785,7 +1787,7 @@ public class BootImageWriter {
         if(alignValue!=AlignmentEncoding.ALIGN_CODE_NONE){
           TIBAssist[index][numbercount[index]] = add;
           numbercount[index]++;
-          VM.sysWriteln("Fake Address is ",add.getFakeAddress()," TIB Address is ", add.getImageAdress() );
+          VM.sysWriteln(" TIB Address is ", add.getImageAdress() );
           VM.sysWriteln("The index is: ",index ,"Total : ",numbercount[index]);
         }
         if (verbosity.isAtLeast(DETAILED)) say(String.format("TIB address = %x, encoded value = %d, requested = %d%n",
@@ -1856,6 +1858,8 @@ public class BootImageWriter {
       depth--;
       traceContext.push("", jdkObject.getClass().getName(), "tib");
     }
+    if(imageAddress==null)
+        VM.sysWriteln("No imageAddress!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
     rvmType.getTypeInformationBlock().setFakeAddress(imageAddress);
     Address tibImageAddress = copyToBootImage(rvmType.getTypeInformationBlock(), false, Address.max(), jdkObject, false, AlignmentEncoding.ALIGN_CODE_NONE);
     if (verbosity.isAtLeast(NONE)) {
