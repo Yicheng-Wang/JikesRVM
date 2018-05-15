@@ -151,7 +151,7 @@ public class BootImageWriter {
    * trying to fill in fields when they cannot be reflected upon. Always lower
    * case.
    */
-  private static Object[][] TIBAssist;
+  private static Object[][] TIBAssist = new Object[8][800];
   private static int[] numbercount = new int[8];
   public static int TIBOffset = 0;
 
