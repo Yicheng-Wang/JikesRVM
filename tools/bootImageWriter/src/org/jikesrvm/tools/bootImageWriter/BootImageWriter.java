@@ -151,8 +151,11 @@ public class BootImageWriter {
    * trying to fill in fields when they cannot be reflected upon. Always lower
    * case.
    */
-  private static TIB[][] TIBAssist = new TIB[8][800];
+  private static Object[][] TIBAssist;
   private static int[] numbercount = new int[8];
+  public static int TIBOffset = 0;
+
+
   private static String classLibrary;
 
   /**
@@ -720,31 +723,60 @@ public class BootImageWriter {
 
       Object jdkObject = BootImageMap.getObject(objCookie);
 
-      if(jdkObject instanceof TIB){
-        int AlignValue = ((TIB)jdkObject).getAlignData();
-        if(AlignValue!=AlignmentEncoding.ALIGN_CODE_NONE){
+      if (jdkObject instanceof TIB) {
+        int AlignValue = ((TIB) jdkObject).getAlignData();
+        if (AlignValue != AlignmentEncoding.ALIGN_CODE_NONE) {
           count1++;
-          VM.sysWriteln("Count of TIB in jdkObject is ",count1);
-          Object backing = ((RuntimeTable<?>)jdkObject).getBacking();
-          BootImageMap.Entry mapEntry = BootImageMap.findOrCreateEntry(backing);
-          Class<?>   jdkType = backing.getClass();
-          RVMType rvmType = getRvmType(jdkType);
-          int arrayCount = Array.getLength(backing);
-          RVMArray rvmArrayType = rvmType.asArray();
-          boolean needsIdentityHash = mapEntry.requiresIdentityHashCode();
-          int identityHashValue = mapEntry.getIdentityHashCode();
-          Address ImageAdress = bootImage.allocateArray(rvmArrayType, arrayCount, needsIdentityHash, identityHashValue, AlignValue);
-          ((TIB)jdkObject).setImageAdress(ImageAdress);
-          /*int index = (alignCodeValue)/(1<<( FIELD_WIDTH - 3));
-          if(alignCodeValue!=AlignmentEncoding.ALIGN_CODE_NONE){
-            TIBAssist[index][numbercount[index]] = ((TIB)jdkObject);
-            numbercount[index]++;
-            VM.sysWriteln("TIB number is ",((TIB)jdkObject).getnum()," TIB Address is ", ((TIB)jdkObject).getImageAdress() );
-            VM.sysWriteln("The index is: ",index ,"Total : ",numbercount[index]);
-          }*/
+          VM.sysWriteln("Count of TIB in jdkObject is ", count1);
+
+          int index = (AlignValue) / (1 << (FIELD_WIDTH - 3));
+          TIBAssist[index][numbercount[index]] = jdkObject;
+          numbercount[index]++;
         }
       }
     }
+
+    Address Start = Address.fromIntSignExtend(1644167168);
+    for(int i=0;i<count1;i++){
+      int aligncodenow = AlignmentEncoding.getTibCodeForRegion(Start.plus(TIBOffset));
+      int closest = ((aligncodenow/(1<<( FIELD_WIDTH - 3))) + 1) % 8;
+      Object jdkObject = null;
+      for(int j=0;j<8;j++){
+        if(numbercount[closest]>0){
+          jdkObject = TIBAssist[closest][numbercount[closest]-1];
+          numbercount[closest]--;
+          break;
+        }
+        else{
+          closest = (closest + 1) % 8;
+        }
+      }
+      int AlignValue = ((TIB) jdkObject).getAlignData();
+      Object backing = ((RuntimeTable<?>)jdkObject).getBacking();
+      BootImageMap.Entry mapEntry = BootImageMap.findOrCreateEntry(backing);
+      Class<?>   jdkType = backing.getClass();
+      RVMType rvmType = getRvmType(jdkType);
+      int arrayCount = Array.getLength(backing);
+      RVMArray rvmArrayType = rvmType.asArray();
+      boolean needsIdentityHash = mapEntry.requiresIdentityHashCode();
+      int identityHashValue = mapEntry.getIdentityHashCode();
+      Address ImageAdress = bootImage.allocateArray(rvmArrayType, arrayCount, needsIdentityHash, identityHashValue, AlignValue);
+      ((TIB)jdkObject).setImageAdress(ImageAdress);
+      int newpadding = (aligncodenow<AlignValue)?(AlignValue-aligncodenow)*4:(AlignValue+AlignmentEncoding.MAX_ALIGN_WORDS-aligncodenow)*4;
+      TIBOffset += (arrayCount + newpadding);
+    }
+
+
+
+    /*int index = (alignCodeValue)/(1<<( FIELD_WIDTH - 3));
+    if(alignCodeValue!=AlignmentEncoding.ALIGN_CODE_NONE){
+      TIBAssist[index][numbercount[index]] = ((TIB)jdkObject);
+      numbercount[index]++;
+      VM.sysWriteln("TIB number is ",((TIB)jdkObject).getnum()," TIB Address is ", ((TIB)jdkObject).getImageAdress() );
+      VM.sysWriteln("The index is: ",index ,"Total : ",numbercount[index]);
+    }*/
+
+
     //
     // First object in image must be boot record (so boot loader will know
     // where to find it).  We'll write out an uninitialized record and not recurse
