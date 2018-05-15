@@ -1010,7 +1010,8 @@ public class ObjectModel {
       int aligncodenow = AlignmentEncoding.getTibCodeForRegion(Start.plus(TIBOffset));
       int newpadding = (aligncodenow<alignCode)?(alignCode-aligncodenow)*4:(alignCode+AlignmentEncoding.MAX_ALIGN_WORDS-aligncodenow)*4;
       boolean isTIB = (alignCode!=AlignmentEncoding.ALIGN_CODE_NONE);
-      Address ptr = bootImage.allocateDataStorage(size + padding, align, offset, isTIB);
+      Address ptr = bootImage.allocateDataStorage(size + newpadding, align, offset, isTIB);
+      TIBOffset += (size + newpadding);
       /*
       if(alignCode==AlignmentEncoding.ALIGN_CODE_NONE){
           ptr = bootImage.allocateDataStorage(size + padding, align, offset, false);
