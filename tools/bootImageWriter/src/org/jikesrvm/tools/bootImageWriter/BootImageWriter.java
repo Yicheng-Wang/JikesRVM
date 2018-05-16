@@ -747,6 +747,7 @@ public class BootImageWriter {
       for(int j=0;j<8;j++){
         if(numbercount[closest]>0){
           int mostcount = -1;
+          int index = 0;
           for(int k=0;k<numbercount[closest];k++){
             Object backing = ((RuntimeTable<?>)TIBAssist[closest][k]).getBacking();
             Class<?>   jdkType = backing.getClass();
@@ -758,10 +759,10 @@ public class BootImageWriter {
             int acceptable = numbercount[cloestafter];
             if(acceptable>mostcount){
               mostcount = acceptable;
-              jdkObject = TIBAssist[closest][k];
+              index = k;
             }
           }
-          //jdkObject = TIBAssist[closest][numbercount[closest]-1];
+          jdkObject = TIBAssist[closest][index];
           numbercount[closest]--;
           break;
         }
@@ -1842,6 +1843,7 @@ public class BootImageWriter {
         Address arrayImageAddress;
         if(alignCode!=AlignmentEncoding.ALIGN_CODE_NONE){
           arrayImageAddress = ((TIB)parentObject).getImageAdress();
+          VM.sysWriteln("Array Image Address is " + arrayImageAddress);
         }
         else{
           arrayImageAddress = (overwriteAddress.isMax()) ? bootImage.allocateArray(rvmArrayType, arrayCount, needsIdentityHash, identityHashValue, alignCode) : overwriteAddress;
