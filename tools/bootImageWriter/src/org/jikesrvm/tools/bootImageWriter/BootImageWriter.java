@@ -748,8 +748,12 @@ public class BootImageWriter {
           int mostcount = -1;
           for(int k=0;k<numbercount[closest];k++){
             Object backing = ((RuntimeTable<?>)TIBAssist[closest][k]).getBacking();
+            Class<?>   jdkType = backing.getClass();
+            RVMType rvmType = getRvmType(jdkType);
             int arrayCount = Array.getLength(backing);
-            int cloestafter = (closest + (arrayCount/4)/(1<<( FIELD_WIDTH - 3)) + 1) % 8;
+            RVMArray rvmArrayType = rvmType.asArray();
+            int size = rvmArrayType.getInstanceSize(arrayCount);
+            int cloestafter = (closest + (size/4)/(1<<( FIELD_WIDTH - 3)) + 1) % 8;
             int acceptable = numbercount[cloestafter];
             if(acceptable>mostcount){
               mostcount = acceptable;
