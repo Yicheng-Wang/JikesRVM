@@ -746,7 +746,7 @@ public class BootImageWriter {
       Object jdkObject = null;
       for(int j=0;j<8;j++){
         if(numbercount[closest]>0){
-          /*int mostcount = -1;
+          int mostcount = -1;
           for(int k=0;k<numbercount[closest];k++){
             Object backing = ((RuntimeTable<?>)TIBAssist[closest][k]).getBacking();
             Class<?>   jdkType = backing.getClass();
@@ -760,8 +760,8 @@ public class BootImageWriter {
               mostcount = acceptable;
               jdkObject = TIBAssist[closest][k];
             }
-          }*/
-          jdkObject = TIBAssist[closest][numbercount[closest]-1];
+          }
+          //jdkObject = TIBAssist[closest][numbercount[closest]-1];
           numbercount[closest]--;
           break;
         }
