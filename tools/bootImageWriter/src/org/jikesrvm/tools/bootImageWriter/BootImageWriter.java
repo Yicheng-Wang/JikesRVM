@@ -749,20 +749,23 @@ public class BootImageWriter {
           int mostcount = -1;
           int index = 0;
           for(int k=0;k<numbercount[closest];k++){
-            Object backing = ((RuntimeTable<?>)TIBAssist[closest][k]).getBacking();
-            Class<?>   jdkType = backing.getClass();
-            RVMType rvmType = getRvmType(jdkType);
-            int arrayCount = Array.getLength(backing);
-            RVMArray rvmArrayType = rvmType.asArray();
-            int size = rvmArrayType.getInstanceSize(arrayCount);
-            int cloestafter = (closest + (size/4)/(1<<( FIELD_WIDTH - 3)) + 1) % 8;
-            int acceptable = numbercount[cloestafter];
-            if(acceptable>mostcount){
-              mostcount = acceptable;
-              index = k;
+            if(TIBAssist[closest][k]!=null) {
+              Object backing = ((RuntimeTable<?>) TIBAssist[closest][k]).getBacking();
+              Class<?> jdkType = backing.getClass();
+              RVMType rvmType = getRvmType(jdkType);
+              int arrayCount = Array.getLength(backing);
+              RVMArray rvmArrayType = rvmType.asArray();
+              int size = rvmArrayType.getInstanceSize(arrayCount);
+              int cloestafter = (closest + (size / 4) / (1 << (FIELD_WIDTH - 3)) + 1) % 8;
+              int acceptable = numbercount[cloestafter];
+              if (acceptable > mostcount) {
+                mostcount = acceptable;
+                index = k;
+              }
             }
           }
           jdkObject = TIBAssist[closest][index];
+          TIBAssist[closest][index] = null;
           numbercount[closest]--;
           break;
         }
