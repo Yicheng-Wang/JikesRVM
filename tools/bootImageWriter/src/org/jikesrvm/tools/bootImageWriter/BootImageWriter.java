@@ -781,7 +781,7 @@ public class BootImageWriter {
       Address ImageAdress = bootImage.allocateArray(rvmArrayType, arrayCount, needsIdentityHash, identityHashValue, AlignValue);
       ((TIB)jdkObject).setImageAdress(ImageAdress);
       int newpadding = (aligncodenow<AlignValue)?(AlignValue-aligncodenow)*4:(AlignValue+AlignmentEncoding.MAX_ALIGN_WORDS-aligncodenow)*4;
-      TIBOffset += (arrayCount + newpadding);
+      TIBOffset += (rvmArrayType.getInstanceSize(arrayCount) + newpadding);
     }
 
 
