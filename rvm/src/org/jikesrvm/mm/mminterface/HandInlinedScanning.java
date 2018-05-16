@@ -27,14 +27,14 @@ import org.vmmagic.pragma.Uninterruptible;
  */
 public class HandInlinedScanning {
 
-  public static final int AE_FALLBACK = 4*(1 << (AlignmentEncoding.FIELD_WIDTH - 3));
-  public static final int AE_REFARRAY = 6*(1 << (AlignmentEncoding.FIELD_WIDTH - 3));
+  public static final int AE_FALLBACK = 7*(1 << (AlignmentEncoding.FIELD_WIDTH - 3));
+  public static final int AE_REFARRAY = 3*(1 << (AlignmentEncoding.FIELD_WIDTH - 3));
 
-  public static final int AE_PATTERN_0x0  = 5*(1 << (AlignmentEncoding.FIELD_WIDTH - 3));
+  public static final int AE_PATTERN_0x0  = 6*(1 << (AlignmentEncoding.FIELD_WIDTH - 3));
   public static final int AE_PATTERN_0x1  = 1*(1 << (AlignmentEncoding.FIELD_WIDTH - 3));
-  public static final int AE_PATTERN_0x7  = 3*(1 << (AlignmentEncoding.FIELD_WIDTH - 3));
+  public static final int AE_PATTERN_0x7  = 5*(1 << (AlignmentEncoding.FIELD_WIDTH - 3));
   public static final int AE_PATTERN_0x3F = 2*(1 << (AlignmentEncoding.FIELD_WIDTH - 3));
-  public static final int AE_PATTERN_0x3  = 7*(1 << (AlignmentEncoding.FIELD_WIDTH - 3));
+  public static final int AE_PATTERN_0x3  = 4*(1 << (AlignmentEncoding.FIELD_WIDTH - 3));
   public static final int AE_PATTERN_0x3D = 0;
 
   private static final int FIELD0_OFFSET =
