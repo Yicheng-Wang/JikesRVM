@@ -745,7 +745,19 @@ public class BootImageWriter {
       Object jdkObject = null;
       for(int j=0;j<8;j++){
         if(numbercount[closest]>0){
-          jdkObject = TIBAssist[closest][numbercount[closest]-1];
+          Object choose = null;
+          int mostcount = -1;
+          for(int k=0;k<numbercount[closest];k++){
+            Object backing = ((RuntimeTable<?>)TIBAssist[closest][k]).getBacking();
+            int arrayCount = Array.getLength(backing);
+            int cloestafter = (((closest * (1<<( FIELD_WIDTH - 3)) + arrayCount) / (1<<( FIELD_WIDTH - 3))) + 1) % 8;
+            int acceptable = numbercount[cloestafter] + numbercount[(cloestafter+1)%8];
+            if(acceptable>mostcount){
+              mostcount = acceptable;
+              choose = TIBAssist[closest][k];
+            }
+          }
+          jdkObject = choose;
           numbercount[closest]--;
           break;
         }
