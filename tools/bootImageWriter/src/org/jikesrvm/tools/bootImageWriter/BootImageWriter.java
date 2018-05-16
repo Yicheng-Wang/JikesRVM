@@ -738,6 +738,10 @@ public class BootImageWriter {
     for(int i=0;i<8;i++){
       VM.sysWriteln("Number of " + i +" is " + numbercount[i]);
     }
+    int[] totalcount = new int[8];
+    for(int i=0;i<8;i++){
+      totalcount[i] = numbercount[i];
+    }
     Address Start = Address.fromIntSignExtend(1644167168);
     for(int i=0;i<count1;i++){
       int aligncodenow = AlignmentEncoding.getTibCodeForRegion(Start.plus(TIBOffset));
@@ -748,7 +752,7 @@ public class BootImageWriter {
         if(numbercount[closest]>0){
           int mostcount = -1;
           int index = 0;
-          for(int k=0;k<numbercount[closest];k++){
+          for(int k=0;k<totalcount[closest];k++){
             if(TIBAssist[closest][k]!=null) {
               Object backing = ((RuntimeTable<?>) TIBAssist[closest][k]).getBacking();
               Class<?> jdkType = backing.getClass();
