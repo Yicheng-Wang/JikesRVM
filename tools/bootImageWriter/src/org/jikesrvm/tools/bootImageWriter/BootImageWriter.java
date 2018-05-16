@@ -735,7 +735,9 @@ public class BootImageWriter {
         }
       }
     }
-
+    for(int i=0;i<8;i++){
+      VM.sysWriteln("Number of " + i +" is " + numbercount[i]);
+    }
     Address Start = Address.fromIntSignExtend(1644167168);
     for(int i=0;i<count1;i++){
       int aligncodenow = AlignmentEncoding.getTibCodeForRegion(Start.plus(TIBOffset));
