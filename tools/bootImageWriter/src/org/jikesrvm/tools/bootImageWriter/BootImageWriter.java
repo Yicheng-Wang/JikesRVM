@@ -1852,7 +1852,7 @@ public class BootImageWriter {
         if (verbosity.isAtLeast(DETAILED)) say("Encoding value " + alignCodeValue + " into tib");
         /* Copy the backing array, and then replace its TIB */
         mapEntry.imageAddress = copyToBootImage(backing, allocOnly, overwriteAddress, jdkObject, rvmType.getTypeRef().isRuntimeTable(), alignCodeValue);
-        VM.sysWriteln("The TIB address is " + mapEntry.imageAddress.toInt());
+        VM.sysWriteln("The TIB address is " + mapEntry.imageAddress);
         if (verbosity.isAtLeast(DETAILED)) say(String.format("TIB address = %x, encoded value = %d, requested = %d%n",
             mapEntry.imageAddress.toInt(),
             AlignmentEncoding.extractTibCode(mapEntry.imageAddress),alignCodeValue));
