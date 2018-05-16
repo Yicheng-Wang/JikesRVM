@@ -1014,6 +1014,7 @@ public class ObjectModel {
       if(isTIB){
         ptr = bootImage.allocateDataStorage(size + newpadding, align, offset, isTIB);
         TIBOffset += (size + newpadding);
+        VM.sysWriteln("TIB size is " + (size + newpadding));
       }
       else
         ptr = bootImage.allocateDataStorage(size + padding, align, offset, isTIB);
