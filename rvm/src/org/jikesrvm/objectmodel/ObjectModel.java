@@ -1006,29 +1006,23 @@ public class ObjectModel {
     }
     int offset = getOffsetForAlignment(array, needsIdentityHash);
     int padding = AlignmentEncoding.padding(alignCode);
+      //The Start of the TIB space in the bootimage
       Address Start = Address.fromIntSignExtend(1644167168);
+      //The aligncode of the TIB space address now
       int aligncodenow = AlignmentEncoding.getTibCodeForRegion(Start.plus(TIBOffset));
+      //New padding space size
       int newpadding = (aligncodenow<alignCode)?(alignCode-aligncodenow)*4:(alignCode+AlignmentEncoding.MAX_ALIGN_WORDS-aligncodenow)*4;
+      //If the alignCode is not none, we can confirm what we are allocating is TIB and need to be allocated in the TIB space in the bootimage.
       boolean isTIB = (alignCode!=AlignmentEncoding.ALIGN_CODE_NONE);
       Address ptr;
       if(isTIB){
+        //If is TIB, need to update the TIB space Offset to calculate the padding of the next TIB.
         ptr = bootImage.allocateDataStorage(size + newpadding, align, offset, isTIB);
         TIBOffset += (size + newpadding);
-        VM.sysWriteln("TIB size is " + (size + newpadding));
+        //VM.sysWriteln("TIB size is " + (size + newpadding));
       }
       else
         ptr = bootImage.allocateDataStorage(size + padding, align, offset, isTIB);
-
-      /*
-      if(alignCode==AlignmentEncoding.ALIGN_CODE_NONE){
-          ptr = bootImage.allocateDataStorage(size + padding, align, offset, false);
-      }
-      else{
-          ptr = bootImage.allocateDataStorage(size + padding, align, offset,true);
-          TIBOffset += (size+padding);
-          VM.sysWriteln(size," ", alignCode);
-      }*/
-    //ptr = bootImage.allocateDataStorage(size + padding, align, offset);
     ptr = AlignmentEncoding.adjustRegion(alignCode, ptr);
     Address ref = JavaHeader.initializeArrayHeader(bootImage, ptr, tib, size, numElements, needsIdentityHash, identityHashValue);
     bootImage.setFullWord(ref.plus(getArrayLengthOffset()), numElements);

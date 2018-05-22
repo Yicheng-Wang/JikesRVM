@@ -84,8 +84,6 @@ public final class MemoryManager {
    *
    * Class variables
    */
-  public static TIB[][] TIBAssist = new TIB[8][800];
-  public static int[] numbercount = new int[8];
   /**
    * <code>true</code> if checking of allocated memory to ensure it is
    * zeroed is desired.
@@ -478,6 +476,7 @@ public final class MemoryManager {
         isPrefix("Lorg/jikesrvm/jni/JNIEnvironment;", typeBA)) {
       allocator = Plan.ALLOC_NON_MOVING;
     }
+    //Yicheng: If allocate for TIB type, pick TIB allocator
     if(type.isTIBType()){
       allocator = Plan.ALLOC_TIB;
       VM.sysWriteln("TIB allocator is :"+allocator);
@@ -856,18 +855,15 @@ public final class MemoryManager {
 
     if (!VM.runningVM) {
       TIB buildTIB = TIB.allocate(elements, alignCode);
-      if(alignCode!=AlignmentEncoding.ALIGN_CODE_NONE){
+      /*if(alignCode!=AlignmentEncoding.ALIGN_CODE_NONE){
         buildTIB.setnum(buildcount);
         buildcount++;
         int index = ((alignCode)/(1<<(AlignmentEncoding.FIELD_WIDTH - 3)));
-
-      }
+      }*/
       return buildTIB;
     }
 
     if (alignCode == AlignmentEncoding.ALIGN_CODE_NONE) {
-      VM.sysWriteln("ALIGN_CODE_NONE, count: "+count);
-      //count++;
       return (TIB)newRuntimeTable(elements, RVMType.TIBType);
     }
 
@@ -886,28 +882,30 @@ public final class MemoryManager {
       /* asked to allocate more than Integer.MAX_VALUE bytes */
       throwLargeArrayOutOfMemoryError();
     }
+    //Yicheng: The allocated size before optimization at the run time
     int size = elemBytes + headerSize + AlignmentEncoding.padding(alignCode);
-    VM.sysWriteln("old size is: "+ size );
+    //VM.sysWriteln("old size is: "+ size );
+    //The aligncode of the TIB address now
     int aligncodenow = AlignmentEncoding.getTibCodeForRegion(testendpoint);
+    //New padding reduce the space that waste after the TIB
     int adjustpadding = (aligncodenow<alignCode)?(alignCode-aligncodenow)*4:(alignCode+AlignmentEncoding.MAX_ALIGN_WORDS-aligncodenow)*4;
+    //New size to be allocated in the TIB runtime space.
     size = elemBytes + headerSize + adjustpadding;
     VM.sysWriteln("new size is: "+ size );
     Selected.Mutator mutator = Selected.Mutator.get();
+    //To choose TIB allocator as the allocator
     notifyClassResolved(type);
-    VM.sysWriteln("count: "+ count + " size: "+size +" align: "+align+ " offset: "+ offset+ " getMMAllocator is : "+ type.getMMAllocator()+"Mean size is : "+meansize);
+    VM.sysWriteln("count: "+ count + " size: "+ size + " getMMAllocator is : "+ type.getMMAllocator());
     Address region = allocateSpace(mutator, size, align, offset, type.getMMAllocator(), Plan.DEFAULT_SITE);
-    if(count>0){
+    /*if(count>0){
       meansize=(region.toInt()-laststart.toInt())/count;
-    }
-      /*if(region.toInt()!=testendpoint.toInt()){
-          VM.sysWriteln("ALARM!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-      }*/
+    }*/
     testendpoint = MutatorContext.immortalTIB.getCursor();
-    lastendpoint = region.plus(size);
-    if(count==0)
-      laststart=region;
-    VM.sysWrite("Allocating TIB: region = ",region," end region first: ",lastendpoint);
-    VM.sysWriteln(" end region after: ",testendpoint);
+    //lastendpoint = region.plus(size);
+    /*if(count==0)
+      laststart=region;*/
+    //VM.sysWrite("Allocating TIB: region = ",region," end region first: ",lastendpoint);
+    //VM.sysWriteln(" end region after: ",testendpoint);
     region = AlignmentEncoding.adjustRegion(alignCode, region);
     Object result = ObjectModel.initializeArray(region, fakeTib, elements, size);
     mutator.postAlloc(ObjectReference.fromObject(result), ObjectReference.fromObject(fakeTib), size, type.getMMAllocator());
