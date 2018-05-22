@@ -297,12 +297,7 @@ public class BootImage implements BootImageInterface {
   @Override
   public Address allocateDataStorage(int size, int align, int offset , boolean isTIB) {
     size = roundAllocationSize(size);
-    Offset handleOffset;
-    if(isTIB)
-      handleOffset = freeTIBOffset;
-    else
-      handleOffset = freeDataOffset;
-
+    Offset handleOffset = isTIB ? freeTIBOffset : freeDataOffset;
       Offset unalignedOffset = handleOffset;
     handleOffset = MemoryManager.alignAllocation(handleOffset, align, offset);
       if (VM.ExtremeAssertions) {
@@ -318,6 +313,12 @@ public class BootImage implements BootImageInterface {
 
       ObjectModel.fillAlignmentGap(this, BOOT_IMAGE_DATA_START.plus(unalignedOffset),
               lowAddr.minus(unalignedOffset).toWord().toExtent());
+      if(isTIB){
+        freeTIBOffset = handleOffset;
+      }
+      else{
+        freeDataOffset = handleOffset;
+      }
       return BOOT_IMAGE_DATA_START.plus(lowAddr);
   }
   /**
