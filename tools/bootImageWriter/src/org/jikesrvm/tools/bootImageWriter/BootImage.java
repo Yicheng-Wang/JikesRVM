@@ -297,34 +297,21 @@ public class BootImage implements BootImageInterface {
   @Override
   public Address allocateDataStorage(int size, int align, int offset , boolean isTIB) {
     size = roundAllocationSize(size);
-    if(isTIB){
-      Offset unalignedOffset = freeTIBOffset;
-      freeTIBOffset = MemoryManager.alignAllocation(freeTIBOffset, align, offset);
-      if (VM.ExtremeAssertions) {
-        VM._assert(freeTIBOffset.plus(offset).toWord().and(Word.fromIntSignExtend(align - 1)).isZero());
-        VM._assert(freeTIBOffset.toWord().and(Word.fromIntSignExtend(3)).isZero());
-      }
-      Offset lowAddr = freeTIBOffset;
-      freeTIBOffset = freeTIBOffset.plus(size);
-      if (!VM.AllowOversizedImages && freeTIBOffset.sGT(Offset.fromIntZeroExtend(BOOT_IMAGE_DATA_SIZE_LIMIT)))
-        fail("bootimage full (need at least " + size + " more bytes for data). " +
-                "To ignore this, add config.allowOversizedImage=true to the configuration you are using " +
-                "or increase BOOT_IMAGE_DATA_SIZE_LIMIT in HeapLayoutConstants.template ."+ BOOT_IMAGE_DATA_SIZE_LIMIT);
+    Offset handleOffset;
+    if(isTIB)
+      handleOffset = freeTIBOffset;
+    else
+      handleOffset = freeDataOffset;
 
-      ObjectModel.fillAlignmentGap(this, BOOT_IMAGE_DATA_START.plus(unalignedOffset),
-              lowAddr.minus(unalignedOffset).toWord().toExtent());
-      return BOOT_IMAGE_DATA_START.plus(lowAddr);
-    }
-    else {
-      Offset unalignedOffset = freeDataOffset;
-      freeDataOffset = MemoryManager.alignAllocation(freeDataOffset, align, offset);
+      Offset unalignedOffset = handleOffset;
+    handleOffset = MemoryManager.alignAllocation(handleOffset, align, offset);
       if (VM.ExtremeAssertions) {
-        VM._assert(freeDataOffset.plus(offset).toWord().and(Word.fromIntSignExtend(align - 1)).isZero());
-        VM._assert(freeDataOffset.toWord().and(Word.fromIntSignExtend(3)).isZero());
+        VM._assert(handleOffset.plus(offset).toWord().and(Word.fromIntSignExtend(align - 1)).isZero());
+        VM._assert(handleOffset.toWord().and(Word.fromIntSignExtend(3)).isZero());
       }
-      Offset lowAddr = freeDataOffset;
-      freeDataOffset = freeDataOffset.plus(size);
-      if (!VM.AllowOversizedImages && freeDataOffset.sGT(Offset.fromIntZeroExtend(BOOT_IMAGE_DATA_SIZE_LIMIT)))
+      Offset lowAddr = handleOffset;
+    handleOffset = handleOffset.plus(size);
+      if (!VM.AllowOversizedImages && handleOffset.sGT(Offset.fromIntZeroExtend(BOOT_IMAGE_DATA_SIZE_LIMIT)))
         fail("bootimage full (need at least " + size + " more bytes for data). " +
                 "To ignore this, add config.allowOversizedImage=true to the configuration you are using " +
                 "or increase BOOT_IMAGE_DATA_SIZE_LIMIT in HeapLayoutConstants.template .");
@@ -332,27 +319,6 @@ public class BootImage implements BootImageInterface {
       ObjectModel.fillAlignmentGap(this, BOOT_IMAGE_DATA_START.plus(unalignedOffset),
               lowAddr.minus(unalignedOffset).toWord().toExtent());
       return BOOT_IMAGE_DATA_START.plus(lowAddr);
-    }
-  }
-
-  public Address allocateTIBStorage(int size, int align, int offset){
-    size = roundAllocationSize(size);
-    Offset unalignedOffset = freeTIBOffset;
-    freeTIBOffset = MemoryManager.alignAllocation(freeTIBOffset, align, offset);
-    if (VM.ExtremeAssertions) {
-      VM._assert(freeTIBOffset.plus(offset).toWord().and(Word.fromIntSignExtend(align - 1)).isZero());
-      VM._assert(freeTIBOffset.toWord().and(Word.fromIntSignExtend(3)).isZero());
-    }
-    Offset lowAddr = freeTIBOffset;
-    freeTIBOffset = freeTIBOffset.plus(size);
-    if (!VM.AllowOversizedImages && freeTIBOffset.sGT(Offset.fromIntZeroExtend(BOOT_IMAGE_DATA_SIZE_LIMIT)))
-      fail("bootimage full (need at least " + size + " more bytes for data). " +
-              "To ignore this, add config.allowOversizedImage=true to the configuration you are using " +
-              "or increase BOOT_IMAGE_DATA_SIZE_LIMIT in HeapLayoutConstants.template .");
-
-    ObjectModel.fillAlignmentGap(this, BOOT_IMAGE_TIB_START.plus(unalignedOffset),
-            lowAddr.minus(unalignedOffset).toWord().toExtent());
-    return BOOT_IMAGE_TIB_START.plus(lowAddr);
   }
   /**
    * Round a size in bytes up to the next value of MIN_ALIGNMENT
