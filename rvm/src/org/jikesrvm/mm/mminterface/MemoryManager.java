@@ -479,7 +479,7 @@ public final class MemoryManager {
     //Yicheng: If allocate for TIB type, pick TIB allocator
     if(type.isTIBType()){
       allocator = Plan.ALLOC_TIB;
-      VM.sysWriteln("TIB allocator is :"+allocator);
+      //VM.sysWriteln("TIB allocator is :"+allocator);
     }
     return allocator;
   }
@@ -984,8 +984,6 @@ public final class MemoryManager {
     int align = ObjectModel.getAlignment(fakeType);
     int offset = ObjectModel.getOffsetForAlignment(fakeType, false);
     int width = fakeType.getLogElementSize();
-    VM.sysWrite("runtimetable allocator is",2);
-    //notifyClassResolved(type);
     /* Allocate a word array */
     Object array = allocateArray(size,
                                  width,

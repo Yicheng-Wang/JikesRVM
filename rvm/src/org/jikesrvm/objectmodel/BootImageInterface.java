@@ -33,8 +33,6 @@ public interface BootImageInterface {
    * @return start address of the allocated memory
    */
   Address allocateDataStorage(int size, int align, int offset , boolean isTIB);
-
-  Address allocateTIBStorage(int size, int align, int offset);
   /**
    * Allocate space in code portion of bootimage. Moral equivalent of
    * memory managers allocating raw storage at runtime.
