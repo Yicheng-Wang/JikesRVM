@@ -1019,7 +1019,7 @@ public class ObjectModel {
         //If is TIB, need to update the TIB space Offset to calculate the padding of the next TIB.
         ptr = bootImage.allocateDataStorage(size + newpadding, align, offset, isTIB);
         TIBOffset += (size + newpadding);
-        //VM.sysWriteln("TIB size is " + (size + newpadding));
+        VM.sysWriteln("TIB size is " + (size + newpadding));
       }
       else
         ptr = bootImage.allocateDataStorage(size + padding, align, offset, isTIB);
