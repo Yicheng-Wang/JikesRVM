@@ -25,6 +25,7 @@ import static org.mmtk.utility.heap.layout.HeapParameters.MAX_SPACES;
 import java.lang.ref.PhantomReference;
 import java.lang.ref.SoftReference;
 import java.lang.ref.WeakReference;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import org.mmtk.plan.MutatorContext;
 import org.mmtk.utility.alloc.BumpPointer;
@@ -99,7 +100,7 @@ public final class MemoryManager {
   private static int count1=0;
   private static LinkedList<Address> FirstHoles = new LinkedList<Address>();
   private static LinkedList <Address> SecondHoles = new LinkedList <Address>();
-  private static LinkedList<Address>[] Holes = new LinkedList[7];
+  private static ArrayList<LinkedList<Address>> Holes = new ArrayList<LinkedList<Address>>();
   /**
    * Has garbage collection been enabled yet?
    */
@@ -856,7 +857,8 @@ public final class MemoryManager {
     testendpoint = MutatorContext.immortalTIB.getCursor();
     if(count==0){
       for(int i=0;i<7;i++){
-        Holes[i] = new LinkedList<Address>();
+        LinkedList<Address> preHoles = new LinkedList<Address>();
+        Holes.add(preHoles);
       }
     }
     if (!VM.runningVM) {
@@ -904,32 +906,32 @@ public final class MemoryManager {
     notifyClassResolved(type);
     VM.sysWriteln("count: "+ count + " size: "+ size + " getMMAllocator is : "+ type.getMMAllocator());
     int Number = alignCode/(1 << (AlignmentEncoding.FIELD_WIDTH - 3));
-    if(count>0&&Holes[Number].isEmpty()){
+    if(count>0&&Holes.get(Number).isEmpty()){
       size = AlignmentEncoding.padding(alignCode) + adjustpadding;
       if((Number!=7 && usedsize<(1 << (AlignmentEncoding.FIELD_WIDTH - 3))*4)||(Number==7 && usedsize< 2*(1 << (AlignmentEncoding.FIELD_WIDTH - 3)))){
         for(int i=1;i<7;i++){
           Address ad;
           if(Number+i>=8){
             ad= testendpoint.plus(adjustpadding + (i+1)*(1 << (AlignmentEncoding.FIELD_WIDTH - 3))*4);
-            Holes[(Number+i)%7].add(ad);
+            Holes.get((Number+i)%7).add(ad);
             VM.sysWriteln(" Address : " ,ad ," Encode :",AlignmentEncoding.getTibCodeForRegion(ad));
           }
           else{
             ad= testendpoint.plus(adjustpadding + (i)*(1 << (AlignmentEncoding.FIELD_WIDTH - 3))*4);
-            Holes[Number+i].add(ad);
+            Holes.get(Number+i).add(ad);
             VM.sysWriteln(" Address : " ,ad ," Encode :",AlignmentEncoding.getTibCodeForRegion(ad));
           }
         }
       }
     }
     Address region;
-    if(!Holes[Number].isEmpty() && usedsize<(1 << (AlignmentEncoding.FIELD_WIDTH - 3))*4 && Number!=7){
+    if(!Holes.get(Number).isEmpty() && usedsize<(1 << (AlignmentEncoding.FIELD_WIDTH - 3))*4 && Number!=7){
       size = usedsize;
-      region = Holes[Number].remove();
+      region = Holes.get(Number).remove();
     }
-    else if(!Holes[Number].isEmpty() && usedsize< 2*(1 << (AlignmentEncoding.FIELD_WIDTH - 3))*4 && Number==7){
+    else if(!Holes.get(Number).isEmpty() && usedsize< 2*(1 << (AlignmentEncoding.FIELD_WIDTH - 3))*4 && Number==7){
       size = usedsize;
-      region = Holes[Number].remove();
+      region = Holes.get(Number).remove();
     }
     else{
       region = allocateSpace(mutator, size, align, offset, type.getMMAllocator(), Plan.DEFAULT_SITE);
