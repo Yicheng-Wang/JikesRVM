@@ -97,8 +97,15 @@ public final class MemoryManager {
    */
   private static boolean booted = false;
   private static int count=0;
-  private static LinkedList<Address> FirstHoles = new LinkedList <Address>();
+  private static LinkedList<Address> FirstHoles = new LinkedList<Address>();
   private static LinkedList <Address> SecondHoles = new LinkedList <Address>();
+  private static LinkedList <Address> ThirdHoles = new LinkedList <Address>();
+  private static LinkedList <Address> FourthHoles = new LinkedList <Address>();
+  private static LinkedList <Address> FifthHoles = new LinkedList <Address>();
+  private static LinkedList <Address> SixthHoles = new LinkedList <Address>();
+  private static LinkedList <Address> SeventhHoles = new LinkedList <Address>();
+  private static LinkedList <Address> EighthHoles = new LinkedList <Address>();
+  private static LinkedList <Address>[] Holes = new LinkedList[8];
   /**
    * Has garbage collection been enabled yet?
    */
@@ -852,7 +859,12 @@ public final class MemoryManager {
   @Interruptible
   public static TIB newTIB(int numVirtualMethods, int alignCode) {
     int elements = TIB.computeSize(numVirtualMethods);
-
+    if(count==0){
+        VM.sysWriteln("Initial");
+        for(int i = 0; i < Holes.length; i++) {
+            Holes[i] = new LinkedList<>();
+        }
+    }
     if (!VM.runningVM) {
       TIB buildTIB = TIB.allocate(elements, alignCode);
       /*if(alignCode!=AlignmentEncoding.ALIGN_CODE_NONE){
@@ -916,9 +928,6 @@ public final class MemoryManager {
     else {
       region = allocateSpace(mutator, size, align, offset, type.getMMAllocator(), Plan.DEFAULT_SITE);
     }
-    /*if(count>0){
-      meansize=(region.toInt()-laststart.toInt())/count;
-    }*/
     testendpoint = MutatorContext.immortalTIB.getCursor();
     //lastendpoint = region.plus(size);
     /*if(count==0)
