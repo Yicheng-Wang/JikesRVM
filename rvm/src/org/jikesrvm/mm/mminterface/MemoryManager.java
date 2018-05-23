@@ -97,10 +97,8 @@ public final class MemoryManager {
    */
   private static boolean booted = false;
   private static int count=0;
-  private static LinkedList<Address> FirstHoles = new LinkedList<Address>();
+  private static LinkedList<Address> FirstHoles = new LinkedList <Address>();
   private static LinkedList <Address> SecondHoles = new LinkedList <Address>();
-  private static LinkedList <Address> ThirdHoles = new LinkedList <Address>();
-  private static LinkedList <Address> FourthHoles = new LinkedList <Address>();
   /**
    * Has garbage collection been enabled yet?
    */
@@ -854,6 +852,7 @@ public final class MemoryManager {
   @Interruptible
   public static TIB newTIB(int numVirtualMethods, int alignCode) {
     int elements = TIB.computeSize(numVirtualMethods);
+
     if (!VM.runningVM) {
       TIB buildTIB = TIB.allocate(elements, alignCode);
       /*if(alignCode!=AlignmentEncoding.ALIGN_CODE_NONE){
@@ -902,8 +901,8 @@ public final class MemoryManager {
       size = AlignmentEncoding.padding(alignCode) + adjustpadding;
       Address first = testendpoint.plus(adjustpadding + 2*(1 << (AlignmentEncoding.FIELD_WIDTH - 3))*4);
       Address second = testendpoint.plus(adjustpadding + 6*(1 << (AlignmentEncoding.FIELD_WIDTH - 3))*4);
-      VM.sysWriteln("Address now is : ",testendpoint ," First: "+ AlignmentEncoding.getTibCodeForRegion(first) + " Second : "+ AlignmentEncoding.getTibCodeForRegion(second));
       VM.sysWriteln("First: ",first," Second: ",second);
+      VM.sysWriteln("Address now is : ",testendpoint ," First: "+ AlignmentEncoding.getTibCodeForRegion(first) + " Second : "+ AlignmentEncoding.getTibCodeForRegion(second));
       FirstHoles.add(first);
       SecondHoles.add(second);
     }
@@ -919,6 +918,9 @@ public final class MemoryManager {
     else {
       region = allocateSpace(mutator, size, align, offset, type.getMMAllocator(), Plan.DEFAULT_SITE);
     }
+    /*if(count>0){
+      meansize=(region.toInt()-laststart.toInt())/count;
+    }*/
     testendpoint = MutatorContext.immortalTIB.getCursor();
     //lastendpoint = region.plus(size);
     /*if(count==0)
