@@ -910,9 +910,11 @@ public final class MemoryManager {
     Address region;
     if(alignCode==HandInlinedScanning.AE_FALLBACK && !FirstHoles.isEmpty() && (usedsize<4*(1 << (AlignmentEncoding.FIELD_WIDTH - 3))*4)){
       region = FirstHoles.remove();
+      size = usedsize;
     }
     else if(alignCode==HandInlinedScanning.AE_PATTERN_0x1 && !SecondHoles.isEmpty() && (usedsize<2*(1 << (AlignmentEncoding.FIELD_WIDTH - 3))*4)){
       region = SecondHoles.remove();
+      size = usedsize;
     }
     else {
       region = allocateSpace(mutator, size, align, offset, type.getMMAllocator(), Plan.DEFAULT_SITE);
