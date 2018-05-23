@@ -897,14 +897,15 @@ public final class MemoryManager {
     //To choose TIB allocator as the allocator
     notifyClassResolved(type);
     VM.sysWriteln("count: "+ count + " size: "+ size + " getMMAllocator is : "+ type.getMMAllocator());
+    VM.sysWriteln( " Testpoint: ",testendpoint );
     if(alignCode==HandInlinedScanning.AE_PATTERN_0x1&&usedsize<2*(1 << (AlignmentEncoding.FIELD_WIDTH - 3))*4){
       size = AlignmentEncoding.padding(alignCode) + adjustpadding;
       Address first = testendpoint.plus(adjustpadding + 2*(1 << (AlignmentEncoding.FIELD_WIDTH - 3))*4);
       Address second = testendpoint.plus(adjustpadding + 4*(1 << (AlignmentEncoding.FIELD_WIDTH - 3))*4);
-      VM.sysWriteln(testendpoint + " Testpoint: ");
-      VM.sysWriteln(first + " First: ");
-      VM.sysWriteln(second + " Second : ");
-      VM.sysWriteln("Address now is : "+ testendpoint + " First: "+ AlignmentEncoding.getTibCodeForRegion(first) + " Second : "+ AlignmentEncoding.getTibCodeForRegion(second));
+      VM.sysWriteln( " Testpoint: ",testendpoint );
+      VM.sysWriteln(" First: ",first);
+      VM.sysWriteln(" Second : ",second);
+      VM.sysWriteln("Address now is : ",testendpoint ," First: "+ AlignmentEncoding.getTibCodeForRegion(first) + " Second : "+ AlignmentEncoding.getTibCodeForRegion(second));
       //FirstHoles.add(first);
       //SecondHoles.add(second);
     }
