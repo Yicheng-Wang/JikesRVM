@@ -905,19 +905,19 @@ public final class MemoryManager {
       VM.sysWriteln(first + " First: ");
       VM.sysWriteln(second + " Second : ");
       VM.sysWriteln("Address now is : "+ testendpoint + " First: "+ AlignmentEncoding.getTibCodeForRegion(first) + " Second : "+ AlignmentEncoding.getTibCodeForRegion(second));
-      FirstHoles.add(first);
-      SecondHoles.add(second);
+      //FirstHoles.add(first);
+      //SecondHoles.add(second);
     }
     Address region;
-    if(alignCode==HandInlinedScanning.AE_PATTERN_0x0 && !FirstHoles.isEmpty() && (usedsize<2*(1 << (AlignmentEncoding.FIELD_WIDTH - 3))*4)){
+    /*if(alignCode==HandInlinedScanning.AE_PATTERN_0x0 && !FirstHoles.isEmpty() && (usedsize<2*(1 << (AlignmentEncoding.FIELD_WIDTH - 3))*4)){
       region = FirstHoles.remove();
     }
     else if(alignCode==HandInlinedScanning.AE_FALLBACK && !SecondHoles.isEmpty() && (usedsize<4*(1 << (AlignmentEncoding.FIELD_WIDTH - 3))*4)){
       region = SecondHoles.remove();
     }
-    else {
+    else {*/
       region = allocateSpace(mutator, size, align, offset, type.getMMAllocator(), Plan.DEFAULT_SITE);
-    }
+    //}
     /*if(count>0){
       meansize=(region.toInt()-laststart.toInt())/count;
     }*/
