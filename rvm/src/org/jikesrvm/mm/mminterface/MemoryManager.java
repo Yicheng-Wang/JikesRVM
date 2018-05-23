@@ -100,7 +100,12 @@ public final class MemoryManager {
   private static int count1=0;
   private static LinkedList<Address> FirstHoles = new LinkedList<Address>();
   private static LinkedList <Address> SecondHoles = new LinkedList <Address>();
-  private static ArrayList<LinkedList<Address>> Holes = new ArrayList<LinkedList<Address>>();
+  private static LinkedList <Address> ThirdHoles = new LinkedList <Address>();
+  private static LinkedList <Address> FourthHoles = new LinkedList <Address>();
+  private static LinkedList <Address> FifthHoles = new LinkedList <Address>();
+  private static LinkedList <Address> SixthHoles = new LinkedList <Address>();
+
+  //private static ArrayList<LinkedList<Address>> Holes = new ArrayList<LinkedList<Address>>();
   /**
    * Has garbage collection been enabled yet?
    */
@@ -855,12 +860,12 @@ public final class MemoryManager {
   public static TIB newTIB(int numVirtualMethods, int alignCode) {
     int elements = TIB.computeSize(numVirtualMethods);
     testendpoint = MutatorContext.immortalTIB.getCursor();
-    if(count==0){
+    /*if(count==0){
       for(int i=0;i<7;i++){
         LinkedList<Address> preHoles = new LinkedList<Address>();
         Holes.add(preHoles);
       }
-    }
+    }*/
     if (!VM.runningVM) {
       TIB buildTIB = TIB.allocate(elements, alignCode);
       /*if(alignCode!=AlignmentEncoding.ALIGN_CODE_NONE){
@@ -905,7 +910,7 @@ public final class MemoryManager {
     //To choose TIB allocator as the allocator
     notifyClassResolved(type);
     VM.sysWriteln("count: "+ count + " size: "+ size + " getMMAllocator is : "+ type.getMMAllocator());
-    int Number = alignCode/(1 << (AlignmentEncoding.FIELD_WIDTH - 3));
+    /*int Number = alignCode/(1 << (AlignmentEncoding.FIELD_WIDTH - 3));
     if(count>0&&Holes.get(Number).isEmpty()){
       size = AlignmentEncoding.padding(alignCode) + adjustpadding;
       if((Number!=7 && usedsize<(1 << (AlignmentEncoding.FIELD_WIDTH - 3))*4)||(Number==7 && usedsize< 2*(1 << (AlignmentEncoding.FIELD_WIDTH - 3)))){
@@ -935,6 +940,129 @@ public final class MemoryManager {
     }
     else{
       region = allocateSpace(mutator, size, align, offset, type.getMMAllocator(), Plan.DEFAULT_SITE);
+    }*/
+    Address region = null;
+    if(count>0&&alignCode==HandInlinedScanning.AE_FALLBACK && (usedsize<=2*(1 << (AlignmentEncoding.FIELD_WIDTH - 3))*4)){
+      if(!SixthHoles.isEmpty()){
+        region = SixthHoles.remove();
+        size = usedsize;
+      }
+      else{
+        size = AlignmentEncoding.padding(alignCode) + adjustpadding;
+        Address First = testendpoint.plus(adjustpadding + 2*(1 << (AlignmentEncoding.FIELD_WIDTH - 3))*4);
+        FirstHoles.add(First);
+        Address Second = testendpoint.plus(adjustpadding + 3*(1 << (AlignmentEncoding.FIELD_WIDTH - 3))*4);
+        SecondHoles.add(Second);
+        Address Third = testendpoint.plus(adjustpadding + 4*(1 << (AlignmentEncoding.FIELD_WIDTH - 3))*4);
+        ThirdHoles.add(Third);
+        Address Fourth = testendpoint.plus(adjustpadding + 6*(1 << (AlignmentEncoding.FIELD_WIDTH - 3))*4);
+        FourthHoles.add(Fourth);
+        Address Fifth = testendpoint.plus(adjustpadding + 7*(1 << (AlignmentEncoding.FIELD_WIDTH - 3))*4);
+        FifthHoles.add(Fifth);
+      }
+    }
+
+    if(count>0&&alignCode==HandInlinedScanning.AE_PATTERN_0x1 && (usedsize<=(1 << (AlignmentEncoding.FIELD_WIDTH - 3))*4)){
+      if(!FirstHoles.isEmpty()){
+        region = FirstHoles.remove();
+        size = usedsize;
+      }
+      else{
+        size = AlignmentEncoding.padding(alignCode) + adjustpadding;
+        Address Sixth = testendpoint.plus(adjustpadding + 6*(1 << (AlignmentEncoding.FIELD_WIDTH - 3))*4);
+        SixthHoles.add(Sixth);
+        Address Second = testendpoint.plus(adjustpadding + 1*(1 << (AlignmentEncoding.FIELD_WIDTH - 3))*4);
+        SecondHoles.add(Second);
+        Address Third = testendpoint.plus(adjustpadding + 2*(1 << (AlignmentEncoding.FIELD_WIDTH - 3))*4);
+        ThirdHoles.add(Third);
+        Address Fourth = testendpoint.plus(adjustpadding + 4*(1 << (AlignmentEncoding.FIELD_WIDTH - 3))*4);
+        FourthHoles.add(Fourth);
+        Address Fifth = testendpoint.plus(adjustpadding + 5*(1 << (AlignmentEncoding.FIELD_WIDTH - 3))*4);
+        FifthHoles.add(Fifth);
+      }
+    }
+
+    if(count>0&&alignCode==HandInlinedScanning.AE_PATTERN_0x0 && (usedsize<=(1 << (AlignmentEncoding.FIELD_WIDTH - 3))*4)){
+      if(!SecondHoles.isEmpty()){
+        region = SecondHoles.remove();
+        size = usedsize;
+      }
+      else{
+        size = AlignmentEncoding.padding(alignCode) + adjustpadding;
+        Address First = testendpoint.plus(adjustpadding + 7*(1 << (AlignmentEncoding.FIELD_WIDTH - 3))*4);
+        FirstHoles.add(First);
+        Address Sixth = testendpoint.plus(adjustpadding + 5*(1 << (AlignmentEncoding.FIELD_WIDTH - 3))*4);
+        SixthHoles.add(Sixth);
+        Address Third = testendpoint.plus(adjustpadding + 1*(1 << (AlignmentEncoding.FIELD_WIDTH - 3))*4);
+        ThirdHoles.add(Third);
+        Address Fourth = testendpoint.plus(adjustpadding + 3*(1 << (AlignmentEncoding.FIELD_WIDTH - 3))*4);
+        FourthHoles.add(Fourth);
+        Address Fifth = testendpoint.plus(adjustpadding + 4*(1 << (AlignmentEncoding.FIELD_WIDTH - 3))*4);
+        FifthHoles.add(Fifth);
+      }
+    }
+
+    if(count>0&&alignCode==HandInlinedScanning.AE_PATTERN_0x7 && (usedsize<=2*(1 << (AlignmentEncoding.FIELD_WIDTH - 3))*4)){
+      if(!ThirdHoles.isEmpty()){
+        region = ThirdHoles.remove();
+        size = usedsize;
+      }
+      else{
+        size = AlignmentEncoding.padding(alignCode) + adjustpadding;
+        Address First = testendpoint.plus(adjustpadding + 6*(1 << (AlignmentEncoding.FIELD_WIDTH - 3))*4);
+        FirstHoles.add(First);
+        Address Second = testendpoint.plus(adjustpadding + 7*(1 << (AlignmentEncoding.FIELD_WIDTH - 3))*4);
+        SecondHoles.add(Second);
+        Address Sixth = testendpoint.plus(adjustpadding + 4*(1 << (AlignmentEncoding.FIELD_WIDTH - 3))*4);
+        SixthHoles.add(Sixth);
+        Address Fourth = testendpoint.plus(adjustpadding + 2*(1 << (AlignmentEncoding.FIELD_WIDTH - 3))*4);
+        FourthHoles.add(Fourth);
+        Address Fifth = testendpoint.plus(adjustpadding + 3*(1 << (AlignmentEncoding.FIELD_WIDTH - 3))*4);
+        FifthHoles.add(Fifth);
+      }
+    }
+
+    if(count>0&&alignCode==HandInlinedScanning.AE_REFARRAY && (usedsize<=(1 << (AlignmentEncoding.FIELD_WIDTH - 3))*4)){
+      if(!FourthHoles.isEmpty()){
+        region = FourthHoles.remove();
+        size = usedsize;
+      }
+      else{
+        size = AlignmentEncoding.padding(alignCode) + adjustpadding;
+        Address First = testendpoint.plus(adjustpadding + 4*(1 << (AlignmentEncoding.FIELD_WIDTH - 3))*4);
+        FirstHoles.add(First);
+        Address Second = testendpoint.plus(adjustpadding + 5*(1 << (AlignmentEncoding.FIELD_WIDTH - 3))*4);
+        SecondHoles.add(Second);
+        Address Third = testendpoint.plus(adjustpadding + 6*(1 << (AlignmentEncoding.FIELD_WIDTH - 3))*4);
+        ThirdHoles.add(Third);
+        Address Sixth = testendpoint.plus(adjustpadding + 2*(1 << (AlignmentEncoding.FIELD_WIDTH - 3))*4);
+        SixthHoles.add(Sixth);
+        Address Fifth = testendpoint.plus(adjustpadding + 1*(1 << (AlignmentEncoding.FIELD_WIDTH - 3))*4);
+        FifthHoles.add(Fifth);
+      }
+    }
+
+    if(count>0&&alignCode==HandInlinedScanning.AE_PATTERN_0x3F && (usedsize<=(1 << (AlignmentEncoding.FIELD_WIDTH - 3))*4)){
+      if(!FifthHoles.isEmpty()){
+        region = FifthHoles.remove();
+        size = usedsize;
+      }
+      else{
+        size = AlignmentEncoding.padding(alignCode) + adjustpadding;
+        Address First = testendpoint.plus(adjustpadding + 3*(1 << (AlignmentEncoding.FIELD_WIDTH - 3))*4);
+        FirstHoles.add(First);
+        Address Second = testendpoint.plus(adjustpadding + 4*(1 << (AlignmentEncoding.FIELD_WIDTH - 3))*4);
+        SecondHoles.add(Second);
+        Address Third = testendpoint.plus(adjustpadding + 5*(1 << (AlignmentEncoding.FIELD_WIDTH - 3))*4);
+        ThirdHoles.add(Third);
+        Address Fourth = testendpoint.plus(adjustpadding + 7*(1 << (AlignmentEncoding.FIELD_WIDTH - 3))*4);
+        FourthHoles.add(Fourth);
+        Address Sixth = testendpoint.plus(adjustpadding + 1*(1 << (AlignmentEncoding.FIELD_WIDTH - 3))*4);
+        SixthHoles.add(Sixth);
+      }
+    }
+    if(region==null){
+      region = allocateSpace(mutator, size, align, offset, type.getMMAllocator(), Plan.DEFAULT_SITE);
     }
     /*if(count>0 && alignCode==HandInlinedScanning.AE_PATTERN_0x0&&usedsize<2*(1 << (AlignmentEncoding.FIELD_WIDTH - 3))*4){
       size = AlignmentEncoding.padding(alignCode) + adjustpadding;
@@ -945,7 +1073,7 @@ public final class MemoryManager {
       FirstHoles.add(first);
       SecondHoles.add(second);
     }
-    Address region;
+
     if(alignCode==HandInlinedScanning.AE_FALLBACK && !FirstHoles.isEmpty() && (usedsize<4*(1 << (AlignmentEncoding.FIELD_WIDTH - 3))*4)){
       region = FirstHoles.remove();
       size = usedsize;
