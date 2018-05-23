@@ -892,6 +892,9 @@ public final class MemoryManager {
     //New size to be allocated in the TIB runtime space.
     size = elemBytes + headerSize + adjustpadding;
     VM.sysWriteln("new size is: "+ size +"used size is: "+(elemBytes+headerSize));
+    if(elemBytes+headerSize>32){
+      VM.sysWriteln("ALARM!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+    }
     Selected.Mutator mutator = Selected.Mutator.get();
     //To choose TIB allocator as the allocator
     notifyClassResolved(type);
