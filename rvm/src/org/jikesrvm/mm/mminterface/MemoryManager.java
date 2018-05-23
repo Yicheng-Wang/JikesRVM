@@ -97,10 +97,9 @@ public final class MemoryManager {
    */
   private static boolean booted = false;
   private static int count=0;
+  private static int count1=0;
   private static LinkedList<Address> FirstHoles = new LinkedList<Address>();
   private static LinkedList <Address> SecondHoles = new LinkedList <Address>();
-  private static LinkedList <Address> ThirdHoles = new LinkedList <Address>();
-  private static LinkedList <Address> FourthHoles = new LinkedList <Address>();
   /**
    * Has garbage collection been enabled yet?
    */
@@ -899,7 +898,7 @@ public final class MemoryManager {
     //To choose TIB allocator as the allocator
     notifyClassResolved(type);
     VM.sysWriteln("count: "+ count + " size: "+ size + " getMMAllocator is : "+ type.getMMAllocator());
-    if(alignCode==HandInlinedScanning.AE_PATTERN_0x0&&usedsize<2*(1 << (AlignmentEncoding.FIELD_WIDTH - 3))*4){
+    if(count>0 && alignCode==HandInlinedScanning.AE_PATTERN_0x0&&usedsize<2*(1 << (AlignmentEncoding.FIELD_WIDTH - 3))*4){
       size = AlignmentEncoding.padding(alignCode) + adjustpadding;
       Address first = testendpoint.plus(adjustpadding + 2*(1 << (AlignmentEncoding.FIELD_WIDTH - 3))*4);
       Address second = testendpoint.plus(adjustpadding + 6*(1 << (AlignmentEncoding.FIELD_WIDTH - 3))*4);
