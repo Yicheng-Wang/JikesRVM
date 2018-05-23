@@ -902,6 +902,7 @@ public final class MemoryManager {
       Address first = testendpoint.plus(adjustpadding + 2*(1 << (AlignmentEncoding.FIELD_WIDTH - 3))*4);
       Address second = testendpoint.plus(adjustpadding + 4*(1 << (AlignmentEncoding.FIELD_WIDTH - 3))*4);
       VM.sysWriteln("Address now is : ",testendpoint ," First: "+ AlignmentEncoding.getTibCodeForRegion(first) + " Second : "+ AlignmentEncoding.getTibCodeForRegion(second));
+      VM.sysWriteln("First: ",first," Second: ",second);
       FirstHoles.add(first);
       SecondHoles.add(second);
     }
