@@ -948,17 +948,26 @@ public final class MemoryManager {
         size = usedsize;
       }
       else{
-        size = AlignmentEncoding.padding(alignCode) + adjustpadding;
-        Address First = testendpoint.plus(adjustpadding + 2*(1 << (AlignmentEncoding.FIELD_WIDTH - 3))*4);
-        FirstHoles.add(First);
-        Address Second = testendpoint.plus(adjustpadding + 3*(1 << (AlignmentEncoding.FIELD_WIDTH - 3))*4);
-        SecondHoles.add(Second);
-        Address Third = testendpoint.plus(adjustpadding + 4*(1 << (AlignmentEncoding.FIELD_WIDTH - 3))*4);
-        ThirdHoles.add(Third);
-        Address Fourth = testendpoint.plus(adjustpadding + 6*(1 << (AlignmentEncoding.FIELD_WIDTH - 3))*4);
-        FourthHoles.add(Fourth);
-        Address Fifth = testendpoint.plus(adjustpadding + 7*(1 << (AlignmentEncoding.FIELD_WIDTH - 3))*4);
-        FifthHoles.add(Fifth);
+        if(adjustpadding>=(1 << (AlignmentEncoding.FIELD_WIDTH - 3))*4){
+          Address Fifth = testendpoint.plus(adjustpadding - (1 << (AlignmentEncoding.FIELD_WIDTH - 3))*4);
+          FifthHoles.add(Fifth);
+        }
+        if(adjustpadding>=2 *(1 <<(AlignmentEncoding.FIELD_WIDTH - 3))*4){
+          Address Fourth = testendpoint.plus(adjustpadding - 2*(1 << (AlignmentEncoding.FIELD_WIDTH - 3))*4);
+          FourthHoles.add(Fourth);
+        }
+        if(adjustpadding>=4 *(1 << (AlignmentEncoding.FIELD_WIDTH - 3))*4){
+          Address Third = testendpoint.plus(adjustpadding - 4*(1 << (AlignmentEncoding.FIELD_WIDTH - 3))*4);
+          ThirdHoles.add(Third);
+        }
+        if(adjustpadding>=5 * (1 << (AlignmentEncoding.FIELD_WIDTH - 3))*4){
+          Address Second = testendpoint.plus(adjustpadding - 5*(1 << (AlignmentEncoding.FIELD_WIDTH - 3))*4);
+          SecondHoles.add(Second);
+        }
+        if(adjustpadding>=6 * (1 << (AlignmentEncoding.FIELD_WIDTH - 3))*4){
+          Address First = testendpoint.plus(adjustpadding - 6*(1 << (AlignmentEncoding.FIELD_WIDTH - 3))*4);
+          FirstHoles.add(First);
+        }
       }
     }
 
@@ -968,18 +977,26 @@ public final class MemoryManager {
         size = usedsize;
       }
       else{
-        size = AlignmentEncoding.padding(alignCode) + adjustpadding;
-        Address Sixth = testendpoint.plus(adjustpadding + 6*(1 << (AlignmentEncoding.FIELD_WIDTH - 3))*4);
-        SixthHoles.add(Sixth);
-        VM.sysWriteln("Sixth: ",Sixth," Encoding: ",AlignmentEncoding.getTibCodeForRegion(Sixth));
-        Address Second = testendpoint.plus(adjustpadding + 1*(1 << (AlignmentEncoding.FIELD_WIDTH - 3))*4);
-        SecondHoles.add(Second);
-        Address Third = testendpoint.plus(adjustpadding + 2*(1 << (AlignmentEncoding.FIELD_WIDTH - 3))*4);
-        ThirdHoles.add(Third);
-        Address Fourth = testendpoint.plus(adjustpadding + 4*(1 << (AlignmentEncoding.FIELD_WIDTH - 3))*4);
-        FourthHoles.add(Fourth);
-        Address Fifth = testendpoint.plus(adjustpadding + 5*(1 << (AlignmentEncoding.FIELD_WIDTH - 3))*4);
-        FifthHoles.add(Fifth);
+        if(adjustpadding>=3 * (1 << (AlignmentEncoding.FIELD_WIDTH - 3))*4){
+          Address Fifth = testendpoint.plus(adjustpadding - 3*(1 << (AlignmentEncoding.FIELD_WIDTH - 3))*4);
+          FifthHoles.add(Fifth);
+        }
+        if(adjustpadding>=4 * (1 << (AlignmentEncoding.FIELD_WIDTH - 3))*4){
+          Address Fourth = testendpoint.plus(adjustpadding - 4*(1 << (AlignmentEncoding.FIELD_WIDTH - 3))*4);
+          FourthHoles.add(Fourth);
+        }
+        if(adjustpadding>=6 * (1 << (AlignmentEncoding.FIELD_WIDTH - 3))*4){
+          Address Third = testendpoint.plus(adjustpadding - 6*(1 << (AlignmentEncoding.FIELD_WIDTH - 3))*4);
+          ThirdHoles.add(Third);
+        }
+        if(adjustpadding>=7 * (1 << (AlignmentEncoding.FIELD_WIDTH - 3))*4){
+          Address Second = testendpoint.plus(adjustpadding - 7*(1 << (AlignmentEncoding.FIELD_WIDTH - 3))*4);
+          SecondHoles.add(Second);
+        }
+        if(adjustpadding>=2 * (1 << (AlignmentEncoding.FIELD_WIDTH - 3))*4){
+          Address Sixth = testendpoint.plus(adjustpadding - 2*(1 << (AlignmentEncoding.FIELD_WIDTH - 3))*4);
+          SixthHoles.add(Sixth);
+        }
       }
     }
 
@@ -989,18 +1006,26 @@ public final class MemoryManager {
         size = usedsize;
       }
       else{
-        size = AlignmentEncoding.padding(alignCode) + adjustpadding;
-        Address First = testendpoint.plus(adjustpadding + 7*(1 << (AlignmentEncoding.FIELD_WIDTH - 3))*4);
-        FirstHoles.add(First);
-        Address Sixth = testendpoint.plus(adjustpadding + 5*(1 << (AlignmentEncoding.FIELD_WIDTH - 3))*4);
-        SixthHoles.add(Sixth);
-        VM.sysWriteln("Sixth: ",Sixth," Encoding: ",AlignmentEncoding.getTibCodeForRegion(Sixth));
-        Address Third = testendpoint.plus(adjustpadding + 1*(1 << (AlignmentEncoding.FIELD_WIDTH - 3))*4);
-        ThirdHoles.add(Third);
-        Address Fourth = testendpoint.plus(adjustpadding + 3*(1 << (AlignmentEncoding.FIELD_WIDTH - 3))*4);
-        FourthHoles.add(Fourth);
-        Address Fifth = testendpoint.plus(adjustpadding + 4*(1 << (AlignmentEncoding.FIELD_WIDTH - 3))*4);
-        FifthHoles.add(Fifth);
+        if(adjustpadding>=4 * (1 << (AlignmentEncoding.FIELD_WIDTH - 3))*4){
+          Address Fifth = testendpoint.plus(adjustpadding - 4*(1 << (AlignmentEncoding.FIELD_WIDTH - 3))*4);
+          FifthHoles.add(Fifth);
+        }
+        if(adjustpadding>=5 * (1 << (AlignmentEncoding.FIELD_WIDTH - 3))*4){
+          Address Fourth = testendpoint.plus(adjustpadding - 5*(1 << (AlignmentEncoding.FIELD_WIDTH - 3))*4);
+          FourthHoles.add(Fourth);
+        }
+        if(adjustpadding>=7 * (1 << (AlignmentEncoding.FIELD_WIDTH - 3))*4){
+          Address Third = testendpoint.plus(adjustpadding - 7*(1 << (AlignmentEncoding.FIELD_WIDTH - 3))*4);
+          ThirdHoles.add(Third);
+        }
+        if(adjustpadding>=(1 << (AlignmentEncoding.FIELD_WIDTH - 3))*4){
+          Address First = testendpoint.plus(adjustpadding - (1 << (AlignmentEncoding.FIELD_WIDTH - 3))*4);
+          FirstHoles.add(First);
+        }
+        if(adjustpadding>=3 * (1 << (AlignmentEncoding.FIELD_WIDTH - 3))*4){
+          Address Sixth = testendpoint.plus(adjustpadding - 3*(1 << (AlignmentEncoding.FIELD_WIDTH - 3))*4);
+          SixthHoles.add(Sixth);
+        }
       }
     }
 
@@ -1010,18 +1035,26 @@ public final class MemoryManager {
         size = usedsize;
       }
       else{
-        size = AlignmentEncoding.padding(alignCode) + adjustpadding;
-        Address First = testendpoint.plus(adjustpadding + 6*(1 << (AlignmentEncoding.FIELD_WIDTH - 3))*4);
-        FirstHoles.add(First);
-        Address Second = testendpoint.plus(adjustpadding + 7*(1 << (AlignmentEncoding.FIELD_WIDTH - 3))*4);
-        SecondHoles.add(Second);
-        Address Sixth = testendpoint.plus(adjustpadding + 4*(1 << (AlignmentEncoding.FIELD_WIDTH - 3))*4);
-        SixthHoles.add(Sixth);
-        VM.sysWriteln("Sixth: ",Sixth," Encoding: ",AlignmentEncoding.getTibCodeForRegion(Sixth));
-        Address Fourth = testendpoint.plus(adjustpadding + 2*(1 << (AlignmentEncoding.FIELD_WIDTH - 3))*4);
-        FourthHoles.add(Fourth);
-        Address Fifth = testendpoint.plus(adjustpadding + 3*(1 << (AlignmentEncoding.FIELD_WIDTH - 3))*4);
-        FifthHoles.add(Fifth);
+        if(adjustpadding>=5 * (1 << (AlignmentEncoding.FIELD_WIDTH - 3))*4){
+          Address Fifth = testendpoint.plus(adjustpadding - 5*(1 << (AlignmentEncoding.FIELD_WIDTH - 3))*4);
+          FifthHoles.add(Fifth);
+        }
+        if(adjustpadding>=6 * (1 << (AlignmentEncoding.FIELD_WIDTH - 3))*4){
+          Address Fourth = testendpoint.plus(adjustpadding - 6*(1 << (AlignmentEncoding.FIELD_WIDTH - 3))*4);
+          FourthHoles.add(Fourth);
+        }
+        if(adjustpadding>=(1 << (AlignmentEncoding.FIELD_WIDTH - 3))*4){
+          Address Second = testendpoint.plus(adjustpadding - (1 << (AlignmentEncoding.FIELD_WIDTH - 3))*4);
+          SecondHoles.add(Second);
+        }
+        if(adjustpadding>=2 * (1 << (AlignmentEncoding.FIELD_WIDTH - 3))*4){
+          Address First = testendpoint.plus(adjustpadding - 2*(1 << (AlignmentEncoding.FIELD_WIDTH - 3))*4);
+          FirstHoles.add(First);
+        }
+        if(adjustpadding>=4 * (1 << (AlignmentEncoding.FIELD_WIDTH - 3))*4){
+          Address Sixth = testendpoint.plus(adjustpadding - 4*(1 << (AlignmentEncoding.FIELD_WIDTH - 3))*4);
+          SixthHoles.add(Sixth);
+        }
       }
     }
 
@@ -1031,18 +1064,26 @@ public final class MemoryManager {
         size = usedsize;
       }
       else{
-        size = AlignmentEncoding.padding(alignCode) + adjustpadding;
-        Address First = testendpoint.plus(adjustpadding + 4*(1 << (AlignmentEncoding.FIELD_WIDTH - 3))*4);
-        FirstHoles.add(First);
-        Address Second = testendpoint.plus(adjustpadding + 5*(1 << (AlignmentEncoding.FIELD_WIDTH - 3))*4);
-        SecondHoles.add(Second);
-        Address Third = testendpoint.plus(adjustpadding + 6*(1 << (AlignmentEncoding.FIELD_WIDTH - 3))*4);
-        ThirdHoles.add(Third);
-        Address Sixth = testendpoint.plus(adjustpadding + 2*(1 << (AlignmentEncoding.FIELD_WIDTH - 3))*4);
-        SixthHoles.add(Sixth);
-        VM.sysWriteln("Sixth: ",Sixth," Encoding: ",AlignmentEncoding.getTibCodeForRegion(Sixth));
-        Address Fifth = testendpoint.plus(adjustpadding + 1*(1 << (AlignmentEncoding.FIELD_WIDTH - 3))*4);
-        FifthHoles.add(Fifth);
+        if(adjustpadding>=7 * (1 << (AlignmentEncoding.FIELD_WIDTH - 3))*4){
+          Address Fifth = testendpoint.plus(adjustpadding - 7*(1 << (AlignmentEncoding.FIELD_WIDTH - 3))*4);
+          FifthHoles.add(Fifth);
+        }
+        if(adjustpadding>=2 * (1 << (AlignmentEncoding.FIELD_WIDTH - 3))*4){
+          Address Third = testendpoint.plus(adjustpadding - 2*(1 << (AlignmentEncoding.FIELD_WIDTH - 3))*4);
+          ThirdHoles.add(Third);
+        }
+        if(adjustpadding>=3 *(1 << (AlignmentEncoding.FIELD_WIDTH - 3))*4){
+          Address Second = testendpoint.plus(adjustpadding - 3*(1 << (AlignmentEncoding.FIELD_WIDTH - 3))*4);
+          SecondHoles.add(Second);
+        }
+        if(adjustpadding>=4 * (1 << (AlignmentEncoding.FIELD_WIDTH - 3))*4){
+          Address First = testendpoint.plus(adjustpadding - 4*(1 << (AlignmentEncoding.FIELD_WIDTH - 3))*4);
+          FirstHoles.add(First);
+        }
+        if(adjustpadding>=6 * (1 << (AlignmentEncoding.FIELD_WIDTH - 3))*4){
+          Address Sixth = testendpoint.plus(adjustpadding - 6*(1 << (AlignmentEncoding.FIELD_WIDTH - 3))*4);
+          SixthHoles.add(Sixth);
+        }
       }
     }
 
@@ -1052,18 +1093,26 @@ public final class MemoryManager {
         size = usedsize;
       }
       else{
-        size = AlignmentEncoding.padding(alignCode) + adjustpadding;
-        Address First = testendpoint.plus(adjustpadding + 3*(1 << (AlignmentEncoding.FIELD_WIDTH - 3))*4);
-        FirstHoles.add(First);
-        Address Second = testendpoint.plus(adjustpadding + 4*(1 << (AlignmentEncoding.FIELD_WIDTH - 3))*4);
-        SecondHoles.add(Second);
-        Address Third = testendpoint.plus(adjustpadding + 5*(1 << (AlignmentEncoding.FIELD_WIDTH - 3))*4);
-        ThirdHoles.add(Third);
-        Address Fourth = testendpoint.plus(adjustpadding + 7*(1 << (AlignmentEncoding.FIELD_WIDTH - 3))*4);
-        FourthHoles.add(Fourth);
-        Address Sixth = testendpoint.plus(adjustpadding + 1*(1 << (AlignmentEncoding.FIELD_WIDTH - 3))*4);
-        SixthHoles.add(Sixth);
-        VM.sysWriteln("Sixth: ",Sixth," Encoding: ",AlignmentEncoding.getTibCodeForRegion(Sixth));
+        if(adjustpadding>=(1 << (AlignmentEncoding.FIELD_WIDTH - 3))*4){
+          Address Fourth = testendpoint.plus(adjustpadding - (1 << (AlignmentEncoding.FIELD_WIDTH - 3))*4);
+          FourthHoles.add(Fourth);
+        }
+        if(adjustpadding>=3 * (1 << (AlignmentEncoding.FIELD_WIDTH - 3))*4){
+          Address Third = testendpoint.plus(adjustpadding - 3*(1 << (AlignmentEncoding.FIELD_WIDTH - 3))*4);
+          ThirdHoles.add(Third);
+        }
+        if(adjustpadding>=4 *(1 << (AlignmentEncoding.FIELD_WIDTH - 3))*4){
+          Address Second = testendpoint.plus(adjustpadding - 4*(1 << (AlignmentEncoding.FIELD_WIDTH - 3))*4);
+          SecondHoles.add(Second);
+        }
+        if(adjustpadding>=5 * (1 << (AlignmentEncoding.FIELD_WIDTH - 3))*4){
+          Address First = testendpoint.plus(adjustpadding - 5*(1 << (AlignmentEncoding.FIELD_WIDTH - 3))*4);
+          FirstHoles.add(First);
+        }
+        if(adjustpadding>=7 * (1 << (AlignmentEncoding.FIELD_WIDTH - 3))*4){
+          Address Sixth = testendpoint.plus(adjustpadding - 7*(1 << (AlignmentEncoding.FIELD_WIDTH - 3))*4);
+          SixthHoles.add(Sixth);
+        }
       }
     }
     if(region==null){
