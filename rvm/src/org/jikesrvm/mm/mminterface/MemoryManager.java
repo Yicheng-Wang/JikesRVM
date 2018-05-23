@@ -897,28 +897,24 @@ public final class MemoryManager {
     //To choose TIB allocator as the allocator
     notifyClassResolved(type);
     VM.sysWriteln("count: "+ count + " size: "+ size + " getMMAllocator is : "+ type.getMMAllocator());
-    VM.sysWriteln( " Testpoint: ",testendpoint );
     if(alignCode==HandInlinedScanning.AE_PATTERN_0x1&&usedsize<2*(1 << (AlignmentEncoding.FIELD_WIDTH - 3))*4){
       size = AlignmentEncoding.padding(alignCode) + adjustpadding;
       Address first = testendpoint.plus(adjustpadding + 2*(1 << (AlignmentEncoding.FIELD_WIDTH - 3))*4);
       Address second = testendpoint.plus(adjustpadding + 4*(1 << (AlignmentEncoding.FIELD_WIDTH - 3))*4);
-      VM.sysWriteln( " Testpoint: ",testendpoint );
-      VM.sysWriteln(" First: ",first);
-      VM.sysWriteln(" Second : ",second);
       VM.sysWriteln("Address now is : ",testendpoint ," First: "+ AlignmentEncoding.getTibCodeForRegion(first) + " Second : "+ AlignmentEncoding.getTibCodeForRegion(second));
-      //FirstHoles.add(first);
-      //SecondHoles.add(second);
+      FirstHoles.add(first);
+      SecondHoles.add(second);
     }
     Address region;
-    /*if(alignCode==HandInlinedScanning.AE_PATTERN_0x0 && !FirstHoles.isEmpty() && (usedsize<2*(1 << (AlignmentEncoding.FIELD_WIDTH - 3))*4)){
+    if(alignCode==HandInlinedScanning.AE_PATTERN_0x0 && !FirstHoles.isEmpty() && (usedsize<2*(1 << (AlignmentEncoding.FIELD_WIDTH - 3))*4)){
       region = FirstHoles.remove();
     }
     else if(alignCode==HandInlinedScanning.AE_FALLBACK && !SecondHoles.isEmpty() && (usedsize<4*(1 << (AlignmentEncoding.FIELD_WIDTH - 3))*4)){
       region = SecondHoles.remove();
     }
-    else {*/
+    else {
       region = allocateSpace(mutator, size, align, offset, type.getMMAllocator(), Plan.DEFAULT_SITE);
-    //}
+    }
     /*if(count>0){
       meansize=(region.toInt()-laststart.toInt())/count;
     }*/
