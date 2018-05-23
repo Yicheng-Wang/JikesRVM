@@ -1004,7 +1004,7 @@ public final class MemoryManager {
       }
     }
 
-    if(count>0&&alignCode==HandInlinedScanning.AE_PATTERN_0x7 && (usedsize<=2*(1 << (AlignmentEncoding.FIELD_WIDTH - 3))*4)){
+    if(count>0&&alignCode==HandInlinedScanning.AE_PATTERN_0x3F && (usedsize<=2*(1 << (AlignmentEncoding.FIELD_WIDTH - 3))*4)){
       if(!ThirdHoles.isEmpty()){
         region = ThirdHoles.remove();
         size = usedsize;
@@ -1046,7 +1046,7 @@ public final class MemoryManager {
       }
     }
 
-    if(count>0&&alignCode==HandInlinedScanning.AE_PATTERN_0x3F && (usedsize<=(1 << (AlignmentEncoding.FIELD_WIDTH - 3))*4)){
+    if(count>0&&alignCode==HandInlinedScanning.AE_PATTERN_0x7 && (usedsize<=(1 << (AlignmentEncoding.FIELD_WIDTH - 3))*4)){
       if(!FifthHoles.isEmpty()){
         region = FifthHoles.remove();
         size = usedsize;
