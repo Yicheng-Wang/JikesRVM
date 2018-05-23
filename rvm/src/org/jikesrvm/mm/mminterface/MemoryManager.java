@@ -854,6 +854,7 @@ public final class MemoryManager {
   @Interruptible
   public static TIB newTIB(int numVirtualMethods, int alignCode) {
     int elements = TIB.computeSize(numVirtualMethods);
+    testendpoint = MutatorContext.immortalTIB.getCursor();
     if (!VM.runningVM) {
       TIB buildTIB = TIB.allocate(elements, alignCode);
       /*if(alignCode!=AlignmentEncoding.ALIGN_CODE_NONE){
@@ -898,28 +899,27 @@ public final class MemoryManager {
     //To choose TIB allocator as the allocator
     notifyClassResolved(type);
     VM.sysWriteln("count: "+ count + " size: "+ size + " getMMAllocator is : "+ type.getMMAllocator());
-    if(alignCode==HandInlinedScanning.AE_PATTERN_0x1&&usedsize<2*(1 << (AlignmentEncoding.FIELD_WIDTH - 3))*4){
+    if(alignCode==HandInlinedScanning.AE_PATTERN_0x0&&usedsize<2*(1 << (AlignmentEncoding.FIELD_WIDTH - 3))*4){
       size = AlignmentEncoding.padding(alignCode) + adjustpadding;
       Address first = testendpoint.plus(adjustpadding + 2*(1 << (AlignmentEncoding.FIELD_WIDTH - 3))*4);
-      Address second = testendpoint.plus(adjustpadding + 4*(1 << (AlignmentEncoding.FIELD_WIDTH - 3))*4);
+      Address second = testendpoint.plus(adjustpadding + 6*(1 << (AlignmentEncoding.FIELD_WIDTH - 3))*4);
       VM.sysWriteln("Address now is : ",testendpoint ," First: "+ AlignmentEncoding.getTibCodeForRegion(first) + " Second : "+ AlignmentEncoding.getTibCodeForRegion(second));
       VM.sysWriteln("First: ",first," Second: ",second);
       FirstHoles.add(first);
       SecondHoles.add(second);
     }
     Address region;
-    if(alignCode==HandInlinedScanning.AE_PATTERN_0x0 && !FirstHoles.isEmpty() && (usedsize<2*(1 << (AlignmentEncoding.FIELD_WIDTH - 3))*4)){
+    if(alignCode==HandInlinedScanning.AE_FALLBACK && !FirstHoles.isEmpty() && (usedsize<4*(1 << (AlignmentEncoding.FIELD_WIDTH - 3))*4)){
       region = FirstHoles.remove();
       size = usedsize;
     }
-    else if(alignCode==HandInlinedScanning.AE_FALLBACK && !SecondHoles.isEmpty() && (usedsize<4*(1 << (AlignmentEncoding.FIELD_WIDTH - 3))*4)){
+    else if(alignCode==HandInlinedScanning.AE_PATTERN_0x1 && !SecondHoles.isEmpty() && (usedsize<2*(1 << (AlignmentEncoding.FIELD_WIDTH - 3))*4)){
       region = SecondHoles.remove();
       size = usedsize;
     }
     else {
       region = allocateSpace(mutator, size, align, offset, type.getMMAllocator(), Plan.DEFAULT_SITE);
     }
-    testendpoint = MutatorContext.immortalTIB.getCursor();
     //lastendpoint = region.plus(size);
     /*if(count==0)
       laststart=region;*/
