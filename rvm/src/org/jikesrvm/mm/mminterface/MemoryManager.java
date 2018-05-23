@@ -27,6 +27,7 @@ import java.lang.ref.SoftReference;
 import java.lang.ref.WeakReference;
 import java.util.LinkedList;
 
+import javafx.beans.binding.NumberBinding;
 import org.mmtk.plan.MutatorContext;
 import org.mmtk.utility.alloc.BumpPointer;
 import org.jikesrvm.VM;
@@ -100,6 +101,7 @@ public final class MemoryManager {
   private static int count1=0;
   private static LinkedList<Address> FirstHoles = new LinkedList<Address>();
   private static LinkedList <Address> SecondHoles = new LinkedList <Address>();
+  private static LinkedList<Address>[] Holes = new LinkedList[7];
   /**
    * Has garbage collection been enabled yet?
    */
@@ -854,6 +856,11 @@ public final class MemoryManager {
   public static TIB newTIB(int numVirtualMethods, int alignCode) {
     int elements = TIB.computeSize(numVirtualMethods);
     testendpoint = MutatorContext.immortalTIB.getCursor();
+    if(count==0){
+      for(int i=0;i<7;i++){
+        Holes[i] = new LinkedList<>();
+      }
+    }
     if (!VM.runningVM) {
       TIB buildTIB = TIB.allocate(elements, alignCode);
       /*if(alignCode!=AlignmentEncoding.ALIGN_CODE_NONE){
@@ -898,7 +905,38 @@ public final class MemoryManager {
     //To choose TIB allocator as the allocator
     notifyClassResolved(type);
     VM.sysWriteln("count: "+ count + " size: "+ size + " getMMAllocator is : "+ type.getMMAllocator());
-    if(count>0 && alignCode==HandInlinedScanning.AE_PATTERN_0x0&&usedsize<2*(1 << (AlignmentEncoding.FIELD_WIDTH - 3))*4){
+    int Number = alignCode/(1 << (AlignmentEncoding.FIELD_WIDTH - 3));
+    if(count>0&&Holes[Number].isEmpty()){
+      size = AlignmentEncoding.padding(alignCode) + adjustpadding;
+      if((Number!=7 && usedsize<(1 << (AlignmentEncoding.FIELD_WIDTH - 3))*4)||(Number==7 && usedsize< 2*(1 << (AlignmentEncoding.FIELD_WIDTH - 3)))){
+        for(int i=1;i<7;i++){
+          Address ad;
+          if(Number+i>=8){
+            ad= testendpoint.plus(adjustpadding + (i+1)*(1 << (AlignmentEncoding.FIELD_WIDTH - 3))*4);
+            Holes[(Number+i)%7].add(ad);
+            VM.sysWriteln(" Address : " ,ad ," Encode :",AlignmentEncoding.getTibCodeForRegion(ad));
+          }
+          else{
+            ad= testendpoint.plus(adjustpadding + (i)*(1 << (AlignmentEncoding.FIELD_WIDTH - 3))*4);
+            Holes[Number+i].add(ad);
+            VM.sysWriteln(" Address : " ,ad ," Encode :",AlignmentEncoding.getTibCodeForRegion(ad));
+          }
+        }
+      }
+    }
+    Address region;
+    if(!Holes[Number].isEmpty() && usedsize<(1 << (AlignmentEncoding.FIELD_WIDTH - 3))*4 && Number!=7){
+      size = usedsize;
+      region = Holes[Number].remove();
+    }
+    else if(!Holes[Number].isEmpty() && usedsize< 2*(1 << (AlignmentEncoding.FIELD_WIDTH - 3))*4 && Number==7){
+      size = usedsize;
+      region = Holes[Number].remove();
+    }
+    else{
+      region = allocateSpace(mutator, size, align, offset, type.getMMAllocator(), Plan.DEFAULT_SITE);
+    }
+    /*if(count>0 && alignCode==HandInlinedScanning.AE_PATTERN_0x0&&usedsize<2*(1 << (AlignmentEncoding.FIELD_WIDTH - 3))*4){
       size = AlignmentEncoding.padding(alignCode) + adjustpadding;
       Address first = testendpoint.plus(adjustpadding + 2*(1 << (AlignmentEncoding.FIELD_WIDTH - 3))*4);
       Address second = testendpoint.plus(adjustpadding + 6*(1 << (AlignmentEncoding.FIELD_WIDTH - 3))*4);
@@ -918,7 +956,7 @@ public final class MemoryManager {
     }
     else {
       region = allocateSpace(mutator, size, align, offset, type.getMMAllocator(), Plan.DEFAULT_SITE);
-    }
+    }*/
     //lastendpoint = region.plus(size);
     /*if(count==0)
       laststart=region;*/

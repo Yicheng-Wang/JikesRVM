@@ -27,8 +27,8 @@ import org.vmmagic.pragma.Uninterruptible;
  */
 public class HandInlinedScanning {
 
-  public static final int AE_FALLBACK = 5*(1 << (AlignmentEncoding.FIELD_WIDTH - 3));
-  public static final int AE_REFARRAY = 7*(1 << (AlignmentEncoding.FIELD_WIDTH - 3));
+  public static final int AE_FALLBACK = 7*(1 << (AlignmentEncoding.FIELD_WIDTH - 3));
+  public static final int AE_REFARRAY = 5*(1 << (AlignmentEncoding.FIELD_WIDTH - 3));
 
   public static final int AE_PATTERN_0x0  = 3*(1 << (AlignmentEncoding.FIELD_WIDTH - 3));
   public static final int AE_PATTERN_0x1  = 1*(1 << (AlignmentEncoding.FIELD_WIDTH - 3));
