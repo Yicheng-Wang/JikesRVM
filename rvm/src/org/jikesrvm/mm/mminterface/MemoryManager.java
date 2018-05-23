@@ -858,7 +858,7 @@ public final class MemoryManager {
     testendpoint = MutatorContext.immortalTIB.getCursor();
     if(count==0){
       for(int i=0;i<7;i++){
-        Holes[i] = new LinkedList<>();
+        Holes[i] = new LinkedList<Address>();
       }
     }
     if (!VM.runningVM) {
