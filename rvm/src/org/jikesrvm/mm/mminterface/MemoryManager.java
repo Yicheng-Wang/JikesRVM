@@ -25,6 +25,8 @@ import static org.mmtk.utility.heap.layout.HeapParameters.MAX_SPACES;
 import java.lang.ref.PhantomReference;
 import java.lang.ref.SoftReference;
 import java.lang.ref.WeakReference;
+import java.util.LinkedList;
+
 import org.mmtk.plan.MutatorContext;
 import org.mmtk.utility.alloc.BumpPointer;
 import org.jikesrvm.VM;
@@ -95,15 +97,13 @@ public final class MemoryManager {
    */
   private static boolean booted = false;
   private static int count=0;
-  private static int buildcount=0;
-  private static int meansize=0;
+  private static LinkedList<Address> FirstHoles = new LinkedList <Address>();
+  private static LinkedList <Address> SecondHoles = new LinkedList <Address>();
   /**
    * Has garbage collection been enabled yet?
    */
   private static boolean collectionEnabled = false;
-  protected static Address lastendpoint;
-    protected static Address testendpoint;
-    protected static Address laststart;
+  protected static Address testendpoint;
   /***********************************************************************
    *
    * Initialization
@@ -891,12 +891,30 @@ public final class MemoryManager {
     int adjustpadding = (aligncodenow<alignCode)?(alignCode-aligncodenow)*4:(alignCode+AlignmentEncoding.MAX_ALIGN_WORDS-aligncodenow)*4;
     //New size to be allocated in the TIB runtime space.
     size = elemBytes + headerSize + adjustpadding;
-    VM.sysWriteln("new size is: "+ size +"used size is: "+(elemBytes+headerSize));
+    int usedsize = elemBytes + headerSize;
+    VM.sysWriteln("new size is: "+ size +"used size is: "+ usedsize);
     Selected.Mutator mutator = Selected.Mutator.get();
     //To choose TIB allocator as the allocator
     notifyClassResolved(type);
     VM.sysWriteln("count: "+ count + " size: "+ size + " getMMAllocator is : "+ type.getMMAllocator());
-    Address region = allocateSpace(mutator, size, align, offset, type.getMMAllocator(), Plan.DEFAULT_SITE);
+    if(alignCode==HandInlinedScanning.AE_PATTERN_0x1&&usedsize<2*(1 << (AlignmentEncoding.FIELD_WIDTH - 3))*4){
+      size = AlignmentEncoding.padding(alignCode) + adjustpadding;
+      Address first = testendpoint.plus(adjustpadding + 2*(1 << (AlignmentEncoding.FIELD_WIDTH - 3))*4);
+      Address second = testendpoint.plus(adjustpadding + 4*(1 << (AlignmentEncoding.FIELD_WIDTH - 3))*4);
+      VM.sysWriteln("Address now is : "+ testendpoint + " First: "+ AlignmentEncoding.getTibCodeForRegion(first) + " Second : "+ AlignmentEncoding.getTibCodeForRegion(second));
+      FirstHoles.add(first);
+      SecondHoles.add(second);
+    }
+    Address region;
+    if(alignCode==HandInlinedScanning.AE_PATTERN_0x0 && !FirstHoles.isEmpty() && (usedsize<2*(1 << (AlignmentEncoding.FIELD_WIDTH - 3))*4)){
+      region = FirstHoles.remove();
+    }
+    else if(alignCode==HandInlinedScanning.AE_FALLBACK && !SecondHoles.isEmpty() && (usedsize<4*(1 << (AlignmentEncoding.FIELD_WIDTH - 3))*4)){
+      region = SecondHoles.remove();
+    }
+    else {
+      region = allocateSpace(mutator, size, align, offset, type.getMMAllocator(), Plan.DEFAULT_SITE);
+    }
     /*if(count>0){
       meansize=(region.toInt()-laststart.toInt())/count;
     }*/
