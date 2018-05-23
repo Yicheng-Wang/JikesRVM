@@ -971,6 +971,7 @@ public final class MemoryManager {
         size = AlignmentEncoding.padding(alignCode) + adjustpadding;
         Address Sixth = testendpoint.plus(adjustpadding + 6*(1 << (AlignmentEncoding.FIELD_WIDTH - 3))*4);
         SixthHoles.add(Sixth);
+        VM.sysWriteln("Sixth: ",Sixth," Encoding: ",AlignmentEncoding.getTibCodeForRegion(Sixth));
         Address Second = testendpoint.plus(adjustpadding + 1*(1 << (AlignmentEncoding.FIELD_WIDTH - 3))*4);
         SecondHoles.add(Second);
         Address Third = testendpoint.plus(adjustpadding + 2*(1 << (AlignmentEncoding.FIELD_WIDTH - 3))*4);
@@ -993,6 +994,7 @@ public final class MemoryManager {
         FirstHoles.add(First);
         Address Sixth = testendpoint.plus(adjustpadding + 5*(1 << (AlignmentEncoding.FIELD_WIDTH - 3))*4);
         SixthHoles.add(Sixth);
+        VM.sysWriteln("Sixth: ",Sixth," Encoding: ",AlignmentEncoding.getTibCodeForRegion(Sixth));
         Address Third = testendpoint.plus(adjustpadding + 1*(1 << (AlignmentEncoding.FIELD_WIDTH - 3))*4);
         ThirdHoles.add(Third);
         Address Fourth = testendpoint.plus(adjustpadding + 3*(1 << (AlignmentEncoding.FIELD_WIDTH - 3))*4);
@@ -1015,6 +1017,7 @@ public final class MemoryManager {
         SecondHoles.add(Second);
         Address Sixth = testendpoint.plus(adjustpadding + 4*(1 << (AlignmentEncoding.FIELD_WIDTH - 3))*4);
         SixthHoles.add(Sixth);
+        VM.sysWriteln("Sixth: ",Sixth," Encoding: ",AlignmentEncoding.getTibCodeForRegion(Sixth));
         Address Fourth = testendpoint.plus(adjustpadding + 2*(1 << (AlignmentEncoding.FIELD_WIDTH - 3))*4);
         FourthHoles.add(Fourth);
         Address Fifth = testendpoint.plus(adjustpadding + 3*(1 << (AlignmentEncoding.FIELD_WIDTH - 3))*4);
@@ -1037,6 +1040,7 @@ public final class MemoryManager {
         ThirdHoles.add(Third);
         Address Sixth = testendpoint.plus(adjustpadding + 2*(1 << (AlignmentEncoding.FIELD_WIDTH - 3))*4);
         SixthHoles.add(Sixth);
+        VM.sysWriteln("Sixth: ",Sixth," Encoding: ",AlignmentEncoding.getTibCodeForRegion(Sixth));
         Address Fifth = testendpoint.plus(adjustpadding + 1*(1 << (AlignmentEncoding.FIELD_WIDTH - 3))*4);
         FifthHoles.add(Fifth);
       }
@@ -1059,6 +1063,7 @@ public final class MemoryManager {
         FourthHoles.add(Fourth);
         Address Sixth = testendpoint.plus(adjustpadding + 1*(1 << (AlignmentEncoding.FIELD_WIDTH - 3))*4);
         SixthHoles.add(Sixth);
+        VM.sysWriteln("Sixth: ",Sixth," Encoding: ",AlignmentEncoding.getTibCodeForRegion(Sixth));
       }
     }
     if(region==null){
