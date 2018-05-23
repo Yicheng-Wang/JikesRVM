@@ -891,7 +891,7 @@ public final class MemoryManager {
     int adjustpadding = (aligncodenow<alignCode)?(alignCode-aligncodenow)*4:(alignCode+AlignmentEncoding.MAX_ALIGN_WORDS-aligncodenow)*4;
     //New size to be allocated in the TIB runtime space.
     size = elemBytes + headerSize + adjustpadding;
-    VM.sysWriteln("new size is: "+ size );
+    VM.sysWriteln("new size is: "+ size +"used size is: "+(elemBytes+headerSize));
     Selected.Mutator mutator = Selected.Mutator.get();
     //To choose TIB allocator as the allocator
     notifyClassResolved(type);
