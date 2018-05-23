@@ -26,8 +26,6 @@ import java.lang.ref.PhantomReference;
 import java.lang.ref.SoftReference;
 import java.lang.ref.WeakReference;
 import java.util.LinkedList;
-
-import javafx.beans.binding.NumberBinding;
 import org.mmtk.plan.MutatorContext;
 import org.mmtk.utility.alloc.BumpPointer;
 import org.jikesrvm.VM;
