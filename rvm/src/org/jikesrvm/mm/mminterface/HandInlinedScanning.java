@@ -31,9 +31,9 @@ public class HandInlinedScanning {
   public static final int AE_REFARRAY = 5*(1 << (AlignmentEncoding.FIELD_WIDTH - 3));
 
   public static final int AE_PATTERN_0x0  = 2*(1 << (AlignmentEncoding.FIELD_WIDTH - 3));
-  public static final int AE_PATTERN_0x1  = 1*(1 << (AlignmentEncoding.FIELD_WIDTH - 3));
-  public static final int AE_PATTERN_0x7  = 6*(1 << (AlignmentEncoding.FIELD_WIDTH - 3));
-  public static final int AE_PATTERN_0x3F = 3*(1 << (AlignmentEncoding.FIELD_WIDTH - 3));
+  public static final int AE_PATTERN_0x1  = (1 << (AlignmentEncoding.FIELD_WIDTH - 3));
+  public static final int AE_PATTERN_0x7  = 3*(1 << (AlignmentEncoding.FIELD_WIDTH - 3));
+  public static final int AE_PATTERN_0x3F = 6*(1 << (AlignmentEncoding.FIELD_WIDTH - 3));
   public static final int AE_PATTERN_0x3  = 4*(1 << (AlignmentEncoding.FIELD_WIDTH - 3));
   public static final int AE_PATTERN_0x3D = 0;
 

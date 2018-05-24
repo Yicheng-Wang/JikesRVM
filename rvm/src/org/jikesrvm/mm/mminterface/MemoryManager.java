@@ -25,8 +25,9 @@ import static org.mmtk.utility.heap.layout.HeapParameters.MAX_SPACES;
 import java.lang.ref.PhantomReference;
 import java.lang.ref.SoftReference;
 import java.lang.ref.WeakReference;
-import java.util.ArrayList;
 import java.util.LinkedList;
+
+import org.jikesrvm.util.LinkedListRVM;
 import org.mmtk.plan.MutatorContext;
 import org.mmtk.utility.alloc.BumpPointer;
 import org.jikesrvm.VM;
@@ -97,8 +98,7 @@ public final class MemoryManager {
    */
   private static boolean booted = false;
   private static int count=0;
-  private static int count1=0;
-  private static LinkedList<Address> FirstHoles = new LinkedList<Address>();
+  private static LinkedList <Address> FirstHoles = new LinkedList<Address>();
   private static LinkedList <Address> SecondHoles = new LinkedList <Address>();
   private static LinkedList <Address> ThirdHoles = new LinkedList <Address>();
   private static LinkedList <Address> FourthHoles = new LinkedList <Address>();
@@ -1032,7 +1032,7 @@ public final class MemoryManager {
       }
     }
 
-    if(count>0&&alignCode==HandInlinedScanning.AE_PATTERN_0x3F && (usedsize<2*(1 << (AlignmentEncoding.FIELD_WIDTH - 3))*4)){
+    if(count>0&&alignCode==HandInlinedScanning.AE_PATTERN_0x7 && (usedsize<2*(1 << (AlignmentEncoding.FIELD_WIDTH - 3))*4)){
       if(!ThirdHoles.isEmpty()){
         region = ThirdHoles.remove();
         size = usedsize;
@@ -1090,7 +1090,7 @@ public final class MemoryManager {
       }
     }
 
-    if(count>0&&alignCode==HandInlinedScanning.AE_PATTERN_0x7 && (usedsize<(1 << (AlignmentEncoding.FIELD_WIDTH - 3))*4)){
+    if(count>0&&alignCode==HandInlinedScanning.AE_PATTERN_0x3F && (usedsize<(1 << (AlignmentEncoding.FIELD_WIDTH - 3))*4)){
       if(!FifthHoles.isEmpty()){
         region = FifthHoles.remove();
         size = usedsize;
