@@ -902,6 +902,9 @@ public final class MemoryManager {
     int aligncodenow = AlignmentEncoding.getTibCodeForRegion(testendpoint);
     //New padding reduce the space that waste after the TIB
     int adjustpadding = (aligncodenow<alignCode)?(alignCode-aligncodenow)*4:(alignCode+AlignmentEncoding.MAX_ALIGN_WORDS-aligncodenow)*4;
+    if(alignCode==aligncodenow){
+      adjustpadding = 0;
+    }
     //New size to be allocated in the TIB runtime space.
     size = elemBytes + headerSize + adjustpadding;
     int usedsize = elemBytes + headerSize;
