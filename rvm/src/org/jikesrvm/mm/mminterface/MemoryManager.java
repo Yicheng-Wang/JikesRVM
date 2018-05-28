@@ -926,7 +926,7 @@ public final class MemoryManager {
     /*SixthHoles for Address encoding equals to HandInlinedScanning.AE_FALLBACK(7), used size should be limited not to cover
       the space prepared for other align code.
      */
-    if(count>0&&alignCode==HandInlinedScanning.AE_FALLBACK && (usedsize<2*(1 << (AlignmentEncoding.FIELD_WIDTH - 3))*4)){
+    /*if(count>0&&alignCode==HandInlinedScanning.AE_FALLBACK && (usedsize<2*(1 << (AlignmentEncoding.FIELD_WIDTH - 3))*4)){
       if(!SixthHoles.isEmpty()){
           //If there is prepared hole in the corresponding list, just give the Address to this TIB
         region = SixthHoles.remove();
@@ -1112,8 +1112,8 @@ public final class MemoryManager {
     //If did not get a address from the list, then need to allocate a new space
     if(region==null){
       region = allocateSpace(mutator, size, align, offset, type.getMMAllocator(), Plan.DEFAULT_SITE);
-    }
-
+    }*/
+    region = allocateSpace(mutator, size, align, offset, type.getMMAllocator(), Plan.DEFAULT_SITE);
     region = AlignmentEncoding.adjustRegion(alignCode, region);
     Object result = ObjectModel.initializeArray(region, fakeTib, elements, size);
     mutator.postAlloc(ObjectReference.fromObject(result), ObjectReference.fromObject(fakeTib), size, type.getMMAllocator());
