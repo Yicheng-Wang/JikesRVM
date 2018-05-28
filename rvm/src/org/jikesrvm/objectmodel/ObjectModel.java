@@ -1017,9 +1017,9 @@ public class ObjectModel {
       Address ptr;
       if(isTIB){
         //If is TIB, need to update the TIB space Offset to calculate the padding of the next TIB.
-        ptr = bootImage.allocateDataStorage(size + newpadding, align, offset, isTIB);
-        TIBOffset += (size + newpadding);
-        VM.sysWriteln("TIB size is " + (size + newpadding));
+        ptr = bootImage.allocateDataStorage(size + padding, align, offset, isTIB);
+        TIBOffset += (size + padding);
+        VM.sysWriteln("TIB size is " + (size + padding));
       }
       //If not, just normally allocate space in data space in the bootimage
       else
