@@ -1021,6 +1021,7 @@ public class ObjectModel {
         TIBOffset += (size + newpadding);
         VM.sysWriteln("TIB size is " + (size + newpadding));
       }
+      //If not, just normally allocate space in data space in the bootimage
       else
         ptr = bootImage.allocateDataStorage(size + padding, align, offset, isTIB);
     ptr = AlignmentEncoding.adjustRegion(alignCode, ptr);

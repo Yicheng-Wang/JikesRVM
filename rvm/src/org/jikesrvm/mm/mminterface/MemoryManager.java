@@ -104,8 +104,8 @@ public final class MemoryManager {
   private static LinkedList <Address> FourthHoles = new LinkedList <Address>();
   private static LinkedList <Address> FifthHoles = new LinkedList <Address>();
   private static LinkedList <Address> SixthHoles = new LinkedList <Address>();
+  //private static LinkedList <Address>[] Holes = new LinkedList<Address>[6];
 
-  //private static ArrayList<LinkedList<Address>> Holes = new ArrayList<LinkedList<Address>>();
   /**
    * Has garbage collection been enabled yet?
    */
@@ -859,16 +859,12 @@ public final class MemoryManager {
   @Interruptible
   public static TIB newTIB(int numVirtualMethods, int alignCode) {
     int elements = TIB.computeSize(numVirtualMethods);
+    //Get the cursor of the Bump Pointer of TIB space.
     testendpoint = MutatorContext.immortalTIB.getCursor();
-    /*if(count==0){
-      for(int i=0;i<7;i++){
-        LinkedList<Address> preHoles = new LinkedList<Address>();
-        Holes.add(preHoles);
-      }
-    }*/
     if (!VM.runningVM) {
       TIB buildTIB = TIB.allocate(elements, alignCode);
-      /*if(alignCode!=AlignmentEncoding.ALIGN_CODE_NONE){
+      /*//Count the TIBs at the build time
+        if(alignCode!=AlignmentEncoding.ALIGN_CODE_NONE){
         buildTIB.setnum(buildcount);
         buildcount++;
         int index = ((alignCode)/(1<<(AlignmentEncoding.FIELD_WIDTH - 3)));
@@ -895,62 +891,51 @@ public final class MemoryManager {
       /* asked to allocate more than Integer.MAX_VALUE bytes */
       throwLargeArrayOutOfMemoryError();
     }
-    //Yicheng: The allocated size before optimization at the run time
+    // The allocated size before optimization at the run time
     int size = elemBytes + headerSize + AlignmentEncoding.padding(alignCode);
-    //VM.sysWriteln("old size is: "+ size );
-    //The aligncode of the TIB address now
+
+    //The aligncode of the TIB space cursor now
     int aligncodenow = AlignmentEncoding.getTibCodeForRegion(testendpoint);
-    //New padding reduce the space that waste after the TIB
+    //New padding reduce the space that waste after the TIB itself
     int adjustpadding = (aligncodenow<alignCode)?(alignCode-aligncodenow)*4:(alignCode+AlignmentEncoding.MAX_ALIGN_WORDS-aligncodenow)*4;
+    //If required alignCode is equal to the aligncodenow, then the padding should be zero
     if(alignCode==aligncodenow){
       adjustpadding = 0;
     }
     //New size to be allocated in the TIB runtime space.
     size = elemBytes + headerSize + adjustpadding;
+    //The size used by TIB itself.
     int usedsize = elemBytes + headerSize;
-    VM.sysWriteln("new size is: "+ size +"used size is: "+ usedsize);
+    VM.sysWriteln("Allocate size is: "+ size +"used size is: "+ usedsize);
     Selected.Mutator mutator = Selected.Mutator.get();
     //To choose TIB allocator as the allocator
     notifyClassResolved(type);
+
     VM.sysWriteln("count: "+ count + " size: "+ size + " getMMAllocator is : "+ type.getMMAllocator());
-    /*int Number = alignCode/(1 << (AlignmentEncoding.FIELD_WIDTH - 3));
-    if(count>0&&Holes.get(Number).isEmpty()){
-      size = AlignmentEncoding.padding(alignCode) + adjustpadding;
-      if((Number!=7 && usedsize<(1 << (AlignmentEncoding.FIELD_WIDTH - 3))*4)||(Number==7 && usedsize< 2*(1 << (AlignmentEncoding.FIELD_WIDTH - 3)))){
-        for(int i=1;i<7;i++){
-          Address ad;
-          if(Number+i>=8){
-            ad= testendpoint.plus(adjustpadding + (i+1)*(1 << (AlignmentEncoding.FIELD_WIDTH - 3))*4);
-            Holes.get((Number+i)%7).add(ad);
-            VM.sysWriteln(" Address : " ,ad ," Encode :",AlignmentEncoding.getTibCodeForRegion(ad));
-          }
-          else{
-            ad= testendpoint.plus(adjustpadding + (i)*(1 << (AlignmentEncoding.FIELD_WIDTH - 3))*4);
-            Holes.get(Number+i).add(ad);
-            VM.sysWriteln(" Address : " ,ad ," Encode :",AlignmentEncoding.getTibCodeForRegion(ad));
-          }
-        }
-      }
-    }
-    Address region;
-    if(!Holes.get(Number).isEmpty() && usedsize<(1 << (AlignmentEncoding.FIELD_WIDTH - 3))*4 && Number!=7){
-      size = usedsize;
-      region = Holes.get(Number).remove();
-    }
-    else if(!Holes.get(Number).isEmpty() && usedsize< 2*(1 << (AlignmentEncoding.FIELD_WIDTH - 3))*4 && Number==7){
-      size = usedsize;
-      region = Holes.get(Number).remove();
-    }
-    else{
-      region = allocateSpace(mutator, size, align, offset, type.getMMAllocator(), Plan.DEFAULT_SITE);
-    }*/
+
+    //The Start Address of this TIB
     Address region = null;
+
+    /*
+    If there is a appropriate space in the padding area, we could add these Address to a LinkedList, once there is
+    a TIB fit the alignCode and the size, just remove this Address from te list and give it to this TIB to set.
+    Because I can't create a array of LinkedList(Generic array creation), I have to use six LinkedList to store
+    the appropriate Addresses for each alignCode requirement
+    */
+
+    /*SixthHoles for Address encoding equals to HandInlinedScanning.AE_FALLBACK(7), used size should be limited not to cover
+      the space prepared for other align code.
+     */
     if(count>0&&alignCode==HandInlinedScanning.AE_FALLBACK && (usedsize<2*(1 << (AlignmentEncoding.FIELD_WIDTH - 3))*4)){
       if(!SixthHoles.isEmpty()){
+          //If there is prepared hole in the corresponding list, just give the Address to this TIB
         region = SixthHoles.remove();
         size = usedsize;
       }
       else{
+        //If not, need to allocate a new space for this TIB
+        //and check if there is any appropriate place for other align code in the padding area
+        //add them to the corresponding list
         if(adjustpadding>(1 << (AlignmentEncoding.FIELD_WIDTH - 3))*4){
           Address Fifth = testendpoint.plus(adjustpadding - (1 << (AlignmentEncoding.FIELD_WIDTH - 3))*4);
           FifthHoles.add(Fifth);
@@ -974,6 +959,7 @@ public final class MemoryManager {
       }
     }
 
+    //encoding equals to HandInlinedScanning.AE_PATTERN_0x1(1), similar to the above
     if(count>0&&alignCode==HandInlinedScanning.AE_PATTERN_0x1 && (usedsize<(1 << (AlignmentEncoding.FIELD_WIDTH - 3))*4)){
       if(!FirstHoles.isEmpty()){
         region = FirstHoles.remove();
@@ -1003,6 +989,7 @@ public final class MemoryManager {
       }
     }
 
+    //encoding equals to HandInlinedScanning.AE_PATTERN_0x0(2), similar to the above
     if(count>0&&alignCode==HandInlinedScanning.AE_PATTERN_0x0 && (usedsize<(1 << (AlignmentEncoding.FIELD_WIDTH - 3))*4)){
       if(!SecondHoles.isEmpty()){
         region = SecondHoles.remove();
@@ -1032,6 +1019,7 @@ public final class MemoryManager {
       }
     }
 
+    //encoding equals to HandInlinedScanning.AE_PATTERN_0x7(3), similar to the above
     if(count>0&&alignCode==HandInlinedScanning.AE_PATTERN_0x7 && (usedsize<2*(1 << (AlignmentEncoding.FIELD_WIDTH - 3))*4)){
       if(!ThirdHoles.isEmpty()){
         region = ThirdHoles.remove();
@@ -1061,6 +1049,7 @@ public final class MemoryManager {
       }
     }
 
+    //encoding equals to HandInlinedScanning.AE_REFARRAY(5), similar to the above
     if(count>0&&alignCode==HandInlinedScanning.AE_REFARRAY && (usedsize<(1 << (AlignmentEncoding.FIELD_WIDTH - 3))*4)){
       if(!FourthHoles.isEmpty()){
         region = FourthHoles.remove();
@@ -1090,6 +1079,7 @@ public final class MemoryManager {
       }
     }
 
+    //encoding equals to HandInlinedScanning.AE_PATTERN_0x3F(6), similar to the above
     if(count>0&&alignCode==HandInlinedScanning.AE_PATTERN_0x3F && (usedsize<(1 << (AlignmentEncoding.FIELD_WIDTH - 3))*4)){
       if(!FifthHoles.isEmpty()){
         region = FifthHoles.remove();
@@ -1118,35 +1108,12 @@ public final class MemoryManager {
         }
       }
     }
+
+    //If did not get a address from the list, then need to allocate a new space
     if(region==null){
       region = allocateSpace(mutator, size, align, offset, type.getMMAllocator(), Plan.DEFAULT_SITE);
     }
-    /*if(count>0 && alignCode==HandInlinedScanning.AE_PATTERN_0x0&&usedsize<2*(1 << (AlignmentEncoding.FIELD_WIDTH - 3))*4){
-      size = AlignmentEncoding.padding(alignCode) + adjustpadding;
-      Address first = testendpoint.plus(adjustpadding + 2*(1 << (AlignmentEncoding.FIELD_WIDTH - 3))*4);
-      Address second = testendpoint.plus(adjustpadding + 6*(1 << (AlignmentEncoding.FIELD_WIDTH - 3))*4);
-      VM.sysWriteln("Address now is : ",testendpoint ," First: "+ AlignmentEncoding.getTibCodeForRegion(first) + " Second : "+ AlignmentEncoding.getTibCodeForRegion(second));
-      VM.sysWriteln("First: ",first," Second: ",second);
-      FirstHoles.add(first);
-      SecondHoles.add(second);
-    }
 
-    if(alignCode==HandInlinedScanning.AE_FALLBACK && !FirstHoles.isEmpty() && (usedsize<4*(1 << (AlignmentEncoding.FIELD_WIDTH - 3))*4)){
-      region = FirstHoles.remove();
-      size = usedsize;
-    }
-    else if(alignCode==HandInlinedScanning.AE_PATTERN_0x1 && !SecondHoles.isEmpty() && (usedsize<2*(1 << (AlignmentEncoding.FIELD_WIDTH - 3))*4)){
-      region = SecondHoles.remove();
-      size = usedsize;
-    }
-    else {
-      region = allocateSpace(mutator, size, align, offset, type.getMMAllocator(), Plan.DEFAULT_SITE);
-    }*/
-    //lastendpoint = region.plus(size);
-    /*if(count==0)
-      laststart=region;*/
-    //VM.sysWrite("Allocating TIB: region = ",region," end region first: ",lastendpoint);
-    //VM.sysWriteln(" end region after: ",testendpoint);
     region = AlignmentEncoding.adjustRegion(alignCode, region);
     Object result = ObjectModel.initializeArray(region, fakeTib, elements, size);
     mutator.postAlloc(ObjectReference.fromObject(result), ObjectReference.fromObject(fakeTib), size, type.getMMAllocator());
@@ -1154,8 +1121,6 @@ public final class MemoryManager {
     /* Now we replace the TIB */
     ObjectModel.setTIB(result, realTib);
     count++;
-    //VM.sysWriteln("TIB: "+count +" Method: "+numVirtualMethods+ " Alignment: "+ alignCode + " Size: "+size);
-
     return (TIB)result;
   }
 
