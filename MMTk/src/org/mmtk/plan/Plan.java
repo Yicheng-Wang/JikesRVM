@@ -112,6 +112,7 @@ public abstract class Plan {
   /** Any immortal objects allocated after booting are allocated here. */
   public static final ImmortalSpace immortalSpace = new ImmortalSpace("immortal", VMRequest.discontiguous());
 
+    /** Any type information block allocated after booting are allocated here. */
   public static final ImmortalSpace immortalTIBSpace = new ImmortalSpace("immortalTIB", VMRequest.discontiguous());
 
   /** All meta data that is used by MMTk is allocated (and accounted for) in the meta data space. */

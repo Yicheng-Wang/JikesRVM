@@ -284,7 +284,7 @@ public abstract class TraceLocal extends TransitiveClosure {
     if (Plan.USE_CODE_SPACE && Space.isInSpace(Plan.LARGE_CODE, object))
       return Plan.largeCodeSpace.traceObject(this, object);
     if (Space.isInSpace(Plan.TIB, object))
-      return Plan.immortalSpace.traceObject(this, object);
+      return Plan.immortalTIBSpace.traceObject(this, object);
     if (VM.VERIFY_ASSERTIONS) {
       Log.writeln("Failing object => ", object);
       Space.printVMMap();
