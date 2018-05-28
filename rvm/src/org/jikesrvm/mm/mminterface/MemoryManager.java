@@ -900,7 +900,7 @@ public final class MemoryManager {
     int size = elemBytes + headerSize + AlignmentEncoding.padding(alignCode);
     //The size used by TIB itself.
      int usedsize = elemBytes + headerSize;
-     totalsize += usedsize;
+     /*totalsize += usedsize;
      totalmean = totalsize/count;
      int index = alignCode/(1 << (AlignmentEncoding.FIELD_WIDTH - 3));
      eachcount[index]++;
@@ -909,10 +909,10 @@ public final class MemoryManager {
      VM.sysWriteln("Total size: "+totalsize+" Total mean: "+totalmean);
      for(int i=0;i<8;i++){
          VM.sysWriteln("Number: "+i+" count: "+eachcount[i]+" mean: "+eachmean[i]);
-     }
+     }*/
 
     //The aligncode of the TIB space cursor now
-    /*int aligncodenow = AlignmentEncoding.getTibCodeForRegion(testendpoint);
+    int aligncodenow = AlignmentEncoding.getTibCodeForRegion(testendpoint);
     //New padding reduce the space that waste after the TIB itself
     int adjustpadding = (aligncodenow<alignCode)?(alignCode-aligncodenow)*4:(alignCode+AlignmentEncoding.MAX_ALIGN_WORDS-aligncodenow)*4;
     //If required alignCode is equal to the aligncodenow, then the padding should be zero
@@ -942,7 +942,7 @@ public final class MemoryManager {
     /*SixthHoles for Address encoding equals to HandInlinedScanning.AE_FALLBACK(7), used size should be limited not to cover
       the space prepared for other align code.
      */
-    /*if(count>0&&alignCode==HandInlinedScanning.AE_FALLBACK && (usedsize<2*(1 << (AlignmentEncoding.FIELD_WIDTH - 3))*4)){
+    if(count>0&&alignCode==HandInlinedScanning.AE_FALLBACK && (usedsize<2*(1 << (AlignmentEncoding.FIELD_WIDTH - 3))*4)){
       if(!SixthHoles.isEmpty()){
           //If there is prepared hole in the corresponding list, just give the Address to this TIB
         region = SixthHoles.remove();
@@ -1128,7 +1128,7 @@ public final class MemoryManager {
     //If did not get a address from the list, then need to allocate a new space
     if(region==null){
       region = allocateSpace(mutator, size, align, offset, type.getMMAllocator(), Plan.DEFAULT_SITE);
-    }*/
+    }
     region = allocateSpace(mutator, size, align, offset, type.getMMAllocator(), Plan.DEFAULT_SITE);
     region = AlignmentEncoding.adjustRegion(alignCode, region);
     Object result = ObjectModel.initializeArray(region, fakeTib, elements, size);
