@@ -895,7 +895,7 @@ public final class MemoryManager {
     int size = elemBytes + headerSize + AlignmentEncoding.padding(alignCode);
 
     //The aligncode of the TIB space cursor now
-    int aligncodenow = AlignmentEncoding.getTibCodeForRegion(testendpoint);
+    /*int aligncodenow = AlignmentEncoding.getTibCodeForRegion(testendpoint);
     //New padding reduce the space that waste after the TIB itself
     int adjustpadding = (aligncodenow<alignCode)?(alignCode-aligncodenow)*4:(alignCode+AlignmentEncoding.MAX_ALIGN_WORDS-aligncodenow)*4;
     //If required alignCode is equal to the aligncodenow, then the padding should be zero
@@ -906,7 +906,7 @@ public final class MemoryManager {
     size = elemBytes + headerSize + adjustpadding;
     //The size used by TIB itself.
     int usedsize = elemBytes + headerSize;
-    VM.sysWriteln("Allocate size is: "+ size +"used size is: "+ usedsize);
+    VM.sysWriteln("Allocate size is: "+ size +"used size is: "+ usedsize);*/
     Selected.Mutator mutator = Selected.Mutator.get();
     //To choose TIB allocator as the allocator
     notifyClassResolved(type);
