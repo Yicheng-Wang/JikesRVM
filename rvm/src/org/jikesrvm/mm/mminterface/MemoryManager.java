@@ -880,7 +880,7 @@ public final class MemoryManager {
     if (alignCode == AlignmentEncoding.ALIGN_CODE_NONE) {
       return (TIB)newRuntimeTable(elements, RVMType.TIBType);
     }
-    count++;
+
     RVMType type = RVMType.TIBType;
     if (VM.VerifyAssertions) VM._assert(VM.runningVM);
 
@@ -1136,6 +1136,7 @@ public final class MemoryManager {
 
     /* Now we replace the TIB */
     ObjectModel.setTIB(result, realTib);
+    count++;
     return (TIB)result;
   }
 
