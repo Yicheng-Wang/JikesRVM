@@ -712,7 +712,7 @@ public class BootImageWriter {
     int refSlotSize = Statics.getReferenceSlotSize();
     //Number of TIB to be allocated in build time
     int countTIB = 0;
-    for (int i = Statics.middleOfTable + refSlotSize, n = Statics.getHighestInUseSlot();
+    /*for (int i = Statics.middleOfTable + refSlotSize, n = Statics.getHighestInUseSlot();
          i <= n;
          i += refSlotSize) {
       //Scan all the TIBs at the build time
@@ -744,12 +744,12 @@ public class BootImageWriter {
     int[] totalcount = new int[8];
     for(int i=0;i<8;i++){
       totalcount[i] = numbercount[i];
-    }
+    }*/
     /*Have already gathered all the TIB, distribute the memory start from TIB space in bootimage.
       Use the bump pointer in ObjectModel.allocateArray, choose the TIB which will cost the least
       padding waste by greedy algorithm.
      */
-    Address Start = Address.fromIntSignExtend(1644167168);
+    /*Address Start = Address.fromIntSignExtend(1644167168);
     for(int i=0;i<countTIB;i++){
       int aligncodenow = AlignmentEncoding.getTibCodeForRegion(Start.plus(TIBOffset));
       //The index of the type which will cost the least padding waste.
@@ -757,10 +757,10 @@ public class BootImageWriter {
       VM.sysWriteln("Aligncodenow is "+aligncodenow+" closest is"+closest);
       Object jdkObject = null;
       for(int j=0;j<8;j++){
-        if(numbercount[closest]>0){
+        if(numbercount[closest]>0){*/
           /*In the array of the appointed type, choose the TIB after which the align code of cursor Address
           have the most successive TIBs to be allocated*/
-          int mostcount = -1;
+          /*int mostcount = -1;
           int index = 0;
           for(int k=0;k<totalcount[closest];k++){
             if(TIBAssist[closest][k]!=null) {
@@ -802,7 +802,7 @@ public class BootImageWriter {
       ((TIB)jdkObject).setImageAdress(ImageAdress);
       int newpadding = (aligncodenow<AlignValue)?(AlignValue-aligncodenow)*4:(AlignValue+AlignmentEncoding.MAX_ALIGN_WORDS-aligncodenow)*4;
       TIBOffset += (rvmArrayType.getInstanceSize(arrayCount) + newpadding);
-    }
+    }*/
 
     //
     // First object in image must be boot record (so boot loader will know
@@ -1849,7 +1849,7 @@ public class BootImageWriter {
         boolean needsIdentityHash = mapEntry.requiresIdentityHashCode();
         int identityHashValue = mapEntry.getIdentityHashCode();
         Address arrayImageAddress;
-        if(alignCode!=AlignmentEncoding.ALIGN_CODE_NONE){
+        /*if(alignCode!=AlignmentEncoding.ALIGN_CODE_NONE){
           //If allocate TIB, the alignCode will not be AlignmentEncoding.ALIGN_CODE_NONE
           //and extract the ImageAdress of this Object as the return value,and don't need
           //to allocate again
@@ -1859,7 +1859,8 @@ public class BootImageWriter {
         else{
           //If not, just allocate normally
           arrayImageAddress = (overwriteAddress.isMax()) ? bootImage.allocateArray(rvmArrayType, arrayCount, needsIdentityHash, identityHashValue, alignCode) : overwriteAddress;
-        }
+        }*/
+        arrayImageAddress = (overwriteAddress.isMax()) ? bootImage.allocateArray(rvmArrayType, arrayCount, needsIdentityHash, identityHashValue, alignCode) : overwriteAddress;
         mapEntry.imageAddress = arrayImageAddress;
         mapEntry.imageAddress = copyArrayToBootImage(arrayCount, arrayImageAddress, jdkObject, jdkType,
             rvmArrayType, allocOnly, overwriteAddress, parentObject, untraced);
