@@ -138,6 +138,7 @@ public class ObjectModel {
   public static int hashTransition2 = 0;
 
   public static int TIBOffset = 0;
+  public static int Totalsize = 0;
   /** Whether to pack bytes and shorts into 32bit fields*/
   private static final boolean PACKED = true;
 
@@ -1017,9 +1018,10 @@ public class ObjectModel {
       Address ptr;
       if(isTIB){
         //If is TIB, need to update the TIB space Offset to calculate the padding of the next TIB.
-        ptr = bootImage.allocateDataStorage(size + padding, align, offset, isTIB);
-        TIBOffset += (size + padding);
-        VM.sysWriteln("TIB size is " + (size + padding));
+        ptr = bootImage.allocateDataStorage(size + newpadding, align, offset, isTIB);
+        TIBOffset += (size + newpadding);
+        Totalsize += size;
+        VM.sysWriteln("TIB size is " + (size + newpadding) + " Total size is " + Totalsize);
       }
       //If not, just normally allocate space in data space in the bootimage
       else
