@@ -98,6 +98,11 @@ public final class MemoryManager {
    */
   private static boolean booted = false;
   private static int count=0;
+  private static int[] eachcount = new int[8];
+  private static int[] eachsize = new int[8];
+  private static int[] eachmean = new int[8];
+  private static int totalsize = 0;
+  private static int totalmean = 0;
   private static LinkedList <Address> FirstHoles = new LinkedList<Address>();
   private static LinkedList <Address> SecondHoles = new LinkedList <Address>();
   private static LinkedList <Address> ThirdHoles = new LinkedList <Address>();
@@ -875,7 +880,7 @@ public final class MemoryManager {
     if (alignCode == AlignmentEncoding.ALIGN_CODE_NONE) {
       return (TIB)newRuntimeTable(elements, RVMType.TIBType);
     }
-
+    count++;
     RVMType type = RVMType.TIBType;
     if (VM.VerifyAssertions) VM._assert(VM.runningVM);
 
@@ -893,6 +898,18 @@ public final class MemoryManager {
     }
     // The allocated size before optimization at the run time
     int size = elemBytes + headerSize + AlignmentEncoding.padding(alignCode);
+    //The size used by TIB itself.
+     int usedsize = elemBytes + headerSize;
+     totalsize += usedsize;
+     totalmean = totalsize/count;
+     int index = alignCode/(1 << (AlignmentEncoding.FIELD_WIDTH - 3));
+     eachcount[index]++;
+     eachsize[index] +=usedsize;
+     eachmean[index] = eachsize[index]/eachcount[index];
+     VM.sysWriteln("Total size: "+totalsize+" Total mean: "+totalmean);
+     for(int i=0;i<8;i++){
+         VM.sysWriteln("Number: "+i+" count: "+eachcount[i]+" mean: "+eachmean[i]);
+     }
 
     //The aligncode of the TIB space cursor now
     /*int aligncodenow = AlignmentEncoding.getTibCodeForRegion(testendpoint);
@@ -904,8 +921,7 @@ public final class MemoryManager {
     }
     //New size to be allocated in the TIB runtime space.
     size = elemBytes + headerSize + adjustpadding;
-    //The size used by TIB itself.
-    int usedsize = elemBytes + headerSize;
+
     VM.sysWriteln("Allocate size is: "+ size +"used size is: "+ usedsize);*/
     Selected.Mutator mutator = Selected.Mutator.get();
     //To choose TIB allocator as the allocator
@@ -1120,7 +1136,6 @@ public final class MemoryManager {
 
     /* Now we replace the TIB */
     ObjectModel.setTIB(result, realTib);
-    count++;
     return (TIB)result;
   }
 
