@@ -922,7 +922,7 @@ public final class MemoryManager {
     //New size to be allocated in the TIB runtime space.
     size = elemBytes + headerSize + adjustpadding;
 
-    VM.sysWriteln("Allocate size is: "+ size +"used size is: "+ usedsize);*/
+    VM.sysWriteln("Allocate size is: "+ size +"used size is: "+ usedsize);
     Selected.Mutator mutator = Selected.Mutator.get();
     //To choose TIB allocator as the allocator
     notifyClassResolved(type);
@@ -1129,7 +1129,7 @@ public final class MemoryManager {
     if(region==null){
       region = allocateSpace(mutator, size, align, offset, type.getMMAllocator(), Plan.DEFAULT_SITE);
     }
-    region = allocateSpace(mutator, size, align, offset, type.getMMAllocator(), Plan.DEFAULT_SITE);
+    //region = allocateSpace(mutator, size, align, offset, type.getMMAllocator(), Plan.DEFAULT_SITE);
     region = AlignmentEncoding.adjustRegion(alignCode, region);
     Object result = ObjectModel.initializeArray(region, fakeTib, elements, size);
     mutator.postAlloc(ObjectReference.fromObject(result), ObjectReference.fromObject(fakeTib), size, type.getMMAllocator());
