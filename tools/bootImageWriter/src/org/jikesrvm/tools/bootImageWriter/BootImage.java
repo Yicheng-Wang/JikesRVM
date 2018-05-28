@@ -68,13 +68,16 @@ public class BootImage implements BootImageInterface {
   /**
    * The reference map for the boot image
    */
-  public Address BOOT_IMAGE_TIB_START = BOOT_IMAGE_DATA_START.plus(0x3000000);
   private final byte[] referenceMap;
   private int referenceMapReferences = 0;
   private int referenceMapLimit = 0;
   private byte[] bootImageRMap;
   private int rMapSize = 0;
 
+  /**
+   * Offset of next free TIB word from the Start of boot image data, in bytes
+   * boot image TIB space start from BOOT_IMAGE_DATA_START.plus(0x2000000)
+   */
   private Offset freeTIBOffset = Offset.zero().plus(0x2000000);
   /**
    * Offset of next free data word, in bytes
@@ -210,7 +213,8 @@ public class BootImage implements BootImageInterface {
   }
 
   /**
-   * Get image data size, in bytes.
+   * Get image data size, in bytes
+   * Include TIB space in data size
    * @return image size
    */
   public int getDataSize() {
@@ -297,6 +301,7 @@ public class BootImage implements BootImageInterface {
   @Override
   public Address allocateDataStorage(int size, int align, int offset , boolean isTIB) {
     size = roundAllocationSize(size);
+    //If allocate TIB, use TIB offset to allocate in TIB space,if not, use Data offset to allocate in Data space.
     Offset handleOffset = isTIB ? freeTIBOffset : freeDataOffset;
       Offset unalignedOffset = handleOffset;
     handleOffset = MemoryManager.alignAllocation(handleOffset, align, offset);
@@ -313,6 +318,7 @@ public class BootImage implements BootImageInterface {
 
       ObjectModel.fillAlignmentGap(this, BOOT_IMAGE_DATA_START.plus(unalignedOffset),
               lowAddr.minus(unalignedOffset).toWord().toExtent());
+      //update the offset
       if(isTIB){
         freeTIBOffset = handleOffset;
       }

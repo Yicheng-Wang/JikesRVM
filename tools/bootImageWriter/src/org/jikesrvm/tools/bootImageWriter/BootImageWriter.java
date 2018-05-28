@@ -710,10 +710,12 @@ public class BootImageWriter {
 
     if (profile) startTime = System.currentTimeMillis();
     int refSlotSize = Statics.getReferenceSlotSize();
-    int count1 = 0;
+    //Number of TIB to be allocated in build time
+    int countTIB = 0;
     for (int i = Statics.middleOfTable + refSlotSize, n = Statics.getHighestInUseSlot();
          i <= n;
          i += refSlotSize) {
+      //Scan all the TIBs at the build time
       Offset jtocOff = Statics.slotAsOffset(i);
       int objCookie;
       if (VM.BuildFor32Addr)
@@ -726,9 +728,9 @@ public class BootImageWriter {
       if (jdkObject instanceof TIB) {
         int AlignValue = ((TIB) jdkObject).getAlignData();
         if (AlignValue != AlignmentEncoding.ALIGN_CODE_NONE) {
-          count1++;
-          VM.sysWriteln("Count of TIB in jdkObject is ", count1);
-
+          countTIB++;
+          VM.sysWriteln("Count of TIB in jdkObject is ", countTIB);
+          //Classify according to the align code
           int index = (AlignValue) / (1 << (FIELD_WIDTH - 3));
           TIBAssist[index][numbercount[index]] = jdkObject;
           numbercount[index]++;
@@ -738,18 +740,26 @@ public class BootImageWriter {
     for(int i=0;i<8;i++){
       VM.sysWriteln("Number of " + i +" is " + numbercount[i]);
     }
+    //Total count of each align code type
     int[] totalcount = new int[8];
     for(int i=0;i<8;i++){
       totalcount[i] = numbercount[i];
     }
+    /*Have already gathered all the TIB, distribute the memory start from TIB space in bootimage.
+      Use the bump pointer in ObjectModel.allocateArray, choose the TIB which will cost the least
+      padding waste by greedy algorithm.
+     */
     Address Start = Address.fromIntSignExtend(1644167168);
-    for(int i=0;i<count1;i++){
+    for(int i=0;i<countTIB;i++){
       int aligncodenow = AlignmentEncoding.getTibCodeForRegion(Start.plus(TIBOffset));
+      //The index of the type which will cost the least padding waste.
       int closest = ((aligncodenow/(1<<( FIELD_WIDTH - 3))) + 1) % 8;
       VM.sysWriteln("Aligncodenow is "+aligncodenow+" closest is"+closest);
       Object jdkObject = null;
       for(int j=0;j<8;j++){
         if(numbercount[closest]>0){
+          /*In the array of the appointed type, choose the TIB after which the align code of cursor Address
+          have the most successive TIBs to be allocated*/
           int mostcount = -1;
           int index = 0;
           for(int k=0;k<totalcount[closest];k++){
@@ -777,6 +787,8 @@ public class BootImageWriter {
           closest = (closest + 1) % 8;
         }
       }
+      //Get the basic information of the TIB to be allocated, and use allocator to get its start address(ImageAdress)
+      //Store this address in the TIB itself, and extract this Address when it is copy and set in the bootimage.
       int AlignValue = ((TIB) jdkObject).getAlignData();
       Object backing = ((RuntimeTable<?>)jdkObject).getBacking();
       BootImageMap.Entry mapEntry = BootImageMap.findOrCreateEntry(backing);
@@ -791,17 +803,6 @@ public class BootImageWriter {
       int newpadding = (aligncodenow<AlignValue)?(AlignValue-aligncodenow)*4:(AlignValue+AlignmentEncoding.MAX_ALIGN_WORDS-aligncodenow)*4;
       TIBOffset += (rvmArrayType.getInstanceSize(arrayCount) + newpadding);
     }
-
-
-
-    /*int index = (alignCodeValue)/(1<<( FIELD_WIDTH - 3));
-    if(alignCodeValue!=AlignmentEncoding.ALIGN_CODE_NONE){
-      TIBAssist[index][numbercount[index]] = ((TIB)jdkObject);
-      numbercount[index]++;
-      VM.sysWriteln("TIB number is ",((TIB)jdkObject).getnum()," TIB Address is ", ((TIB)jdkObject).getImageAdress() );
-      VM.sysWriteln("The index is: ",index ,"Total : ",numbercount[index]);
-    }*/
-
 
     //
     // First object in image must be boot record (so boot loader will know
@@ -1849,10 +1850,14 @@ public class BootImageWriter {
         int identityHashValue = mapEntry.getIdentityHashCode();
         Address arrayImageAddress;
         if(alignCode!=AlignmentEncoding.ALIGN_CODE_NONE){
+          //If allocate TIB, the alignCode will not be AlignmentEncoding.ALIGN_CODE_NONE
+          //and extract the ImageAdress of this Object as the return value,and don't need
+          //to allocate again
           arrayImageAddress = ((TIB)parentObject).getImageAdress();
           VM.sysWriteln("Array Image Address is " + arrayImageAddress);
         }
         else{
+          //If not, just allocate normally
           arrayImageAddress = (overwriteAddress.isMax()) ? bootImage.allocateArray(rvmArrayType, arrayCount, needsIdentityHash, identityHashValue, alignCode) : overwriteAddress;
         }
         mapEntry.imageAddress = arrayImageAddress;
@@ -1862,14 +1867,11 @@ public class BootImageWriter {
         // already
         if (!allocOnly) {
           if (verbosity.isAtLeast(DETAILED)) traceContext.push("", jdkObject.getClass().getName(), "tib");
-          //rvmType.getTypeInformationBlock().setFakeAddress(mapEntry.imageAddress);
           Address tibImageAddress = copyToBootImage(rvmType.getTypeInformationBlock(), allocOnly, Address.max(), jdkObject, false, AlignmentEncoding.ALIGN_CODE_NONE);
           if (verbosity.isAtLeast(DETAILED)) traceContext.pop();
           if (tibImageAddress.EQ(OBJECT_NOT_ALLOCATED)) {
             fail("can't copy tib for " + jdkObject);
           }
-          if(mapEntry.imageAddress==null)
-            VM.sysWriteln("No imageAddress!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
           ObjectModel.setTIB(bootImage, mapEntry.imageAddress, tibImageAddress, rvmType);
         }
       } else if (jdkObject instanceof TIB) {
@@ -1879,7 +1881,7 @@ public class BootImageWriter {
         if (verbosity.isAtLeast(DETAILED)) say("Encoding value " + alignCodeValue + " into tib");
         /* Copy the backing array, and then replace its TIB */
         mapEntry.imageAddress = copyToBootImage(backing, allocOnly, overwriteAddress, jdkObject, rvmType.getTypeRef().isRuntimeTable(), alignCodeValue);
-        VM.sysWriteln("The TIB address is " + mapEntry.imageAddress);
+        //VM.sysWriteln("The TIB address is " + mapEntry.imageAddress);
         if (verbosity.isAtLeast(DETAILED)) say(String.format("TIB address = %x, encoded value = %d, requested = %d%n",
             mapEntry.imageAddress.toInt(),
             AlignmentEncoding.extractTibCode(mapEntry.imageAddress),alignCodeValue));
@@ -1948,9 +1950,6 @@ public class BootImageWriter {
       depth--;
       traceContext.push("", jdkObject.getClass().getName(), "tib");
     }
-    if(imageAddress==null)
-        VM.sysWriteln("No imageAddress!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-    //rvmType.getTypeInformationBlock().setFakeAddress(imageAddress);
     Address tibImageAddress = copyToBootImage(rvmType.getTypeInformationBlock(), false, Address.max(), jdkObject, false, AlignmentEncoding.ALIGN_CODE_NONE);
     if (verbosity.isAtLeast(NONE)) {
       traceContext.pop();
@@ -1959,22 +1958,6 @@ public class BootImageWriter {
     if (tibImageAddress.EQ(OBJECT_NOT_ALLOCATED)) {
       fail("can't copy tib for " + jdkObject);
     }
-    //VM.sysWriteln(" TIB of " + jdkObject.getClass().getName() + " Address " + Integer.toHexString(tibImageAddress.toInt()) + " Align Data is " + rvmType.getTypeInformationBlock().getAlignData());
-      /*TIB add = rvmType.getTypeInformationBlock();
-      add.setImageType(rvmType);
-      add.setImageAdress(imageAddress);
-      add.setFakeAddress(tibImageAddress);
-      int index = ((add.getAlignData())/(1<<( FIELD_WIDTH - 3)));
-      boolean same=true;
-      for(int i=0;i<numbercount[index];i++){
-          if(add.getFakeAddress().toInt()==TIBAssist[index][i].getFakeAddress().toInt())
-              same=false;
-      }
-      if(same){
-          TIBAssist[index][numbercount[index]] = add;
-          numbercount[index]++;
-          VM.sysWriteln("The index is: ",index ,"Total : ",numbercount[index]);
-      }*/
     ObjectModel.setTIB(bootImage, imageAddress, tibImageAddress, rvmType);
   }
 
