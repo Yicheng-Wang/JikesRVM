@@ -807,8 +807,10 @@ public class BootImageWriter {
       totalsize[closest] += rvmArrayType.getInstanceSize(arrayCount);
     }
     for(int i=0;i<8;i++){
-      meansize[i] = totalsize[i]/totalcount[i];
-      VM.sysWriteln("Mean size of " + i +" is " + meansize[i]);
+      if(totalcount[i]>0){
+        meansize[i] = totalsize[i]/totalcount[i];
+        VM.sysWriteln("Mean size of " + i +" is " + meansize[i]);
+      }
     }
     //
     // First object in image must be boot record (so boot loader will know
