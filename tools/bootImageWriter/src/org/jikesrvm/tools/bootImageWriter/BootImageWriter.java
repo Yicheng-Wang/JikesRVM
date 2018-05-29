@@ -153,6 +153,8 @@ public class BootImageWriter {
    */
   private static Object[][] TIBAssist = new Object[8][800];
   private static int[] numbercount = new int[8];
+  private static int[] totalsize = new int[8];
+  private static int[] meansize = new int[8];
   public static int TIBOffset = 0;
 
 
@@ -802,8 +804,12 @@ public class BootImageWriter {
       ((TIB)jdkObject).setImageAdress(ImageAdress);
       int newpadding = (aligncodenow<AlignValue)?(AlignValue-aligncodenow)*4:(AlignValue+AlignmentEncoding.MAX_ALIGN_WORDS-aligncodenow)*4;
       TIBOffset += (rvmArrayType.getInstanceSize(arrayCount) + newpadding);
+      totalsize[closest] += rvmArrayType.getInstanceSize(arrayCount);
     }
-
+    for(int i=0;i<8;i++){
+      meansize[i] = totalsize[i]/totalcount[i];
+      VM.sysWriteln("Mean size of " + i +" is " + meansize[i]);
+    }
     //
     // First object in image must be boot record (so boot loader will know
     // where to find it).  We'll write out an uninitialized record and not recurse
